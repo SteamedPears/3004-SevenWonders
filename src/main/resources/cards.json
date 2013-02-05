@@ -1,0 +1,15 @@
+{
+university:{
+    name: "university",
+    color: "red",
+    resources: {stone: 2, paper: 3},
+    cost: {glass: 2, gold: 3},
+    freeFor: "school",
+    multiplierResources: ["red", "blue", "army"],
+    multiplierTarget: ["self", "left", "right"],
+    discountResources: ["wood", "stone"],
+    discountTarget: ["left", "right"]
+},
+school:{
+}
+}
