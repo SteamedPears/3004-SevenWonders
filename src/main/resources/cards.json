@@ -8,7 +8,8 @@ university:{
     multiplierResources: ["red", "blue", "army"],
     multiplierTarget: ["self", "left", "right"],
     discountResources: ["wood", "stone"],
-    discountTarget: ["left", "right"]
+    discountTarget: ["left", "right"],
+    isChoice:false
 },
 school:{
 }
