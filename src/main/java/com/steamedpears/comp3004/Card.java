@@ -58,7 +58,7 @@ public class Card {
     }
 
     public List<String> getAssetsOptional(Player player){
-        //TODO: compute the list of assets this card yields if it has a choice
+        //TODO: compute the list of assets this card yields if it isChoice
 
         return null;
     }

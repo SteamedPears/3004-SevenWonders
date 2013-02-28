@@ -46,8 +46,11 @@ public abstract class Player {
         //TODO: play card, return whether successful
     }
 
-    public final void takeTurn(ArrayList<Card> cards){
-        PlayerCommand command = handleTurn(cards);
+    public final void takeTurn(ArrayList<Card> currentHand) throws Exception {
+        PlayerCommand command = handleTurn(currentHand);
+        if(!isValid(command, currentHand)){
+            throw new Exception("Player made invalid move");
+        }
         if(command!=null){
             if(command.action.equals(PlayerCardAction.BUILD)){
                 buildWonder(command.card);
@@ -72,6 +75,12 @@ public abstract class Player {
     }
 
     //getters///////////////////////////////////////////////////////////////////
+    private final boolean isValid(PlayerCommand command, List<Card> cards){
+        //TODO: determine if the given command is a valid one for the player to perform
+
+        return false;
+    }
+
     public final Player getPlayerLeft(){
         return playerLeft;
     }
@@ -80,6 +89,25 @@ public abstract class Player {
         return playerRight;
     }
 
+    public final Map<String, Integer> getAssets(){
+        //TODO: get the assets a player definitely has
 
+        return null;
+    }
 
+    public final List<Map<String, Integer>> getOptionalAssetsComplete(){
+        //TODO: get a list of all the asset choices a player can make
+
+        return null;
+    }
+
+    public final Map<String, Integer> getOptionalAssetsSummary(){
+        //TODO: get a map representing the total of all the asset choices a player can make
+        //e.g. wood/stone and stone/clay -> wood:1, stone:2, clay:1
+        return null;
+    }
+
+    public final int getCountOfAsset(String assetName){
+        return getAsset(getAssets(), assetName);
+    }
 }
