@@ -107,6 +107,18 @@ public abstract class Player {
         return null;
     }
 
+    public final Map<String, Integer> getAssetsTradeable(){
+        //TODO: get the tradeable assets a player definitely has
+
+        return null;
+    }
+
+    public final List<Map<String, Integer>> getOptionalAssetsCompleteTradeable(){
+        //TODO: get a list of all the tradeable asset choices a player can make
+
+        return null;
+    }
+
     public final int getCountOfAsset(String assetName){
         return getAsset(getAssets(), assetName);
     }
