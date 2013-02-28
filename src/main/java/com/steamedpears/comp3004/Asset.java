@@ -2,7 +2,10 @@ package com.steamedpears.comp3004;
 
 import java.util.Map;
 
-public abstract class Asset {
+public final class Asset {
+
+    //prevent making this real
+    private Asset(){}
 
     //resources
     public static final String ASSET_WOOD = "wood";

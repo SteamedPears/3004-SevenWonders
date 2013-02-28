@@ -14,8 +14,8 @@ public class Wonder {
     //instance variables///////////////////////////////////////////
     private String name;
     private char side;
-    private List<Map<String, Integer>> stageCosts;
-    private List<Map<String, Integer>> stageAssets;
+    //stages are represented by cards for simplicity
+    private List<Card> stages;
     private int currentStage;
     private Image image;
 
