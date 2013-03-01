@@ -15,7 +15,8 @@ public class Wonder {
     private String name;
     private char side;
     //stages are represented by cards for simplicity
-    private List<Card> stages;
+    private List<Card> stagesA;
+    private List<Card> stagesB;
     private int currentStage;
     private Image image;
 

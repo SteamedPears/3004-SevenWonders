@@ -5,21 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.steamedpears.comp3004.Asset.*;
+import static com.steamedpears.comp3004.PlayerCommand.PlayerCardAction.*;
 
-public abstract class Player {
-    //inner utility classes/////////////////////////////////////////////////
-    protected enum PlayerCardAction{
-        DISCARD, BUILD, PLAY
-    }
-
-    protected class PlayerCommand{
-        public PlayerCardAction action;
-        public Card card;
-        public Map<String, Integer> leftPurchases;
-        public Map<String, Integer> rightPurchases;
-    }
-
-
+public abstract class Player extends Thread{
     //instance variables////////////////////////////////////////////////////
     private Wonder wonder;
     private List<Card> playedCards;
@@ -27,10 +15,14 @@ public abstract class Player {
     private Map<String, Integer> restrictedAssets;
     private Player playerLeft;
     private Player playerRight;
+    private SevenWondersGame game;
+    private PlayerCommand currentCommand;
+    private List<Card> hand;
 
     //constructor///////////////////////////////////////////////////////////
-    public Player(Wonder wonder){
+    public Player(Wonder wonder, SevenWondersGame game){
         this.wonder = wonder;
+        this.game = game;
         this.playedCards = new ArrayList<Card>();
     }
 
@@ -46,24 +38,37 @@ public abstract class Player {
         //TODO: play card, return whether successful
     }
 
-    public final void takeTurn(ArrayList<Card> currentHand) throws Exception {
-        PlayerCommand command = handleTurn(currentHand);
-        if(!isValid(command, currentHand)){
-            throw new Exception("Player made invalid move");
-        }
+    private final void undiscard(Card card){
+        //TODO: take this card out of this discard, and play it
+    }
+
+    private final void playFree(Card card){
+        //TODO: take this card out of this discard, and play it
+    }
+
+    public final void takeTurn(PlayerCommand command) throws Exception {
         if(command!=null){
-            if(command.action.equals(PlayerCardAction.BUILD)){
+            if(command.action.equals(BUILD)){
                 buildWonder(command.card);
-            }else if(command.action.equals(PlayerCardAction.PLAY)){
+            }else if(command.action.equals(PLAY)){
                 playCard(command.card);
-            }else if(command.action.equals(PlayerCardAction.DISCARD)){
+            }else if(command.action.equals(DISCARD)){
                 discardCard(command.card);
+            }else if(command.action.equals(UNDISCARD)){
+                undiscard(command.card);
+            }else if(command.action.equals(PLAY_FREE)){
+                playFree(command.card);
             }
         }
     }
 
     //extend with a GUI or AI
-    protected abstract PlayerCommand handleTurn(ArrayList<Card> cardsInHand);
+    //when handleTurn terminates, currentCommand should be set with the Player's desired command
+    protected abstract PlayerCommand handleTurn();
+
+    public void run(){
+        handleTurn();
+    }
 
     //setters///////////////////////////////////////////////////////////////////
     public final void setPlayerLeft(Player playerLeft){
@@ -72,6 +77,14 @@ public abstract class Player {
 
     public final void setPlayerRight(Player playerRight){
         this.playerRight = playerRight;
+    }
+
+    protected final void setCurrentCommand(PlayerCommand currentCommand){
+        this.currentCommand = currentCommand;
+    }
+
+    public final void setHand(List<Card> hand){
+        this.hand = hand;
     }
 
     //getters///////////////////////////////////////////////////////////////////
@@ -87,6 +100,14 @@ public abstract class Player {
 
     public final Player getPlayerRight(){
         return playerRight;
+    }
+
+    public final List<Card> getHand(){
+        return hand;
+    }
+
+    public final PlayerCommand getCurrentCommand(){
+        return currentCommand;
     }
 
     public final Map<String, Integer> getAssets(){
