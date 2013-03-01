@@ -25,7 +25,7 @@ public class SevenWondersGame {
 
     public void handleMoves(Map<Player, PlayerCommand> commands){
         //TODO: locally apply these moves sent from the Router
-
+        //note: all player moves must be verified before any player move is actually applied
         //at the end just call takeTurn()? Maybe?
     }
 
