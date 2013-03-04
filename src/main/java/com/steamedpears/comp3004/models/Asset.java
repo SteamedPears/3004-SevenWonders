@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,14 +61,22 @@ public final class Asset {
         return map;
     }
 
-    public static Map<String, Integer> convertJSArrayToAssetMap(JsonArray arr){
-        Map<String, Integer> map = new HashMap<String, Integer>();
+    public static Set<String> convertJSArrayToSet(JsonArray arr){
+        Set<String> set = new HashSet<String>();
 
         for(JsonElement entry: arr){
-            map.put(entry.getAsString(), 1);
+            set.add(entry.getAsString());
         }
 
-        return map;
+        return set;
+    }
+
+    public static Map<String, Integer> convertJSONToAssetMap(JsonObject obj, String key){
+        return obj.has(key) ? convertJSONToAssetMap(obj.getAsJsonObject(key)) : new HashMap<String, Integer>();
+    }
+
+    public static Set<String> convertJSArrayToSet(JsonObject obj, String key){
+        return obj.has(key) ? convertJSArrayToSet(obj.getAsJsonArray(key)) : new HashSet<String>();
     }
 
 }

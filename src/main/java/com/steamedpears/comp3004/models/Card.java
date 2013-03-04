@@ -1,10 +1,15 @@
 package com.steamedpears.comp3004.models;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import javax.swing.*;
 import java.awt.Image;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static com.steamedpears.comp3004.models.Asset.*;
 
 public class Card {
     //constants/////////////////////////////////////////////////////
@@ -16,26 +21,41 @@ public class Card {
     private String color;
     private String name;
     private Image image;
+    private int minPlayers;
+    private int age;
     //The base amount of assets this card yields
     private Map<String, Integer> baseAssets;
     //If multiplierAssets is not null, multiply the values in baseAssets
     //by the number of occurences of these assets in multiplierTargets (a combination of self, left, and right)
-    private List<String> multiplierAssets;
-    private List<String> multiplierTargets;
+    private Set<String> multiplierAssets;
+    private Set<String> multiplierTargets;
     //The building the card is free to play for
     private String freeFor;
     //the cost of playing this card
     private Map<String, Integer> cost;
     //the resources this card makes discounted
-    private List<String> discountsAssets;
+    private Set<String> discountsAssets;
     //the players to which this card's discountsAssets applies to
-    private List<String> discountsTargets;
+    private Set<String> discountsTargets;
     //if true, the player may choose only *one* of the keys of baseAssets
     private boolean isChoice;
 
     //constructor///////////////////////////////////////////////////
     public Card(JsonObject obj){
-        //TODO: interpret this object
+        this.name = obj.getAsJsonPrimitive("name").getAsString();
+        this.color = obj.getAsJsonPrimitive("guild").getAsString();
+        this.image = new ImageIcon(obj.getAsJsonPrimitive("image").getAsString()).getImage();
+        this.cost = convertJSONToAssetMap(obj,"cost");
+        this.minPlayers = obj.getAsJsonPrimitive("players").getAsInt();
+        this.age = obj.getAsJsonPrimitive("age").getAsInt();
+
+        //figure out what this card actually does
+        this.baseAssets = convertJSONToAssetMap(obj,"baseAssets");
+        this.multiplierAssets = convertJSArrayToSet(obj,"multiplierAssets");
+        this.multiplierTargets = convertJSArrayToSet(obj,"multiplierTargets");
+        this.discountsAssets = convertJSArrayToSet(obj,"discountsAssets");
+        this.discountsTargets = convertJSArrayToSet(obj,"discountsTargets");
+        this.isChoice = obj.has("isChoice") && obj.getAsJsonPrimitive("isChoice").getAsBoolean();
     }
 
     //getters////////////////////////////////////////////////////////
@@ -51,13 +71,21 @@ public class Card {
         return image;
     }
 
+    public int getMinPlayers(){
+        return minPlayers;
+    }
+
+    public int getAge(){
+        return age;
+    }
+
     public Map<String, Integer> getAssets(Player player){
         //TODO: compute the assets this card yields if played by this player
 
         return null;
     }
 
-    public List<String> getAssetsOptional(Player player){
+    public Set<String> getAssetsOptional(Player player){
         //TODO: compute the list of assets this card yields if it isChoice
 
         return null;
