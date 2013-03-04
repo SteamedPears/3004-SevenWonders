@@ -2,6 +2,7 @@ package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonObject;
 
+import javax.swing.*;
 import java.awt.Image;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,12 @@ public class Wonder {
         public List<Card> stages;
         public Image image;
         public String startResource;
+
+        public WonderSide(JsonObject obj){
+            this.stages = Card.parseDeck(obj.getAsJsonArray("stages"));
+            this.image = new ImageIcon(obj.getAsJsonPrimitive("image").getAsString()).getImage();
+            this.startResource = obj.getAsJsonPrimitive("startResource").getAsString();
+        }
     }
     //static constants/////////////////////////////////////////////
     public static final char SIDE_A = 'A';
@@ -26,8 +33,9 @@ public class Wonder {
 
     //constructor//////////////////////////////////////////////////
     public Wonder(JsonObject obj){
-        //TODO: interpret this object
-
+        this.name = obj.getAsJsonPrimitive("name").getAsString();
+        this.sideA = new WonderSide(obj.getAsJsonObject("a"));
+        this.sideB = new WonderSide(obj.getAsJsonObject("b"));
         reset();
     }
 

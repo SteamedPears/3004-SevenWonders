@@ -1,10 +1,12 @@
 package com.steamedpears.comp3004.models;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.swing.*;
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,15 @@ public class Card {
     public static final String PLAYER_LEFT = "left";
     public static final String PLAYER_RIGHT = "right";
     public static final String PLAYER_SELF = "self";
+
+    //static methods////////////////////////////////////////////////
+    public static List<Card> parseDeck(JsonArray deck){
+        List<Card> cards = new ArrayList<Card>();
+        for(JsonElement element: deck){
+            cards.add(new Card(element.getAsJsonObject()));
+        }
+        return cards;
+    }
 
     //instance variables////////////////////////////////////////////
     private String color;
@@ -45,7 +56,7 @@ public class Card {
         this.name = obj.has("name") ? obj.getAsJsonPrimitive("name").getAsString() : "";
         this.color = obj.has("color") ? obj.getAsJsonPrimitive("guild").getAsString() : "";
         this.image = obj.has("image") ? new ImageIcon(obj.getAsJsonPrimitive("image").getAsString()).getImage() : null;
-        this.cost = convertJSONToAssetMap(obj,"cost");
+        this.cost = convertJSONToAssetMap(obj, "cost");
         this.minPlayers = obj.has("players") ? obj.getAsJsonPrimitive("players").getAsInt() : 0;
         this.age = obj.has("age") ? obj.getAsJsonPrimitive("age").getAsInt() : 0;
 
