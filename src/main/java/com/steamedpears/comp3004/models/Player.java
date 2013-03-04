@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
 import static com.steamedpears.comp3004.models.Asset.*;
 
 public abstract class Player extends Thread{
@@ -47,15 +48,15 @@ public abstract class Player extends Thread{
 
     public final void takeTurn(PlayerCommand command) throws Exception {
         if(command!=null){
-            if(command.action.equals(PlayerCommand.PlayerCardAction.BUILD)){
+            if(command.action.equals(BUILD)){
                 buildWonder(command.card);
-            }else if(command.action.equals(PlayerCommand.PlayerCardAction.PLAY)){
+            }else if(command.action.equals(PLAY)){
                 playCard(command.card);
-            }else if(command.action.equals(PlayerCommand.PlayerCardAction.DISCARD)){
+            }else if(command.action.equals(DISCARD)){
                 discardCard(command.card);
-            }else if(command.action.equals(PlayerCommand.PlayerCardAction.UNDISCARD)){
+            }else if(command.action.equals(UNDISCARD)){
                 undiscard(command.card);
-            }else if(command.action.equals(PlayerCommand.PlayerCardAction.PLAY_FREE)){
+            }else if(command.action.equals(PLAY_FREE)){
                 playFree(command.card);
             }
         }
