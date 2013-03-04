@@ -1,26 +1,28 @@
 package com.steamedpears.comp3004;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class SevenWondersGame {
-    private boolean host;
+public class SevenWondersGame extends Thread{
     private List<Player> players;
     private Set<Player> localPlayers;
     private Set<Card> discard;
     private List<List<Card>> deck;
     private int age;
-    private int maxPlayers;
+    private int maxPlayers; //useless?
     private Router router;
 
-    public SevenWondersGame(boolean host){
+    public SevenWondersGame(Router router){
         players = new ArrayList<Player>();
+        localPlayers = new HashSet<Player>();
         discard = new HashSet<Card>();
-        this.host = host;
-        this.router = new Router(this);
+        age = 1;
+        this.router = router;
     }
 
     public void handleMoves(Map<Player, PlayerCommand> commands){
@@ -29,7 +31,7 @@ public class SevenWondersGame {
         //at the end just call takeTurn()? Maybe?
     }
 
-    public void takeTurn(){
+    private void takeTurn(){
         changeHands();
         Set<Player> runningPlayers = new HashSet<Player>();
 
@@ -53,6 +55,10 @@ public class SevenWondersGame {
         }
     }
 
+    public void run(){
+        takeTurn();
+    }
+
     private void changeHands(){
         //TODO: either deal new hands, or rotate the hands
     }
@@ -65,6 +71,19 @@ public class SevenWondersGame {
         //TODO: undiscard this card
     }
 
+    public void setDeck(JsonObject obj){
+        //TODO: compute the deck
+    }
+
+    public void addPlayer(Player player){
+        players.add(player);
+    }
+
+    public void addLocalPlayer(Player player){
+        localPlayers.add(player);
+        addPlayer(player);
+    }
+
     public List<Player> getPlayers(){
         return players;
     }
@@ -75,9 +94,5 @@ public class SevenWondersGame {
 
     public int getAge(){
         return age;
-    }
-
-    public boolean isHost(){
-        return host;
     }
 }
