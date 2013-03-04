@@ -1,11 +1,11 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.models;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.steamedpears.comp3004.Asset.*;
-import static com.steamedpears.comp3004.PlayerCommand.PlayerCardAction.*;
+import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
+import static com.steamedpears.comp3004.models.Asset.*;
 
 public abstract class Player extends Thread{
     //instance variables////////////////////////////////////////////////////
