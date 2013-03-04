@@ -1,6 +1,13 @@
 package com.steamedpears.comp3004.models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class Asset {
 
@@ -8,29 +15,30 @@ public final class Asset {
     private Asset(){}
 
     //resources
-    public static final String ASSET_WOOD = "wood";
-    public static final String ASSET_STONE = "stone";
-    public static final String ASSET_CLAY = "clay";
-    public static final String ASSET_ORE = "ore";
+    public static final String ASSET_WOOD = "w";
+    public static final String ASSET_STONE = "s";
+    public static final String ASSET_CLAY = "c";
+    public static final String ASSET_ORE = "o";
 
     //synthetics
-    public static final String ASSET_LOOM = "loom";
-    public static final String ASSET_PAPYRUS = "papyrus";
-    public static final String ASSET_GLASS = "glass";
+    public static final String ASSET_LOOM = "l";
+    public static final String ASSET_PAPYRUS = "p";
+    public static final String ASSET_GLASS = "g";
 
     //science
-    public static final String ASSET_SCIENCE_1 = "science-1";
-    public static final String ASSET_SCIENCE_2 = "science-2";
-    public static final String ASSET_SCIENCE_3 = "science-3";
+    public static final String ASSET_SCIENCE_1 = "tab";
+    public static final String ASSET_SCIENCE_2 = "comp";
+    public static final String ASSET_SCIENCE_3 = "gear";
 
     //abilities
     public static final String ASSET_DISCARD = "discard";
-    public static final String ASSET_DOUBLE_PLAY = "doublePlay";
-    public static final String ASSET_BUILD_FREE = "buildFree";
+    public static final String ASSET_DOUBLE_PLAY = "lastcard";
+    public static final String ASSET_BUILD_FREE = "freeBuild";
+    public static final String ASSET_GUILD_COPY = "guildCopy";
 
     //misc
     public static final String ASSET_GOLD = "gold";
-    public static final String ASSET_MILITARY = "military";
+    public static final String ASSET_MILITARY = "army";
     public static final String ASSET_VICTORY = "victory";
 
     //utility methods
@@ -40,6 +48,35 @@ public final class Asset {
         }else{
             return 0;
         }
+    }
+
+    public static Map<String, Integer> convertJSONToAssetMap(JsonObject obj){
+        Map<String, Integer> map = new HashMap<String, Integer>();
+
+        Set<Map.Entry<String, JsonElement>> entrySet = obj.entrySet();
+        for(Map.Entry<String, JsonElement> entry: entrySet){
+            map.put(entry.getKey(), entry.getValue().getAsInt());
+        }
+
+        return map;
+    }
+
+    public static Set<String> convertJSArrayToSet(JsonArray arr){
+        Set<String> set = new HashSet<String>();
+
+        for(JsonElement entry: arr){
+            set.add(entry.getAsString());
+        }
+
+        return set;
+    }
+
+    public static Map<String, Integer> convertJSONToAssetMap(JsonObject obj, String key){
+        return obj.has(key) ? convertJSONToAssetMap(obj.getAsJsonObject(key)) : new HashMap<String, Integer>();
+    }
+
+    public static Set<String> convertJSArrayToSet(JsonObject obj, String key){
+        return obj.has(key) ? convertJSArrayToSet(obj.getAsJsonArray(key)) : new HashSet<String>();
     }
 
 }
