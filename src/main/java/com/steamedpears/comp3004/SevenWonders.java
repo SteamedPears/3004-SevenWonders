@@ -6,14 +6,17 @@ public class SevenWonders {
     }
 
     ViewFrame view;
-    SevenWondersGame game;
+    NewGameDialog dialog;
+    Router router;
 
     public SevenWonders() {
         view = new ViewFrame(this);
+        dialog = new NewGameDialog(view,this);
+        dialog.setVisible(true);
     }
 
     public void startGame(boolean isHost,String ipAddress) {
-        game =  (new Router(isHost)).getLocalGame();
+        router = new Router(isHost);
     }
 
     public void exit() {
