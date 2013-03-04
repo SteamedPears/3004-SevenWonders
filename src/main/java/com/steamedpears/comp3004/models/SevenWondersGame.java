@@ -1,6 +1,7 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonObject;
+import com.steamedpears.comp3004.routing.Router;
 
 import java.util.ArrayList;
 import java.util.HashSet;
