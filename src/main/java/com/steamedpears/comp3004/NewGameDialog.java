@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
  */
 public class NewGameDialog extends JDialog {
     private final int width = 480;
-    private final int height = 320;
+    private final int height = 120;
 
     private boolean isHost = true;
 
@@ -42,16 +42,20 @@ public class NewGameDialog extends JDialog {
         addressField.setVisible(true);
     }
 
+    public boolean isHostSelected() { return isHost; }
+    public String getipAddress() { return ipAddress; }
+
     public NewGameDialog(ViewFrame f,
-                         final ActionListener startButtonListener,
-                         final ActionListener cancelButtonListener,
-                         final WindowListener windowCloseListener) {
+                         ActionListener startButtonListener,
+                         ActionListener cancelButtonListener,
+                         WindowListener windowCloseListener) {
         super(f,"New Game",true);
 
         // initialization
         setLayout(new MigLayout());
         setBounds((f.getWidth() / 2) - (width / 2), (f.getHeight() / 2) - (height / 2), width, height);
         addWindowListener(windowCloseListener);
+        setResizable(false);
 
         // host/client buttons
         ButtonGroup hostClientButtonGroup = new ButtonGroup();
@@ -91,7 +95,7 @@ public class NewGameDialog extends JDialog {
         selectHost();
 
         // Cancel game button
-        JButton cancelButton = new JButton("Cancel Game");
+        JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(cancelButtonListener);
         add(cancelButton);
 
@@ -99,8 +103,5 @@ public class NewGameDialog extends JDialog {
         JButton startButton = new JButton("Start Game");
         startButton.addActionListener(startButtonListener);
         add(startButton);
-
-        // finalize
-        setVisible(true);
     }
 }

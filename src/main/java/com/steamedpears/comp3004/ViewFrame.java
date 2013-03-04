@@ -13,14 +13,12 @@ import java.awt.event.*;
  * To change this template use File | Settings | File Templates.
  */
 public class ViewFrame extends JFrame {
-    JPanel panel;
+    private JPanel panel;
+    public SevenWonders controller;
+    public NewGameDialog dialog;
 
     public void newGame() {
-        new NewGameDialog(this,new StartGameListener(),new CancelGameListener(),new NewGameDialogClose());
-    }
-
-    private void startGame() {
-        // TODO: make this do something
+        dialog.setVisible(true);
     }
 
     private void init() {
@@ -28,31 +26,33 @@ public class ViewFrame extends JFrame {
         setBounds(0,0,640,480);
         setResizable(false);
         setVisible(true);
+        dialog = new NewGameDialog(this,new StartGameListener(),new CancelGameListener(),new NewGameDialogClose());
         newGame();
     }
 
-    public ViewFrame() {
+    public ViewFrame(SevenWonders controller) {
+        this.controller = controller;
         init();
     }
 
     private class StartGameListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            // TODO: do something here
+            controller.startGame(dialog.isHostSelected(),dialog.getipAddress());
         }
     }
 
     private class CancelGameListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            System.exit(0);
+            controller.exit();
         }
     }
 
     private class NewGameDialogClose extends WindowAdapter {
         @Override
-        public void windowClosed(WindowEvent windowEvent) {
-            System.exit(0);
+        public void windowClosing(WindowEvent windowEvent) {
+            controller.exit();
         }
     }
 }
