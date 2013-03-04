@@ -13,7 +13,7 @@ public class SevenWonders {
     }
 
     public void startGame(boolean isHost,String ipAddress) {
-        game =  new SevenWondersGame(new Router(isHost));
+        game =  (new Router(isHost)).getLocalGame();
     }
 
     public void exit() {
