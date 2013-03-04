@@ -1,6 +1,12 @@
 package com.steamedpears.comp3004.models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public final class Asset {
 
@@ -41,6 +47,27 @@ public final class Asset {
         }else{
             return 0;
         }
+    }
+
+    public static Map<String, Integer> convertJSONToAssetMap(JsonObject obj){
+        Map<String, Integer> map = new HashMap<String, Integer>();
+
+        Set<Map.Entry<String, JsonElement>> entrySet = obj.entrySet();
+        for(Map.Entry<String, JsonElement> entry: entrySet){
+            map.put(entry.getKey(), entry.getValue().getAsInt());
+        }
+
+        return map;
+    }
+
+    public static Map<String, Integer> convertJSArrayToAssetMap(JsonArray arr){
+        Map<String, Integer> map = new HashMap<String, Integer>();
+
+        for(JsonElement entry: arr){
+            map.put(entry.getAsString(), 1);
+        }
+
+        return map;
     }
 
 }
