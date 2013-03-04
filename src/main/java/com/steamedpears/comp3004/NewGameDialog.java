@@ -36,7 +36,7 @@ public class NewGameDialog extends JDialog {
     }
 
     public boolean isHostSelected() { return isHost; }
-    public String getipAddress() { return ipAddress; }
+    public String getIpAddress() { return ipAddress; }
 
     public NewGameDialog(ViewFrame f,
                          ActionListener startButtonListener,

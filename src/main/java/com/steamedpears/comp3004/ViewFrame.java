@@ -31,7 +31,7 @@ public class ViewFrame extends JFrame {
     private class StartGameListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            controller.startGame(dialog.isHostSelected(),dialog.getipAddress());
+            controller.startGame(dialog.isHostSelected(),dialog.getIpAddress());
         }
     }
 
