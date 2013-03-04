@@ -44,7 +44,7 @@ function reformat(data){
 			}		
 			var from = effect.from;
 			var basis = effect.basis;
-			if(from){
+			if(from && basis && basis!="none"){
 				if(from=="all"){
 					multiplierTargets = ["left", "self", "right"];
 				}else if(from=="player"){
