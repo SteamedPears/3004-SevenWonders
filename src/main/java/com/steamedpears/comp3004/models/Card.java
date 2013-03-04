@@ -28,6 +28,11 @@ public class Card {
         return cards;
     }
 
+    public static List<List<Card>> generateRandomDeck(List<Card> cards, int numPlayers){
+        //TODO: implement this
+        return null;
+    }
+
     //instance variables////////////////////////////////////////////
     private String color;
     private String name;
