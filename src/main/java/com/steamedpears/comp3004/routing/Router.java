@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class Router {
 
+    private static final int HOST_PORT = 1567;
+
     //localGame#handleMoves should be called when every player has decided on a command
     private SevenWondersGame localGame;
     private Map<Player, PlayerCommand> registeredMoves;
