@@ -5,13 +5,6 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: spratt
- * Date: 2013-03-02
- * Time: 7:40 PM
- * To change this template use File | Settings | File Templates.
- */
 public class ViewFrame extends JFrame {
     private JPanel panel;
     public SevenWonders controller;

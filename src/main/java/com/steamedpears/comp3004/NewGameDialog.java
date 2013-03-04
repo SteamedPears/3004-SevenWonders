@@ -7,13 +7,6 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-/**
- * Created with IntelliJ IDEA.
- * User: spratt
- * Date: 2013-03-03
- * Time: 3:26 PM
- * To change this template use File | Settings | File Templates.
- */
 public class NewGameDialog extends JDialog {
     private final int width = 480;
     private final int height = 120;
