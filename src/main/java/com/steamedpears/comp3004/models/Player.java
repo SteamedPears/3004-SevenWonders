@@ -1,11 +1,10 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.models;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.steamedpears.comp3004.Asset.*;
-import static com.steamedpears.comp3004.PlayerCommand.PlayerCardAction.*;
+import static com.steamedpears.comp3004.models.Asset.*;
 
 public abstract class Player extends Thread{
     //instance variables////////////////////////////////////////////////////
@@ -48,15 +47,15 @@ public abstract class Player extends Thread{
 
     public final void takeTurn(PlayerCommand command) throws Exception {
         if(command!=null){
-            if(command.action.equals(BUILD)){
+            if(command.action.equals(PlayerCommand.PlayerCardAction.BUILD)){
                 buildWonder(command.card);
-            }else if(command.action.equals(PLAY)){
+            }else if(command.action.equals(PlayerCommand.PlayerCardAction.PLAY)){
                 playCard(command.card);
-            }else if(command.action.equals(DISCARD)){
+            }else if(command.action.equals(PlayerCommand.PlayerCardAction.DISCARD)){
                 discardCard(command.card);
-            }else if(command.action.equals(UNDISCARD)){
+            }else if(command.action.equals(PlayerCommand.PlayerCardAction.UNDISCARD)){
                 undiscard(command.card);
-            }else if(command.action.equals(PLAY_FREE)){
+            }else if(command.action.equals(PlayerCommand.PlayerCardAction.PLAY_FREE)){
                 playFree(command.card);
             }
         }

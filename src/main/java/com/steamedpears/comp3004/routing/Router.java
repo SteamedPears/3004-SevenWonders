@@ -1,4 +1,8 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.routing;
+
+import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.PlayerCommand;
+import com.steamedpears.comp3004.models.SevenWondersGame;
 
 import java.util.Map;
 
