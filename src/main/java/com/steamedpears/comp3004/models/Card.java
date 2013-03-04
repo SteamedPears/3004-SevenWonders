@@ -42,12 +42,12 @@ public class Card {
 
     //constructor///////////////////////////////////////////////////
     public Card(JsonObject obj){
-        this.name = obj.getAsJsonPrimitive("name").getAsString();
-        this.color = obj.getAsJsonPrimitive("guild").getAsString();
-        this.image = new ImageIcon(obj.getAsJsonPrimitive("image").getAsString()).getImage();
+        this.name = obj.has("name") ? obj.getAsJsonPrimitive("name").getAsString() : "";
+        this.color = obj.has("color") ? obj.getAsJsonPrimitive("guild").getAsString() : "";
+        this.image = obj.has("image") ? new ImageIcon(obj.getAsJsonPrimitive("image").getAsString()).getImage() : null;
         this.cost = convertJSONToAssetMap(obj,"cost");
-        this.minPlayers = obj.getAsJsonPrimitive("players").getAsInt();
-        this.age = obj.getAsJsonPrimitive("age").getAsInt();
+        this.minPlayers = obj.has("players") ? obj.getAsJsonPrimitive("players").getAsInt() : 0;
+        this.age = obj.has("age") ? obj.getAsJsonPrimitive("age").getAsInt() : 0;
 
         //figure out what this card actually does
         this.baseAssets = convertJSONToAssetMap(obj,"baseAssets");
