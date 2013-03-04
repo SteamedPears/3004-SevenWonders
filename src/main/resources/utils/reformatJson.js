@@ -1,5 +1,5 @@
-function reformat(data){
-	var cards = data.cards;
+function reformatCards(data){
+	var cards = data.cards || data;
 	var freeFor = {};
 	for(var i=0; i<cards.length; ++i){
 		var card = cards[i];
@@ -84,10 +84,31 @@ function reformat(data){
 	} 	
 	
 	echo(data);
+	return data;
+}
+
+function reformatWonders(data){
+	var wonders = data.wonders;
+	for(var i=0; i<wonders.length; i++){
+			var wonder = wonders[i];
+			var sides = [wonder.a, wonder.b];
+			for(var j=0; j<sides.length; j++){
+				var side = sides[j];
+				
+				side.startResource = side.effects[0].type;
+				delete side.effects;
+				
+				reformatCards(side.stages);
+			}
+	}	
+	
+	echo(data);
+	return data;
 }
 
 function echo(data){
 	console.log(JSON.stringify(data));
 }
 
-$.getJSON("target.json", reformat);
+$.getJSON("../data/cards.json", reformatCards);
+$.getJSON("../data/wonderlist.json", reformatWonders);
