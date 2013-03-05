@@ -1,37 +1,56 @@
 package com.steamedpears.comp3004.routing;
 
+import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-public class Router {
+public abstract class Router extends Thread{
+
+    public static Router getHostRouter(int port){
+        return new HostRouter(port);
+    }
+
+    public static Router getClientRouter(String ipAddress, int port){
+        return new ClientRouter(ipAddress, port);
+    }
 
     public static final int HOST_PORT = 1567;
 
     //localGame#handleMoves should be called when every player has decided on a command
     private SevenWondersGame localGame;
-    private Map<Player, PlayerCommand> registeredMoves;
-    private boolean host;
+    private boolean playing;
 
-    public Router(boolean host){
+    protected Router() {
         this.localGame = new SevenWondersGame(this);
-        this.host = host;
+        playing = false;
     }
 
-    public void registerMove(Player player, PlayerCommand command){
-        //TODO: relay this command to whatever networked Routers that care (probably just host's Router)
-    }
+    public abstract void registerMove(Player player, PlayerCommand command);
 
-    public void beginGame(){
-        //TODO: if host, tell other routers to beginGame
-
-        //calls localGame.takeTurn in different thread
-        localGame.start();
-    }
+    public abstract void beginGame();
 
     public SevenWondersGame getLocalGame(){
         return localGame;
+    }
+
+    public boolean isPlaying(){
+        return playing;
+    }
+
+    protected JsonObject playerCommandsToJson(Map<Player, PlayerCommand> commands){
+        //TODO: this
+        return null;
+    }
+
+    protected Map<Player, PlayerCommand> jsonToPlayerCommands(JsonObject obj){
+        //TODO: this
+        return null;
     }
 }
