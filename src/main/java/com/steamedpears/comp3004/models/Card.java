@@ -95,6 +95,10 @@ public class Card {
         return age;
     }
 
+    public Map<String, Integer> getCost(){
+        return cost;
+    }
+
     public Map<String, Integer> getAssets(Player player){
         //TODO: compute the assets this card yields if played by this player
 

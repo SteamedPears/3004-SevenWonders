@@ -50,6 +50,10 @@ public class Wonder {
         return false;
     }
 
+    public void expendLimitedResource(String resourceName){
+        //TODO: make it so the Player can't reuse this ever again, somehow (i.e. if this is Asset.ASSET_BUILD_FREE, disable it)
+    }
+
     //setters///////////////////////////////////////////////////////
     public void setSide(char side){
         if(side==SIDE_A){
@@ -78,6 +82,22 @@ public class Wonder {
 
     public Map<String, Integer> getCostOfNextStage(){
         //TODO: return cost of next stage
+
+        return null;
+    }
+
+    public List<Card> getStages(){
+        return currentSide.stages;
+    }
+
+    public Map<String, Integer> getAssets(){
+        //TODO: get the assets this wonder definitely has
+
+        return null;
+    }
+
+    public List<Map<String, Integer>> getOptionalAssetsComplete(){
+        //TODO: get a list of all the asset choices this wonder can make
 
         return null;
     }
