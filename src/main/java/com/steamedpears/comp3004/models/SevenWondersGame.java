@@ -16,7 +16,6 @@ public class SevenWondersGame extends Thread{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
 
-
     private List<Player> players;
     private Set<Player> localPlayers;
     private Set<Card> discard;
@@ -78,7 +77,7 @@ public class SevenWondersGame extends Thread{
     }
 
     private void rotateHands(){
-        if(getAge()==2){
+        if(getAge()==2){  //rotate cards to the right
             Player curPlayer = players.get(players.size()-1);
             List<Card> oldHand = curPlayer.getHand();
             List<Card> newHand;
@@ -88,7 +87,7 @@ public class SevenWondersGame extends Thread{
                 curPlayer.setHand(oldHand);
                 oldHand = newHand;
             }
-        }else{
+        }else{ //rotate cards to the left
             Player curPlayer = players.get(0);
             List<Card> oldHand = curPlayer.getHand();
             List<Card> newHand;
