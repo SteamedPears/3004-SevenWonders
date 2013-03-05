@@ -27,10 +27,10 @@ public class SevenWondersGame extends Thread{
     private Router router;
 
     public SevenWondersGame(Router router){
-        players = new ArrayList<Player>();
-        localPlayers = new HashSet<Player>();
-        discard = new HashSet<Card>();
-        age = 1;
+        this.players = new ArrayList<Player>();
+        this.localPlayers = new HashSet<Player>();
+        this.discard = new HashSet<Card>();
+        this.age = 1;
         this.router = router;
     }
 
@@ -193,5 +193,9 @@ public class SevenWondersGame extends Thread{
             }
         }
         return null;
+    }
+
+    public Card getCardById(String id){
+        return cards.get(id);
     }
 }
