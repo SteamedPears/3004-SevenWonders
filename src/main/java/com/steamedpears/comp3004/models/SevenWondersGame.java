@@ -96,4 +96,13 @@ public class SevenWondersGame extends Thread{
     public int getAge(){
         return age;
     }
+
+    public Player getPlayerById(int id){
+        for(Player player: players){
+            if(player.getPlayerId()==id){
+                return player;
+            }
+        }
+        return null;
+    }
 }

@@ -4,6 +4,8 @@ import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Router {
@@ -14,10 +16,14 @@ public class Router {
     private SevenWondersGame localGame;
     private Map<Player, PlayerCommand> registeredMoves;
     private boolean host;
+    private List<String> clients;
 
     public Router(boolean host){
         this.localGame = new SevenWondersGame(this);
         this.host = host;
+        if(host){
+            this.clients = new ArrayList<String>();
+        }
     }
 
     public void registerMove(Player player, PlayerCommand command){

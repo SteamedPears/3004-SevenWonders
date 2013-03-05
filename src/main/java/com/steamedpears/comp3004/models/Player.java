@@ -8,6 +8,14 @@ import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
 import static com.steamedpears.comp3004.models.Asset.*;
 
 public abstract class Player extends Thread{
+    //static variables//////////////////////////////////////////////////////
+    private static int currentId = 0;
+
+    //static methods////////////////////////////////////////////////////////
+    private static int getNextId(){
+        return currentId++;
+    }
+
     //instance variables////////////////////////////////////////////////////
     private Wonder wonder;
     private List<Card> playedCards;
@@ -18,14 +26,20 @@ public abstract class Player extends Thread{
     private List<Card> hand;
     private List<Integer> militaryResults;
     private int gold;
+    private int id;
 
     //constructor///////////////////////////////////////////////////////////
-    public Player(Wonder wonder, SevenWondersGame game){
+    public Player(Wonder wonder, SevenWondersGame game, int id){
         this.wonder = wonder;
         this.game = game;
         this.playedCards = new ArrayList<Card>();
         this.gold = 0;
         this.militaryResults = new ArrayList<Integer>();
+        this.id = id;
+    }
+
+    public Player(Wonder wonder, SevenWondersGame game){
+        this(wonder, game, getNextId());
     }
 
     private void discardCard(Card card){
@@ -118,6 +132,10 @@ public abstract class Player extends Thread{
 
     public final PlayerCommand getCurrentCommand(){
         return currentCommand;
+    }
+
+    public final int getPlayerId(){
+        return id;
     }
 
     public final Map<String, Integer> getAssets(){
