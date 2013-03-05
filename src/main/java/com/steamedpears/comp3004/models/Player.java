@@ -1,8 +1,10 @@
 package com.steamedpears.comp3004.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
 import static com.steamedpears.comp3004.models.Asset.*;
@@ -130,6 +132,17 @@ public abstract class Player extends Thread{
         return militaryResults;
     }
 
+    public final int getMilitaryDefeats(){
+        int result = 0;
+        for(int value: getMilitaryResults()){
+            if(value==-1){
+                ++result;
+            }
+        }
+
+        return result;
+    }
+
     public final PlayerCommand getCurrentCommand(){
         return currentCommand;
     }
@@ -143,39 +156,115 @@ public abstract class Player extends Thread{
         return getPlayerId();
     }
 
+    /**
+     * gets all the assets that aren't captured in the cards or wonder of the player
+     * @return the map
+     */
+    public final Map<String, Integer> getPrivateAssets(){
+        Map<String, Integer> privateAssets = new HashMap<String, Integer>();
+        privateAssets.put(ASSET_GOLD, getGold());
+        privateAssets.put(ASSET_DEFEAT, getMilitaryDefeats());
+
+        return privateAssets;
+    }
+
+    /**
+     * gets all the Assets the player definitely has before any decisions
+     * @return the map
+     */
     public final Map<String, Integer> getAssets(){
-        //TODO: get the assets a player definitely has
+        List<Map<String, Integer>> collectedAssets = new ArrayList<Map<String, Integer>>();
 
-        return null;
+        for(Card card: playedCards){
+            collectedAssets.add(card.getAssets(this));
+        }
+
+        collectedAssets.add(wonder.getAssets(this));
+
+        collectedAssets.add(getPrivateAssets());
+
+        return sumAssets(collectedAssets);
     }
 
-    public final List<Map<String, Integer>> getOptionalAssetsComplete(){
-        //TODO: get a list of all the asset choices a player can make
+    /**
+     * get all the asset choices the player can make
+     * @return the list of choices
+     */
+    public final List<Set<String>> getOptionalAssetsComplete(){
+        List<Set<String>> collectedAssets = new ArrayList<Set<String>>();
 
-        return null;
+        for(Card card: playedCards){
+            Set<String> options = card.getAssetsOptional(this);
+            if(options!=null && !options.isEmpty()){
+                collectedAssets.add(options);
+            }
+        }
+
+        collectedAssets.addAll(wonder.getOptionalAssetsComplete(this));
+
+        return collectedAssets;
     }
 
+    /**
+     * get a map representing the total of all the asset choices a player can make
+     * e.g. wood/stone and stone/clay -> wood:1, stone:2, clay:1
+     * @return the map
+     */
     public final Map<String, Integer> getOptionalAssetsSummary(){
-        //TODO: get a map representing the total of all the asset choices a player can make
-        //e.g. wood/stone and stone/clay -> wood:1, stone:2, clay:1
-        return null;
+        List<Set<String>> options = getOptionalAssetsComplete();
+
+        Map<String, Integer> result = new HashMap<String, Integer>();
+
+        for(Set<String> option: options){
+            for(String key: option){
+                if(result.containsKey(key)){
+                    result.put(key, result.get(key)+1);
+                }else{
+                    result.put(key, 1);
+                }
+            }
+        }
+
+        return result;
     }
 
+    /**
+     * get a map of all the assets a player can definitely trade before making any decisions
+     * @return the map
+     */
     public final Map<String, Integer> getAssetsTradeable(){
-        //TODO: get the tradeable assets a player definitely has
+        List<Map<String, Integer>> collectedAssets = new ArrayList<Map<String, Integer>>();
 
-        return null;
+        for(Card card: playedCards){
+            if(card.getColor().equals(COLOR_BROWN) || card.getColor().equals(COLOR_GREY)){
+                collectedAssets.add(card.getAssets(this));
+            }
+        }
+
+        collectedAssets.add(wonder.getTradeableAssets());
+
+        return sumAssets(collectedAssets);
     }
 
-    public final List<Map<String, Integer>> getOptionalAssetsCompleteTradeable(){
-        //TODO: get a list of all the tradeable asset choices a player can make
+    /**
+     * get a list of all the tradeable asset choices a player can make
+     * @return the list
+     */
+    public final List<Set<String>> getOptionalAssetsCompleteTradeable(){
+        List<Set<String>> collectedAssets = new ArrayList<Set<String>>();
 
-        return null;
-    }
+        for(Card card: playedCards){
+            if(card.getColor().equals(COLOR_BROWN) || card.getColor().equals(COLOR_GREY)){
+                Set<String> options = card.getAssetsOptional(this);
+                if(options!=null && !options.isEmpty()){
+                    collectedAssets.add(options);
+                }
+            }
+        }
 
-    public final int getCountOfAsset(String assetName){
-        //TODO: make this suck less, maybe? Do we even want this method?
-        return getAsset(getAssets(), assetName);
+        collectedAssets.addAll(wonder.getOptionalAssetsComplete(this));
+
+        return collectedAssets;
     }
 
 }
