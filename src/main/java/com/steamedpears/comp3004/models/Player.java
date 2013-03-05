@@ -11,19 +11,21 @@ public abstract class Player extends Thread{
     //instance variables////////////////////////////////////////////////////
     private Wonder wonder;
     private List<Card> playedCards;
-    private Map<String, Integer> freeAssets;
-    private Map<String, Integer> restrictedAssets;
     private Player playerLeft;
     private Player playerRight;
     private SevenWondersGame game;
     private PlayerCommand currentCommand;
     private List<Card> hand;
+    private List<Integer> militaryResults;
+    private int gold;
 
     //constructor///////////////////////////////////////////////////////////
     public Player(Wonder wonder, SevenWondersGame game){
         this.wonder = wonder;
         this.game = game;
         this.playedCards = new ArrayList<Card>();
+        this.gold = 0;
+        this.militaryResults = new ArrayList<Integer>();
     }
 
     private final void discardCard(Card card){
@@ -106,6 +108,14 @@ public abstract class Player extends Thread{
         return hand;
     }
 
+    public final int getGold(){
+        return gold;
+    }
+
+    public final List<Integer> getMilitaryResults(){
+        return militaryResults;
+    }
+
     public final PlayerCommand getCurrentCommand(){
         return currentCommand;
     }
@@ -141,6 +151,8 @@ public abstract class Player extends Thread{
     }
 
     public final int getCountOfAsset(String assetName){
+        //TODO: make this suck less, maybe? Do we even want this method?
         return getAsset(getAssets(), assetName);
     }
+
 }
