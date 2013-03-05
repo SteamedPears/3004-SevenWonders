@@ -15,14 +15,18 @@ public class Wonder {
         public String startResource;
 
         public WonderSide(JsonObject obj){
-            this.stages = Card.parseDeck(obj.getAsJsonArray("stages"));
-            this.image = new ImageIcon(obj.getAsJsonPrimitive("image").getAsString()).getImage();
-            this.startResource = obj.getAsJsonPrimitive("startResource").getAsString();
+            this.stages = Card.parseDeck(obj.getAsJsonArray(PROP_WONDER_STAGES));
+            this.image = new ImageIcon(obj.getAsJsonPrimitive(PROP_WONDER_IMAGE).getAsString()).getImage();
+            this.startResource = obj.getAsJsonPrimitive(PROP_WONDER_START_RESOURCE).getAsString();
         }
     }
     //static constants/////////////////////////////////////////////
-    public static final char SIDE_A = 'A';
-    public static final char SIDE_B = 'B';
+    public static final String PROP_WONDER_SIDE_A =             "a";
+    public static final String PROP_WONDER_SIDE_B =             "b";
+    public static final String PROP_WONDER_NAME =               "name";
+    public static final String PROP_WONDER_STAGES =             "stages";
+    public static final String PROP_WONDER_IMAGE =              "image";
+    public static final String PROP_WONDER_START_RESOURCE =     "startResource";
 
     //instance variables///////////////////////////////////////////
     private String name;
@@ -33,9 +37,9 @@ public class Wonder {
 
     //constructor//////////////////////////////////////////////////
     public Wonder(JsonObject obj){
-        this.name = obj.getAsJsonPrimitive("name").getAsString();
-        this.sideA = new WonderSide(obj.getAsJsonObject("a"));
-        this.sideB = new WonderSide(obj.getAsJsonObject("b"));
+        this.name = obj.getAsJsonPrimitive(PROP_WONDER_NAME).getAsString();
+        this.sideA = new WonderSide(obj.getAsJsonObject(PROP_WONDER_SIDE_A));
+        this.sideB = new WonderSide(obj.getAsJsonObject(PROP_WONDER_SIDE_B));
         reset();
     }
 
@@ -55,10 +59,10 @@ public class Wonder {
     }
 
     //setters///////////////////////////////////////////////////////
-    public void setSide(char side){
-        if(side==SIDE_A){
+    public void setSide(String side){
+        if(side==PROP_WONDER_SIDE_A){
             this.currentSide = sideA;
-        }else if(side==SIDE_B){
+        }else if(side==PROP_WONDER_SIDE_B){
             this.currentSide = sideB;
         }
     }
@@ -72,11 +76,11 @@ public class Wonder {
         return currentStage;
     }
 
-    public char getSide(){
+    public String getSide(){
         if(currentSide==sideB){
-            return SIDE_B;
+            return PROP_WONDER_SIDE_B;
         }else{
-            return SIDE_A;
+            return PROP_WONDER_SIDE_A;
         }
     }
 

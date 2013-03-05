@@ -15,9 +15,22 @@ import static com.steamedpears.comp3004.models.Asset.*;
 
 public class Card {
     //constants/////////////////////////////////////////////////////
-    public static final String PLAYER_LEFT = "left";
-    public static final String PLAYER_RIGHT = "right";
-    public static final String PLAYER_SELF = "self";
+    public static final String PLAYER_LEFT =    "left";
+    public static final String PLAYER_RIGHT =   "right";
+    public static final String PLAYER_SELF =    "self";
+
+    public static final String PROP_CARD_NAME =                 "name";
+    public static final String PROP_CARD_COLOR =                "guild";
+    public static final String PROP_CARD_IMAGE =                "image";
+    public static final String PROP_CARD_COST =                 "cost";
+    public static final String PROP_CARD_MIN_PLAYERS =          "players";
+    public static final String PROP_CARD_AGE =                  "age";
+    public static final String PROP_CARD_BASE_ASSETS =          "baseAssets";
+    public static final String PROP_CARD_MULTIPLIER_ASSETS =    "multiplierAssets";
+    public static final String PROP_CARD_MULTIPLIER_TARGETS =   "multiplierTargets";
+    public static final String PROP_CARD_DISCOUNTS_ASSETS =     "discountsAssets";
+    public static final String PROP_CARD_DISCOUNTS_TARGETS =    "discountsTargets";
+    public static final String PROP_CARD_CHOICE =               "isChoice";
 
     //static methods////////////////////////////////////////////////
     public static List<Card> parseDeck(JsonArray deck){
@@ -58,20 +71,20 @@ public class Card {
 
     //constructor///////////////////////////////////////////////////
     public Card(JsonObject obj){
-        this.name = obj.has("name") ? obj.getAsJsonPrimitive("name").getAsString() : "";
-        this.color = obj.has("color") ? obj.getAsJsonPrimitive("guild").getAsString() : "";
-        this.image = obj.has("image") ? new ImageIcon(obj.getAsJsonPrimitive("image").getAsString()).getImage() : null;
-        this.cost = convertJSONToAssetMap(obj, "cost");
-        this.minPlayers = obj.has("players") ? obj.getAsJsonPrimitive("players").getAsInt() : 0;
-        this.age = obj.has("age") ? obj.getAsJsonPrimitive("age").getAsInt() : 0;
+        this.name = obj.has(PROP_CARD_NAME) ? obj.getAsJsonPrimitive(PROP_CARD_NAME).getAsString() : "";
+        this.color = obj.has(PROP_CARD_COLOR) ? obj.getAsJsonPrimitive(PROP_CARD_COLOR).getAsString() : "";
+        this.image = obj.has(PROP_CARD_IMAGE) ? new ImageIcon(obj.getAsJsonPrimitive(PROP_CARD_IMAGE).getAsString()).getImage() : null;
+        this.cost = convertJSONToAssetMap(obj, PROP_CARD_COST);
+        this.minPlayers = obj.has(PROP_CARD_MIN_PLAYERS) ? obj.getAsJsonPrimitive(PROP_CARD_MIN_PLAYERS).getAsInt() : 0;
+        this.age = obj.has(PROP_CARD_AGE) ? obj.getAsJsonPrimitive(PROP_CARD_AGE).getAsInt() : 0;
 
         //figure out what this card actually does
-        this.baseAssets = convertJSONToAssetMap(obj,"baseAssets");
-        this.multiplierAssets = convertJSArrayToSet(obj,"multiplierAssets");
-        this.multiplierTargets = convertJSArrayToSet(obj,"multiplierTargets");
-        this.discountsAssets = convertJSArrayToSet(obj,"discountsAssets");
-        this.discountsTargets = convertJSArrayToSet(obj,"discountsTargets");
-        this.isChoice = obj.has("isChoice") && obj.getAsJsonPrimitive("isChoice").getAsBoolean();
+        this.baseAssets = convertJSONToAssetMap(obj,PROP_CARD_BASE_ASSETS);
+        this.multiplierAssets = convertJSArrayToSet(obj,PROP_CARD_MULTIPLIER_ASSETS);
+        this.multiplierTargets = convertJSArrayToSet(obj,PROP_CARD_MULTIPLIER_TARGETS);
+        this.discountsAssets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_ASSETS);
+        this.discountsTargets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_TARGETS);
+        this.isChoice = obj.has(PROP_CARD_CHOICE) && obj.getAsJsonPrimitive(PROP_CARD_CHOICE).getAsBoolean();
     }
 
     //getters////////////////////////////////////////////////////////
