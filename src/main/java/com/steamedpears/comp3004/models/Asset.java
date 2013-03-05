@@ -15,15 +15,15 @@ public final class Asset {
     private Asset(){}
 
     //resources
-    public static final String ASSET_WOOD = "w";
-    public static final String ASSET_STONE = "s";
-    public static final String ASSET_CLAY = "c";
-    public static final String ASSET_ORE = "o";
+    public static final String ASSET_WOOD =     "w";
+    public static final String ASSET_STONE =    "s";
+    public static final String ASSET_CLAY =     "c";
+    public static final String ASSET_ORE =      "o";
 
     //synthetics
-    public static final String ASSET_LOOM = "l";
-    public static final String ASSET_PAPYRUS = "p";
-    public static final String ASSET_GLASS = "g";
+    public static final String ASSET_LOOM =     "l";
+    public static final String ASSET_PAPYRUS =  "p";
+    public static final String ASSET_GLASS =    "g";
 
     //science
     public static final String ASSET_SCIENCE_1 = "tab";
@@ -31,15 +31,25 @@ public final class Asset {
     public static final String ASSET_SCIENCE_3 = "gear";
 
     //abilities
-    public static final String ASSET_DISCARD = "discard";
-    public static final String ASSET_DOUBLE_PLAY = "lastcard";
-    public static final String ASSET_BUILD_FREE = "freeBuild";
-    public static final String ASSET_GUILD_COPY = "guildCopy";
+    public static final String ASSET_DISCARD =      "discard";
+    public static final String ASSET_DOUBLE_PLAY =  "lastcard";
+    public static final String ASSET_BUILD_FREE =   "freeBuild";
+    public static final String ASSET_GUILD_COPY =   "guildCopy";
 
     //misc
-    public static final String ASSET_GOLD = "gold";
-    public static final String ASSET_MILITARY = "army";
-    public static final String ASSET_VICTORY = "victory";
+    public static final String ASSET_GOLD =             "coin";
+    public static final String ASSET_MILITARY =         "army";
+    public static final String ASSET_VICTORY =          "victory";
+    public static final String ASSET_DEFEAT =           "defeat";
+    public static final String ASSET_WONDER_STAGES =    "wonderstages";
+
+    //colors
+    public static final String COLOR_RED =          "red";
+    public static final String COLOR_YELLOW =       "yellow";
+    public static final String COLOR_GREY =         "gray";
+    public static final String COLOR_PURPLE =       "purple";
+    public static final String COLOR_GREEN =        "green";
+    public static final String COLOR_BROWN =        "brown";
 
     //utility methods
     public static int getAsset(Map<String, Integer> map, String key){
