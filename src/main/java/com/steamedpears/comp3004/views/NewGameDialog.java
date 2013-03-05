@@ -1,5 +1,7 @@
 package com.steamedpears.comp3004.views;
 
+import com.steamedpears.comp3004.*;
+
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;

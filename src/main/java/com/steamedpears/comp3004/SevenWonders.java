@@ -1,8 +1,8 @@
 package com.steamedpears.comp3004;
 
-import com.steamedpears.comp3004.models.SevenWondersGame;
-import com.steamedpears.comp3004.routing.Router;
-import com.steamedpears.comp3004.views.ViewFrame;
+import com.steamedpears.comp3004.models.*;
+import com.steamedpears.comp3004.routing.*;
+import com.steamedpears.comp3004.views.*;
 
 public class SevenWonders {
     public static void main(String[] args){
