@@ -36,7 +36,8 @@ public class SevenWonders {
             router = Router.getClientRouter(ipAddress, Router.HOST_PORT);
         }
         dialog.setVisible(false);
-        handView = new HandView(this);
+        // TODO: make sure this next line is the right way of getting a player's hand
+        handView = new HandView((router.getLocalGame()).getPlayerById((int)router.getId()).getHand());
         highLevelView = new HighLevelView(this);
         view.setView(handView);
     }
