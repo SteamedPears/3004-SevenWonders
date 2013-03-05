@@ -21,7 +21,7 @@ public class SevenWonders {
     ViewFrame view;
     NewGameDialog dialog;
     Router router;
-    HandView handView;
+    PlayerView playerView;
     HighLevelView highLevelView;
 
     public SevenWonders() {
@@ -40,9 +40,9 @@ public class SevenWonders {
         router.beginGame();
         dialog.setVisible(false);
         // TODO: make sure this next line is the right way of getting a player's hand
-        handView = new HandView((router.getLocalGame()).getPlayerById((int)router.getId()).getHand());
+        playerView = new PlayerView((router.getLocalGame()).getPlayerById((int)router.getId()).getHand());
         highLevelView = new HighLevelView(this);
-        view.setView(handView);
+        view.setView(playerView);
     }
 
     public List<Card> getHand() {
