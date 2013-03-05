@@ -2,6 +2,7 @@ package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.routing.Router;
+import sun.security.krb5.internal.crypto.DesMacCksumType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -61,7 +62,47 @@ public class SevenWondersGame extends Thread{
     }
 
     private void changeHands(){
-        //TODO: either deal new hands, or rotate the hands
+        if(players.get(0).getHand().size()==0){
+            deal();
+        }else{
+            rotateHands();
+        }
+    }
+
+    private void rotateHands(){
+        if(getAge()==2){
+            Player curPlayer = players.get(players.size()-1);
+            List<Card> oldHand = curPlayer.getHand();
+            List<Card> newHand;
+            for(int i=0; i<players.size(); ++i){
+                curPlayer = players.get(i);
+                newHand = curPlayer.getHand();
+                curPlayer.setHand(oldHand);
+                oldHand = newHand;
+            }
+        }else{
+            Player curPlayer = players.get(0);
+            List<Card> oldHand = curPlayer.getHand();
+            List<Card> newHand;
+            for(int i=players.size()-1; i>=0; --i){
+                curPlayer = players.get(i);
+                newHand = curPlayer.getHand();
+                curPlayer.setHand(oldHand);
+                oldHand = newHand;
+            }
+        }
+    }
+
+    private void deal(){
+        List<Card> currentDeck = deck.get(age-1);
+        List<List<Card>> hands = new ArrayList<List<Card>>();
+        for(int i=0; i<players.size(); ++i){
+            hands.add(new ArrayList<Card>());
+        }
+        int numPlayers = players.size();
+        for(int i=0; i<currentDeck.size(); ++i){
+            hands.get(i%numPlayers).add(currentDeck.get(i));
+        }
     }
 
     public void discard(Card card){
