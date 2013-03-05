@@ -4,8 +4,10 @@ import com.google.gson.JsonObject;
 
 import javax.swing.*;
 import java.awt.Image;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Wonder {
     private class WonderSide{
@@ -94,15 +96,31 @@ public class Wonder {
         return currentSide.stages;
     }
 
-    public Map<String, Integer> getAssets(){
+    public Map<String, Integer> getAssets(Player p){
         //TODO: get the assets this wonder definitely has
 
         return null;
     }
 
-    public List<Map<String, Integer>> getOptionalAssetsComplete(){
+    public List<Set<String>> getOptionalAssetsComplete(Player p){
         //TODO: get a list of all the asset choices this wonder can make
 
         return null;
+    }
+
+    public Map<String, Integer> getTradeableAssets(){
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        result.put(currentSide.startResource, 1);
+
+        return result;
+    }
+
+    public String getId(){
+        return this.getName()+"_"+this.getSide();
+    }
+
+    @Override
+    public int hashCode(){
+        return getId().hashCode();
     }
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -87,6 +88,21 @@ public final class Asset {
 
     public static Set<String> convertJSArrayToSet(JsonObject obj, String key){
         return obj.has(key) ? convertJSArrayToSet(obj.getAsJsonArray(key)) : new HashSet<String>();
+    }
+
+    public static Map<String, Integer> sumAssets(Collection<Map<String, Integer>> assets){
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        for(Map<String, Integer> assetMap: assets){
+            for(String key: assetMap.keySet()){
+                if(result.containsKey(key)){
+                    result.put(key, result.get(key)+assetMap.get(key));
+                }else{
+                    result.put(key, assetMap.get(key));
+                }
+            }
+        }
+
+        return result;
     }
 
 }
