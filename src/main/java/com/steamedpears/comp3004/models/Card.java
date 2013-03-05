@@ -31,6 +31,7 @@ public class Card {
     public static final String PROP_CARD_DISCOUNTS_ASSETS =     "discountsAssets";
     public static final String PROP_CARD_DISCOUNTS_TARGETS =    "discountsTargets";
     public static final String PROP_CARD_CHOICE =               "isChoice";
+    public static final String PROP_CARD_FREE_FOR =             "freeFor";
 
     //static methods////////////////////////////////////////////////
     public static List<Card> parseDeck(JsonArray deck){
@@ -85,6 +86,7 @@ public class Card {
         this.discountsAssets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_ASSETS);
         this.discountsTargets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_TARGETS);
         this.isChoice = obj.has(PROP_CARD_CHOICE) && obj.getAsJsonPrimitive(PROP_CARD_CHOICE).getAsBoolean();
+        this.freeFor = obj.has(PROP_CARD_FREE_FOR) ? obj.getAsJsonPrimitive(PROP_CARD_FREE_FOR).getAsString() : "";
     }
 
     //getters////////////////////////////////////////////////////////
@@ -108,8 +110,20 @@ public class Card {
         return age;
     }
 
+    public String getFreeFor(){
+        return freeFor;
+    }
+
     public Map<String, Integer> getCost(){
         return cost;
+    }
+
+    public Set<String> getDiscountsAssets(){
+        return discountsAssets;
+    }
+
+    public Set<String> getDiscountsTargets(){
+        return discountsTargets;
     }
 
     public Map<String, Integer> getAssets(Player player){
