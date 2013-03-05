@@ -14,14 +14,22 @@ import java.util.Map;
 public abstract class Router extends Thread{
 
     public static Router getHostRouter(int port){
-        return new HostRouter(port);
+        Router router = new HostRouter(port);
+        router.start();
+        return router;
     }
 
     public static Router getClientRouter(String ipAddress, int port){
-        return new ClientRouter(ipAddress, port);
+        Router router = new ClientRouter(ipAddress, port);
+        router.start();
+        return router;
     }
 
     public static final int HOST_PORT = 1567;
+    public static String PROP_ROUTE_CARDS = "cards";
+    public static String PROP_ROUTE_WONDERS = "wonders";
+    public static String PROP_ROUTE_DECK = "deck";
+
 
     //localGame#handleMoves should be called when every player has decided on a command
     private SevenWondersGame localGame;

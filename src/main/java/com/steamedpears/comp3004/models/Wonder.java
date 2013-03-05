@@ -1,10 +1,14 @@
 package com.steamedpears.comp3004.models;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.swing.*;
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +33,16 @@ public class Wonder {
     public static final String PROP_WONDER_STAGES =             "stages";
     public static final String PROP_WONDER_IMAGE =              "image";
     public static final String PROP_WONDER_START_RESOURCE =     "startResource";
+
+    //static methods///////////////////////////////////////////////
+    public static Map<String,Wonder> parseWonders(JsonArray wonderList){
+        Map<String, Wonder> wonders = new HashMap<String, Wonder>();
+        for(JsonElement element: wonderList){
+            Wonder newWonder = new Wonder(element.getAsJsonObject());
+            wonders.put(newWonder.getName(),newWonder);
+        }
+        return wonders;
+    }
 
     //instance variables///////////////////////////////////////////
     private String name;
@@ -121,6 +135,6 @@ public class Wonder {
 
     @Override
     public int hashCode(){
-        return getId().hashCode();
+        return getName().hashCode();
     }
 }

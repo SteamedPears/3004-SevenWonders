@@ -1,5 +1,6 @@
 package com.steamedpears.comp3004.models;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.routing.Router;
 import sun.security.krb5.internal.crypto.DesMacCksumType;
@@ -124,8 +125,8 @@ public class SevenWondersGame extends Thread{
         discard.remove(card);
     }
 
-    public void setCards(JsonObject obj){
-        List<Card> cards = Card.parseDeck(obj.getAsJsonArray(PROP_GAME_CARDS));
+    public void setCards(JsonArray arr){
+        List<Card> cards = Card.parseDeck(arr);
         this.cards = new HashMap<String, Card>();
         for(Card card: cards){
             this.cards.put(card.getId(),card);
