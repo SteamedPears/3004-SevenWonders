@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.models;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.steamedpears.comp3004.SevenWonders;
 
 import javax.swing.*;
 import java.awt.Image;
@@ -69,15 +70,17 @@ public class Card {
     private Set<String> discountsTargets;
     //if true, the player may choose only *one* of the keys of baseAssets
     private boolean isChoice;
+    private String id;
 
     //constructor///////////////////////////////////////////////////
     public Card(JsonObject obj){
         this.name = obj.has(PROP_CARD_NAME) ? obj.getAsJsonPrimitive(PROP_CARD_NAME).getAsString() : "";
         this.color = obj.has(PROP_CARD_COLOR) ? obj.getAsJsonPrimitive(PROP_CARD_COLOR).getAsString() : "";
-        this.image = obj.has(PROP_CARD_IMAGE) ? new ImageIcon(obj.getAsJsonPrimitive(PROP_CARD_IMAGE).getAsString()).getImage() : null;
         this.cost = convertJSONToAssetMap(obj, PROP_CARD_COST);
         this.minPlayers = obj.has(PROP_CARD_MIN_PLAYERS) ? obj.getAsJsonPrimitive(PROP_CARD_MIN_PLAYERS).getAsInt() : 0;
         this.age = obj.has(PROP_CARD_AGE) ? obj.getAsJsonPrimitive(PROP_CARD_AGE).getAsInt() : 0;
+        this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
+        this.image = new ImageIcon(SevenWonders.PATH_IMG+getId()+".png").getImage();
 
         //figure out what this card actually does
         this.baseAssets = convertJSONToAssetMap(obj,PROP_CARD_BASE_ASSETS);
@@ -128,7 +131,6 @@ public class Card {
 
     public Map<String, Integer> getAssets(Player player){
         //TODO: compute the assets this card yields if played by this player
-
         return null;
     }
 
@@ -136,5 +138,14 @@ public class Card {
         //TODO: compute the list of assets this card yields if it isChoice
 
         return null;
+    }
+
+    public String getId(){
+        return this.id;
+    }
+
+    @Override
+    public int hashCode(){
+        return getId().hashCode();
     }
 }
