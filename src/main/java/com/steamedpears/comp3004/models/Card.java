@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.models;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.steamedpears.comp3004.SevenWonders;
 
 import javax.swing.*;
 import java.awt.Image;
@@ -75,10 +76,10 @@ public class Card {
     public Card(JsonObject obj){
         this.name = obj.has(PROP_CARD_NAME) ? obj.getAsJsonPrimitive(PROP_CARD_NAME).getAsString() : "";
         this.color = obj.has(PROP_CARD_COLOR) ? obj.getAsJsonPrimitive(PROP_CARD_COLOR).getAsString() : "";
-        this.image = obj.has(PROP_CARD_IMAGE) ? new ImageIcon(obj.getAsJsonPrimitive(PROP_CARD_IMAGE).getAsString()).getImage() : null;
         this.cost = convertJSONToAssetMap(obj, PROP_CARD_COST);
         this.minPlayers = obj.has(PROP_CARD_MIN_PLAYERS) ? obj.getAsJsonPrimitive(PROP_CARD_MIN_PLAYERS).getAsInt() : 0;
         this.age = obj.has(PROP_CARD_AGE) ? obj.getAsJsonPrimitive(PROP_CARD_AGE).getAsInt() : 0;
+        this.image = new ImageIcon(SevenWonders.PATH_IMG+getId()+".png").getImage();
 
         //figure out what this card actually does
         this.baseAssets = convertJSONToAssetMap(obj,PROP_CARD_BASE_ASSETS);

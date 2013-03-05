@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SevenWonders {
+    public static final String PATH_RESOURCE = "src/main/resources/";
+    public static final String PATH_DATA = PATH_RESOURCE + "data/";
+    public static final String PATH_IMG = PATH_RESOURCE + "img/";
+
     public static void main(String[] args){
         new SevenWonders();
     }
