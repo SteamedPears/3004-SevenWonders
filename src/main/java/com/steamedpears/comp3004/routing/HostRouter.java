@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
+import com.steamedpears.comp3004.models.Wonder;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,12 +20,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class HostRouter extends Router {
     ServerSocket serverSocket;
     List<Client> clients;
-    JsonArray cards;
-    JsonArray wonders;
+    JsonArray cardJSON;
+    JsonArray wonderJSON;
+    Map<String, Wonder> wonders;
     private Map<Player, PlayerCommand> registeredMoves;
 
 
@@ -48,25 +51,25 @@ class HostRouter extends Router {
     public void beginGame() {
         //TODO: load in wonders, decks;
 
-        JsonArray cards = null;
-        JsonArray wonders = null;
         try {
             JsonParser parser = new JsonParser();
-            cards = parser
+            this.cardJSON = parser
                     .parse(new FileReader(SevenWonders.PATH_CARDS))
                     .getAsJsonObject()
                     .get(Router.PROP_ROUTE_CARDS)
                     .getAsJsonArray();
-            wonders = parser
+            this.wonderJSON = parser
                     .parse(new FileReader(SevenWonders.PATH_WONDERS))
                     .getAsJsonObject()
-                    .get(Router.PROP_ROUTE_CARDS)
+                    .get(Router.PROP_ROUTE_WONDERS)
                     .getAsJsonArray();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(-1);
         }
 
+        getLocalGame().setCards(this.cardJSON);
+        this.wonders = Wonder.parseWonders(this.wonderJSON);
 
         //TODO: build Players;
         //TODO: send all this info to each client;

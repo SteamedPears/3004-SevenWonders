@@ -37,6 +37,7 @@ public class SevenWonders {
         }else{
             router = Router.getClientRouter(ipAddress, Router.HOST_PORT);
         }
+        router.beginGame();
         dialog.setVisible(false);
         handView = new HandView(this);
         highLevelView = new HighLevelView(this);

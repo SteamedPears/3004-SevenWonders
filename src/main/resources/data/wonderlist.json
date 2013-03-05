@@ -146,8 +146,7 @@
                },
                {
                   "cost":{
-                     "type":"o",
-                     "amount":2
+                     "o":2
                   },
                   "baseAssets":{
                      "c":1,
@@ -173,8 +172,7 @@
             "stages":[
                {
                   "cost":{
-                     "type":"c",
-                     "amount":2
+                     "c":2
                   },
                   "baseAssets":{
                      "c":1,
