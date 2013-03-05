@@ -5,6 +5,7 @@ import com.steamedpears.comp3004.routing.Router;
 import sun.security.krb5.internal.crypto.DesMacCksumType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 public class SevenWondersGame extends Thread{
     public static final String PROP_GAME_CARDS = "cards";
+    public static final int MAX_AGES = 3;
 
 
     private List<Player> players;
@@ -129,6 +131,38 @@ public class SevenWondersGame extends Thread{
         for(Card card: cards){
             this.cards.put(card.getId(),card);
         }
+    }
+
+    public List<List<Card>> generateRandomDeck(int numPlayers){
+        List<List<Card>> result = new ArrayList<List<Card>>();
+        for(int curAge=0; curAge<MAX_AGES; ++curAge){
+            List<Card> ageDeck = new ArrayList<Card>();
+            result.add(ageDeck);
+        }
+        List<Card> guilds = new ArrayList<Card>();
+
+        for(Card card: cards.values()){
+            if(card.getMinPlayers()==0){
+                guilds.add(card);
+            }else if(card.getMinPlayers()<=numPlayers){
+                result.get(card.getAge()).add(card);
+            }
+        }
+
+        Collections.shuffle(guilds);
+        for(int i=0; i<numPlayers; ++i){
+            result.get(2).add(guilds.get(i));
+        }
+
+        for(List<Card> ageDeck: result){
+            Collections.shuffle(ageDeck);
+        }
+
+        return result;
+    }
+
+    public void setDeck(List<List<Card>> deck){
+        this.deck = deck;
     }
 
     public void addPlayer(Player player){
