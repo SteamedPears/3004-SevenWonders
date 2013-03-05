@@ -1,10 +1,16 @@
 package com.steamedpears.comp3004.routing;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -17,6 +23,8 @@ import java.util.Map;
 class HostRouter extends Router {
     ServerSocket serverSocket;
     List<Client> clients;
+    JsonArray cards;
+    JsonArray wonders;
     private Map<Player, PlayerCommand> registeredMoves;
 
 
@@ -38,7 +46,32 @@ class HostRouter extends Router {
 
     @Override
     public void beginGame() {
-        //TODO: load in wonders, decks; build Players; send all this info to each client; tell each client what player they are
+        //TODO: load in wonders, decks;
+
+        JsonArray cards = null;
+        JsonArray wonders = null;
+        try {
+            JsonParser parser = new JsonParser();
+            cards = parser
+                    .parse(new FileReader(SevenWonders.PATH_CARDS))
+                    .getAsJsonObject()
+                    .get(Router.PROP_ROUTE_CARDS)
+                    .getAsJsonArray();
+            wonders = parser
+                    .parse(new FileReader(SevenWonders.PATH_WONDERS))
+                    .getAsJsonObject()
+                    .get(Router.PROP_ROUTE_CARDS)
+                    .getAsJsonArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+
+        //TODO: build Players;
+        //TODO: send all this info to each client;
+        //TODO: tell each client what player they are?
+
     }
 
     @Override
@@ -68,7 +101,7 @@ class HostRouter extends Router {
     }
 
     private void broadcastPlayerCommands(){
-        //TODO: broadcast registeredMoves to clients
+        JsonObject result = new JsonObject();
     }
 
     private void broadcast(String message){

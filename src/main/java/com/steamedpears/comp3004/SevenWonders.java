@@ -11,6 +11,8 @@ public class SevenWonders {
     public static final String PATH_RESOURCE = "src/main/resources/";
     public static final String PATH_DATA = PATH_RESOURCE + "data/";
     public static final String PATH_IMG = PATH_RESOURCE + "img/";
+    public static final String PATH_CARDS = PATH_DATA + "cards.json";
+    public static final String PATH_WONDERS = PATH_DATA + "wonderlist.json";
 
     public static void main(String[] args){
         new SevenWonders();
