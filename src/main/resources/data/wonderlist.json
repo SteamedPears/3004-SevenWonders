@@ -1,704 +1,491 @@
 {
-    "wonders": [
-        {
-            "name": "Gizah",
-            "a": {
-                "image": "Gizah_A",
-                "effects": [
-                    {
-                        "type": "s",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "s": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "w": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 5
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "s": 4
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            },
-            "b": {
-                "image": "Gizah_B",
-                "effects": [
-                    {
-                        "type": "s",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "s": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 5
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "c": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 5
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "s": 3,
-                            "p": 1
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Rhodos",
-            "a": {
-                "image": "Rhodos_A",
-                "effects": [
-                    {
-                        "type": "o",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "c": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "army",
-                                "amount": 2
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "o": 4
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            },
-            "b": {
-                "image": "Rhodos_B",
-                "effects": [
-                    {
-                        "type": "o",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "s": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "army",
-                                "amount": 1
-                            },
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            },
-                            {
-                                "type": "coin",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "o": 4
-                        },
-                        "effects": [
-                            {
-                                "type": "army",
-                                "amount": 1
-                            },
-                            {
-                                "type": "victory",
-                                "amount": 4
-                            },
-                            {
-                                "type": "coin",
-                                "amount": 4
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Alexandria",
-            "a": {
-                "image": "Alexandria_A",
-                "effects": [
-                    {
-                        "type": "g",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "s": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "type": "o",
-                            "amount": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "rchoice",
-                                "list": [
-                                    "c",
-                                    "o",
-                                    "w",
-                                    "s"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "g": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            },
-            "b": {
-                "image": "Alexandria_B",
-                "effects": [
-                    {
-                        "type": "g",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "type": "c",
-                            "amount": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "rchoice",
-                                "list": [
-                                    "c",
-                                    "o",
-                                    "w",
-                                    "s"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "rchoice",
-                                "list": [
-                                    "g",
-                                    "l",
-                                    "p"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "s": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Babylon",
-            "a": {
-                "image": "Babylon_A",
-                "effects": [
-                    {
-                        "type": "c",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "c": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "w": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "schoice",
-                                "list": [
-                                    "tab",
-                                    "comp",
-                                    "gear"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "c": 4
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            },
-            "b": {
-                "image": "Babylon_B",
-                "effects": [
-                    {
-                        "type": "c",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "l": 1,
-                            "c": 1
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "g": 1,
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "lastcard"
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "p": 1,
-                            "c": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "schoice",
-                                "list": [
-                                    "tab",
-                                    "comp",
-                                    "gear"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Ephesos",
-            "a": {
-                "image": "Ephesos_A",
-                "effects": [
-                    {
-                        "type": "p",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "s": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "coin",
-                                "amount": 9
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "p": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            },
-            "b": {
-                "image": "Ephesos_B",
-                "effects": [
-                    {
-                        "type": "p",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "s": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 2
-                            },
-                            {
-                                "type": "coin",
-                                "amount": 4
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            },
-                            {
-                                "type": "coin",
-                                "amount": 4
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "p": 1,
-                            "l": 1,
-                            "g": 1
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            },
-                            {
-                                "type": "coin",
-                                "amount": 4
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Olympia",
-            "a": {
-                "image": "Olympia_A",
-                "effects": [
-                    {
-                        "type": "w",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "s": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "freeBuild"
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "o": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            },
-            "b": {
-                "image": "Olympia_B",
-                "effects": [
-                    {
-                        "type": "w",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "w": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "rcostEast"
-                            },
-                            {
-                                "type": "rcostWest"
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "s": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 5
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "l": 1,
-                            "o": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "guildCopy"
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Halikarnassos",
-            "a": {
-                "image": "Halikarnassos_A",
-                "effects": [
-                    {
-                        "type": "l",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "c": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 3
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "o": 3
-                        },
-                        "effects": [
-                            {
-                                "type": "discard"
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "l": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 7
-                            }
-                        ]
-                    }
-                ]
-            },
-            "b": {
-                "image": "Halikarnassos_B",
-                "effects": [
-                    {
-                        "type": "l",
-                        "amount": 1
-                    }
-                ],
-                "stages": [
-                    {
-                        "cost": {
-                            "o": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 2
-                            },
-                            {
-                                "type": "discard"
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "s": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "victory",
-                                "amount": 1
-                            },
-                            {
-                                "type": "discard"
-                            }
-                        ]
-                    },
-                    {
-                        "cost": {
-                            "l": 1,
-                            "o": 2
-                        },
-                        "effects": [
-                            {
-                                "type": "discard"
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    ]
+   "wonders":[
+      {
+         "name":"Gizah",
+         "a":{
+            "image":"Gizah_A",
+            "stages":[
+               {
+                  "cost":{
+                     "s":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "w":3
+                  },
+                  "baseAssets":{
+                     "victory":5
+                  }
+               },
+               {
+                  "cost":{
+                     "s":4
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"s"
+         },
+         "b":{
+            "image":"Gizah_B",
+            "stages":[
+               {
+                  "cost":{
+                     "w":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "s":3
+                  },
+                  "baseAssets":{
+                     "victory":5
+                  }
+               },
+               {
+                  "cost":{
+                     "c":3
+                  },
+                  "baseAssets":{
+                     "victory":5
+                  }
+               },
+               {
+                  "cost":{
+                     "s":3,
+                     "p":1
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"s"
+         }
+      },
+      {
+         "name":"Rhodos",
+         "a":{
+            "image":"Rhodos_A",
+            "stages":[
+               {
+                  "cost":{
+                     "w":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "c":3
+                  },
+                  "baseAssets":{
+                     "army":2
+                  }
+               },
+               {
+                  "cost":{
+                     "o":4
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"o"
+         },
+         "b":{
+            "image":"Rhodos_B",
+            "stages":[
+               {
+                  "cost":{
+                     "s":3
+                  },
+                  "baseAssets":{
+                     "army":1,
+                     "victory":3,
+                     "coin":3
+                  }
+               },
+               {
+                  "cost":{
+                     "o":4
+                  },
+                  "baseAssets":{
+                     "army":1,
+                     "victory":4,
+                     "coin":4
+                  }
+               }
+            ],
+            "startResource":"o"
+         }
+      },
+      {
+         "name":"Alexandria",
+         "a":{
+            "image":"Alexandria_A",
+            "stages":[
+               {
+                  "cost":{
+                     "s":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "type":"o",
+                     "amount":2
+                  },
+                  "baseAssets":{
+                     "c":1,
+                     "o":1,
+                     "w":1,
+                     "s":1
+                  },
+                  "isChoice":true
+               },
+               {
+                  "cost":{
+                     "g":2
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"g"
+         },
+         "b":{
+            "image":"Alexandria_B",
+            "stages":[
+               {
+                  "cost":{
+                     "type":"c",
+                     "amount":2
+                  },
+                  "baseAssets":{
+                     "c":1,
+                     "o":1,
+                     "w":1,
+                     "s":1
+                  },
+                  "isChoice":true
+               },
+               {
+                  "cost":{
+                     "w":2
+                  },
+                  "baseAssets":{
+                     "g":1,
+                     "l":1,
+                     "p":1
+                  },
+                  "isChoice":true
+               },
+               {
+                  "cost":{
+                     "s":3
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"g"
+         }
+      },
+      {
+         "name":"Babylon",
+         "a":{
+            "image":"Babylon_A",
+            "stages":[
+               {
+                  "cost":{
+                     "c":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "w":3
+                  },
+                  "baseAssets":{
+                     "tab":1,
+                     "comp":1,
+                     "gear":1
+                  },
+                  "isChoice":true
+               },
+               {
+                  "cost":{
+                     "c":4
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"c"
+         },
+         "b":{
+            "image":"Babylon_B",
+            "stages":[
+               {
+                  "cost":{
+                     "l":1,
+                     "c":1
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "g":1,
+                     "w":2
+                  },
+                  "baseAssets":{
+                     "lastcard":1
+                  }
+               },
+               {
+                  "cost":{
+                     "p":1,
+                     "c":3
+                  },
+                  "baseAssets":{
+                     "tab":1,
+                     "comp":1,
+                     "gear":1
+                  },
+                  "isChoice":true
+               }
+            ],
+            "startResource":"c"
+         }
+      },
+      {
+         "name":"Ephesos",
+         "a":{
+            "image":"Ephesos_A",
+            "stages":[
+               {
+                  "cost":{
+                     "s":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "w":2
+                  },
+                  "baseAssets":{
+                     "coin":9
+                  }
+               },
+               {
+                  "cost":{
+                     "p":2
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"p"
+         },
+         "b":{
+            "image":"Ephesos_B",
+            "stages":[
+               {
+                  "cost":{
+                     "s":2
+                  },
+                  "baseAssets":{
+                     "victory":2,
+                     "coin":4
+                  }
+               },
+               {
+                  "cost":{
+                     "w":2
+                  },
+                  "baseAssets":{
+                     "victory":3,
+                     "coin":4
+                  }
+               },
+               {
+                  "cost":{
+                     "p":1,
+                     "l":1,
+                     "g":1
+                  },
+                  "baseAssets":{
+                     "victory":3,
+                     "coin":4
+                  }
+               }
+            ],
+            "startResource":"p"
+         }
+      },
+      {
+         "name":"Olympia",
+         "a":{
+            "image":"Olympia_A",
+            "stages":[
+               {
+                  "cost":{
+                     "w":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "s":2
+                  },
+                  "baseAssets":{
+                     "freeBuild":1
+                  }
+               },
+               {
+                  "cost":{
+                     "o":2
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"w"
+         },
+         "b":{
+            "image":"Olympia_B",
+            "stages":[
+               {
+                  "cost":{
+                     "w":2
+                  },
+                  "baseAssets":{
+
+                  },
+                  "discountsAssets":[
+                     "c",
+                     "o",
+                     "w",
+                     "s"
+                  ],
+                  "discountsTargets":[
+                     "right",
+                     "left"
+                  ]
+               },
+               {
+                  "cost":{
+                     "s":2
+                  },
+                  "baseAssets":{
+                     "victory":5
+                  }
+               },
+               {
+                  "cost":{
+                     "l":1,
+                     "o":2
+                  },
+                  "baseAssets":{
+                     "guildCopy":1
+                  }
+               }
+            ],
+            "startResource":"w"
+         }
+      },
+      {
+         "name":"Halikarnassos",
+         "a":{
+            "image":"Halikarnassos_A",
+            "stages":[
+               {
+                  "cost":{
+                     "c":2
+                  },
+                  "baseAssets":{
+                     "victory":3
+                  }
+               },
+               {
+                  "cost":{
+                     "o":3
+                  },
+                  "baseAssets":{
+                     "discard":1
+                  }
+               },
+               {
+                  "cost":{
+                     "l":2
+                  },
+                  "baseAssets":{
+                     "victory":7
+                  }
+               }
+            ],
+            "startResource":"l"
+         },
+         "b":{
+            "image":"Halikarnassos_B",
+            "stages":[
+               {
+                  "cost":{
+                     "o":2
+                  },
+                  "baseAssets":{
+                     "victory":2,
+                     "discard":1
+                  }
+               },
+               {
+                  "cost":{
+                     "s":2
+                  },
+                  "baseAssets":{
+                     "victory":1,
+                     "discard":1
+                  }
+               },
+               {
+                  "cost":{
+                     "l":1,
+                     "o":2
+                  },
+                  "baseAssets":{
+                     "discard":1
+                  }
+               }
+            ],
+            "startResource":"l"
+         }
+      }
+   ]
 }
