@@ -28,23 +28,23 @@ public abstract class Player extends Thread{
         this.militaryResults = new ArrayList<Integer>();
     }
 
-    private final void discardCard(Card card){
+    private void discardCard(Card card){
         //TODO: remove card from hand, get 3 gold
     }
 
-    private final void buildWonder(Card card){
+    private void buildWonder(Card card){
         //TODO: buildup wonder, return whether successful
     }
 
-    private final void playCard(Card card){
+    private void playCard(Card card){
         //TODO: play card, return whether successful
     }
 
-    private final void undiscard(Card card){
+    private void undiscard(Card card){
         //TODO: take this card out of this discard, and play it
     }
 
-    private final void playFree(Card card){
+    private void playFree(Card card){
         //TODO: take this card out of this discard, and play it
     }
 
@@ -68,7 +68,7 @@ public abstract class Player extends Thread{
     //when handleTurn terminates, currentCommand should be set with the Player's desired command
     protected abstract PlayerCommand handleTurn();
 
-    public void run(){
+    public final void run(){
         handleTurn();
     }
 
@@ -90,7 +90,7 @@ public abstract class Player extends Thread{
     }
 
     //getters///////////////////////////////////////////////////////////////////
-    private final boolean isValid(PlayerCommand command, List<Card> cards){
+    public final boolean isValid(PlayerCommand command){
         //TODO: determine if the given command is a valid one for the player to perform
 
         return false;
