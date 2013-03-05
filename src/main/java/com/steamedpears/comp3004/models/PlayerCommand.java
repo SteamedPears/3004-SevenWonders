@@ -8,7 +8,7 @@ public class PlayerCommand{
     }
 
     public PlayerCardAction action;
-    public Card card;
+    public String card;
     public Map<String, Integer> leftPurchases;
     public Map<String, Integer> rightPurchases;
     public PlayerCommand followup; //for if you can perform multiple actions this turn

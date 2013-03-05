@@ -66,17 +66,21 @@ public abstract class Player extends Thread{
 
     public final void takeTurn(PlayerCommand command) throws Exception {
         if(command!=null){
+            Card card = game.getCardById(command.card);
             if(command.action.equals(BUILD)){
-                buildWonder(command.card);
+                buildWonder(card);
             }else if(command.action.equals(PLAY)){
-                playCard(command.card);
+                playCard(card);
             }else if(command.action.equals(DISCARD)){
-                discardCard(command.card);
+                discardCard(card);
             }else if(command.action.equals(UNDISCARD)){
-                undiscard(command.card);
+                undiscard(card);
             }else if(command.action.equals(PLAY_FREE)){
-                playFree(command.card);
+                playFree(card);
             }
+        }
+        if(command.followup!=null){
+            takeTurn(command.followup);
         }
     }
 
@@ -145,6 +149,10 @@ public abstract class Player extends Thread{
 
     public final PlayerCommand getCurrentCommand(){
         return currentCommand;
+    }
+
+    public final Wonder getWonder(){
+        return wonder;
     }
 
     public final int getPlayerId(){

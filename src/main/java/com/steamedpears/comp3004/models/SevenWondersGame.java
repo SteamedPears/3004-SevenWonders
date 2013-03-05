@@ -186,6 +186,10 @@ public class SevenWondersGame extends Thread{
         return age;
     }
 
+    public List<List<Card>> getDeck(){
+        return deck;
+    }
+
     public Player getPlayerById(int id){
         for(Player player: players){
             if(player.getPlayerId()==id){

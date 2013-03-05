@@ -2,9 +2,12 @@ package com.steamedpears.comp3004.routing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.steamedpears.comp3004.SevenWonders;
+import com.steamedpears.comp3004.models.Card;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.Wonder;
@@ -103,9 +106,36 @@ class HostRouter extends Router {
         }
     }
 
-    private void broadcastPlayerCommands(){
-        //TODO: broadcast registeredMoves to clients
+    private void broadcastInitialConfig(){
+        Gson gson = new Gson();
         JsonObject result = new JsonObject();
+        result.add(PROP_ROUTE_CARDS, this.cardJSON);
+        result.add(PROP_ROUTE_WONDERS, this.wonderJSON);
+
+        JsonObject players = new JsonObject();
+        for(Player player: getLocalGame().getPlayers()){
+            players.addProperty("" + player.getPlayerId(), player.getWonder().getId());
+        }
+        result.add(PROP_ROUTE_PLAYERS, players);
+
+        JsonArray deck = new JsonArray();
+        for(List<Card> ageDeck: getLocalGame().getDeck()){
+            JsonArray ageDeckJSON = new JsonArray();
+            for(Card card: ageDeck){
+                ageDeckJSON.add(new JsonPrimitive(card.getId()));
+            }
+        }
+        result.add(PROP_ROUTE_DECK, deck);
+
+        broadcast(result.toString());
+    }
+
+    private void broadcastTakeTurn(){
+        broadcast(COMMAND_ROUTE_TAKE_TURN);
+    }
+
+    private void broadcastPlayerCommands(){
+        broadcast(playerCommandsToJson(registeredMoves).toString());
     }
 
     private void broadcast(String message){
