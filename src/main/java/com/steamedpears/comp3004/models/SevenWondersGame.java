@@ -103,6 +103,10 @@ public class SevenWondersGame extends Thread{
         for(int i=0; i<currentDeck.size(); ++i){
             hands.get(i%numPlayers).add(currentDeck.get(i));
         }
+        for(int i=0; i<players.size(); ++i){
+            players.get(i).setHand(hands.get(i));
+        }
+
     }
 
     public void discard(Card card){
