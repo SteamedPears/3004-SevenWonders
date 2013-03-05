@@ -104,6 +104,7 @@ class HostRouter extends Router {
     }
 
     private void broadcastPlayerCommands(){
+        //TODO: broadcast registeredMoves to clients
         JsonObject result = new JsonObject();
     }
 
