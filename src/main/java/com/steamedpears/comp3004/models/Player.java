@@ -90,7 +90,7 @@ public abstract class Player extends Thread{
     }
 
     //getters///////////////////////////////////////////////////////////////////
-    private final boolean isValid(PlayerCommand command, List<Card> cards){
+    public final boolean isValid(PlayerCommand command){
         //TODO: determine if the given command is a valid one for the player to perform
 
         return false;
