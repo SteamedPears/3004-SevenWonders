@@ -26,7 +26,11 @@ public class SevenWonders {
 
     public void startGame(boolean isHost,String ipAddress) {
         // TODO: make sure this is the correct way to instantiate a router/game/player
-        router = new Router(isHost);
+        if(isHost){
+            router = Router.getHostRouter(Router.HOST_PORT);
+        }else{
+            router = Router.getClientRouter(ipAddress, Router.HOST_PORT);
+        }
         dialog.setVisible(false);
         handView = new HandView(this);
         highLevelView = new HighLevelView(this);
