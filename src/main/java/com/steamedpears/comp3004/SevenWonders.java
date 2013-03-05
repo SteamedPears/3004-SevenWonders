@@ -4,6 +4,9 @@ import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SevenWonders {
     public static void main(String[] args){
         new SevenWonders();
@@ -12,6 +15,8 @@ public class SevenWonders {
     ViewFrame view;
     NewGameDialog dialog;
     Router router;
+    HandView handView;
+    HighLevelView highLevelView;
 
     public SevenWonders() {
         view = new ViewFrame(this);
@@ -20,7 +25,17 @@ public class SevenWonders {
     }
 
     public void startGame(boolean isHost,String ipAddress) {
+        // TODO: make sure this is the correct way to instantiate a router/game/player
         router = new Router(isHost);
+        dialog.setVisible(false);
+        handView = new HandView(this);
+        highLevelView = new HighLevelView(this);
+        view.setView(handView);
+    }
+
+    public List<Card> getHand() {
+        // TODO: actually get player's hand
+        return new ArrayList<Card>();
     }
 
     public void exit() {

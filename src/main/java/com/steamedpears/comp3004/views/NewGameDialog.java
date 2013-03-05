@@ -1,6 +1,7 @@
 package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.*;
+import com.steamedpears.comp3004.routing.*;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -10,15 +11,19 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class NewGameDialog extends JDialog {
-    private final int width = 480;
-    private final int height = 120;
-
     private SevenWonders controller;
 
+    // Configuration
+    private final int width = 480;
+    private final int height = 120;
     private boolean isHost = true;
     private String ipAddress = "127.0.0.1";
+    private Integer port = Router.HOST_PORT;
 
+    // Interface elements
+    private JLabel addressLabel;
     private JTextField addressField;
+    private JTextField portField;
 
     private void selectHost() {
         isHost = true;
@@ -32,10 +37,12 @@ public class NewGameDialog extends JDialog {
 
     private void hideAddressField() {
         addressField.setVisible(false);
+        addressLabel.setVisible(false);
     }
 
     private void showAddressField() {
         addressField.setVisible(true);
+        addressLabel.setVisible(true);
     }
 
     public boolean isHostSelected() { return isHost; }
@@ -75,6 +82,8 @@ public class NewGameDialog extends JDialog {
         add(clientButton);
 
         // address field
+        addressLabel = new JLabel("IP:");
+        add(addressLabel);
         addressField = new JTextField(ipAddress);
         addressField.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -82,7 +91,21 @@ public class NewGameDialog extends JDialog {
                 ipAddress = addressField.getText();
             }
         });
-        add(addressField, "span, grow");
+        add(addressField,"span");
+
+        // port field
+        add(new JLabel("Port:"));
+        portField = new JTextField(port.toString());
+        portField.addPropertyChangeListener(new PropertyChangeListener(){
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                String portText = portField.getText();
+                if(portText.equals(""))
+                    return;
+                port = Integer.parseInt(portField.getText(),10);
+            }
+        });
+        add(portField);
 
         // by default, offer to host
         hostButton.setSelected(true);

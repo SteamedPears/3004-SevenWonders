@@ -17,6 +17,11 @@ public class ViewFrame extends JFrame {
         setVisible(true);
     }
 
+    public void setView(JPanel view) {
+        removeAll();
+        add(view);
+    }
+
     public ViewFrame(SevenWonders controller) {
         this.controller = controller;
         init();
