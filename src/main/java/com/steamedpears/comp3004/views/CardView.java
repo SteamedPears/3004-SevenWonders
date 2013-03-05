@@ -1,10 +1,9 @@
 package com.steamedpears.comp3004.views;
-
-import com.google.gson.*;
 import com.steamedpears.comp3004.models.Card;
 
+import com.google.gson.*;
+
 import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class CardView extends JLabel {
