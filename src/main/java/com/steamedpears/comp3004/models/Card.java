@@ -69,6 +69,7 @@ public class Card {
     private Set<String> discountsTargets;
     //if true, the player may choose only *one* of the keys of baseAssets
     private boolean isChoice;
+    private String id;
 
     //constructor///////////////////////////////////////////////////
     public Card(JsonObject obj){
@@ -87,6 +88,7 @@ public class Card {
         this.discountsTargets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_TARGETS);
         this.isChoice = obj.has(PROP_CARD_CHOICE) && obj.getAsJsonPrimitive(PROP_CARD_CHOICE).getAsBoolean();
         this.freeFor = obj.has(PROP_CARD_FREE_FOR) ? obj.getAsJsonPrimitive(PROP_CARD_FREE_FOR).getAsString() : "";
+        this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
     }
 
     //getters////////////////////////////////////////////////////////
@@ -128,7 +130,6 @@ public class Card {
 
     public Map<String, Integer> getAssets(Player player){
         //TODO: compute the assets this card yields if played by this player
-
         return null;
     }
 
@@ -136,5 +137,14 @@ public class Card {
         //TODO: compute the list of assets this card yields if it isChoice
 
         return null;
+    }
+
+    public String getId(){
+        return this.id;
+    }
+
+    @Override
+    public int hashCode(){
+        return getId().hashCode();
     }
 }

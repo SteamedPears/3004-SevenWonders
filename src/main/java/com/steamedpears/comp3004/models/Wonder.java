@@ -105,4 +105,13 @@ public class Wonder {
 
         return null;
     }
+
+    public String getId(){
+        return this.getName()+"_"+this.getSide();
+    }
+
+    @Override
+    public int hashCode(){
+        return getId().hashCode();
+    }
 }

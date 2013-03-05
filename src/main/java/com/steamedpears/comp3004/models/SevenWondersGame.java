@@ -11,9 +11,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class SevenWondersGame extends Thread{
+    public static final String PROP_GAME_CARDS = "cards";
+
+
     private List<Player> players;
     private Set<Player> localPlayers;
     private Set<Card> discard;
+    private Map<String, Card> cards;
     private List<List<Card>> deck;
     private int age;
     private int maxPlayers; //useless?
@@ -110,15 +114,16 @@ public class SevenWondersGame extends Thread{
     }
 
     public void discard(Card card){
-        //TODO: discard this card
+        discard.add(card);
     }
 
     public void undiscard(Card card){
-        //TODO: undiscard this card
+        discard.remove(card);
     }
 
-    public void setDeck(JsonObject obj){
-        //TODO: compute the deck
+    public void setCards(JsonObject obj){
+        List<Card> cards = Card.parseDeck(obj.getAsJsonArray(PROP_GAME_CARDS));
+
     }
 
     public void addPlayer(Player player){

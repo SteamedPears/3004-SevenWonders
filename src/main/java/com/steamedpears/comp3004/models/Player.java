@@ -138,6 +138,11 @@ public abstract class Player extends Thread{
         return id;
     }
 
+    @Override
+    public int hashCode(){
+        return getPlayerId();
+    }
+
     public final Map<String, Integer> getAssets(){
         //TODO: get the assets a player definitely has
 
