@@ -5,6 +5,7 @@ import com.steamedpears.comp3004.routing.Router;
 import sun.security.krb5.internal.crypto.DesMacCksumType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,8 @@ public class SevenWondersGame extends Thread{
             try{
                 Thread.sleep(100);
             }catch(InterruptedException ex){
-                //TODO: find out what should be done here
+                ex.printStackTrace();
+                System.exit(-1);
             }
         }
     }
@@ -123,7 +125,10 @@ public class SevenWondersGame extends Thread{
 
     public void setCards(JsonObject obj){
         List<Card> cards = Card.parseDeck(obj.getAsJsonArray(PROP_GAME_CARDS));
-
+        this.cards = new HashMap<String, Card>();
+        for(Card card: cards){
+            this.cards.put(card.getId(),card);
+        }
     }
 
     public void addPlayer(Player player){
