@@ -79,6 +79,7 @@ public class Card {
         this.cost = convertJSONToAssetMap(obj, PROP_CARD_COST);
         this.minPlayers = obj.has(PROP_CARD_MIN_PLAYERS) ? obj.getAsJsonPrimitive(PROP_CARD_MIN_PLAYERS).getAsInt() : 0;
         this.age = obj.has(PROP_CARD_AGE) ? obj.getAsJsonPrimitive(PROP_CARD_AGE).getAsInt() : 0;
+        this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
         this.image = new ImageIcon(SevenWonders.PATH_IMG+getId()+".png").getImage();
 
         //figure out what this card actually does
@@ -89,7 +90,6 @@ public class Card {
         this.discountsTargets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_TARGETS);
         this.isChoice = obj.has(PROP_CARD_CHOICE) && obj.getAsJsonPrimitive(PROP_CARD_CHOICE).getAsBoolean();
         this.freeFor = obj.has(PROP_CARD_FREE_FOR) ? obj.getAsJsonPrimitive(PROP_CARD_FREE_FOR).getAsString() : "";
-        this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
     }
 
     //getters////////////////////////////////////////////////////////
