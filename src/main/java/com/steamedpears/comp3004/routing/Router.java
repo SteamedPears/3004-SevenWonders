@@ -1,8 +1,14 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.routing;
+
+import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.PlayerCommand;
+import com.steamedpears.comp3004.models.SevenWondersGame;
 
 import java.util.Map;
 
 public class Router {
+
+    private static final int HOST_PORT = 1567;
 
     //localGame#handleMoves should be called when every player has decided on a command
     private SevenWondersGame localGame;

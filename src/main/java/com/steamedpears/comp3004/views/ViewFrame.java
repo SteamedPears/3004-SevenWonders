@@ -1,5 +1,6 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.views;
 
+import com.steamedpears.comp3004.SevenWonders;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
