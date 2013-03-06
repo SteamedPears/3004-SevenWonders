@@ -2,6 +2,7 @@ package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
+import org.apache.log4j.BasicConfigurator;
 
 import javax.swing.*;
 
@@ -18,6 +19,7 @@ public class SevenWonders {
     public static final int MIN_PLAYERS = 3;
 
     public static void main(String[] args){
+        BasicConfigurator.configure();
         new SevenWonders();
     }
 
