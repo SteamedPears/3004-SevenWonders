@@ -31,7 +31,7 @@ public class JoinGameDialog extends JDialog {
     private class DialogClosingListener extends WindowAdapter {
         @Override
         public void windowClosing(WindowEvent windowEvent) {
-            controller.showNewGameDialog();
+            controller.openNewGameDialog();
         }
     }
 }

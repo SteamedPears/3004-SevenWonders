@@ -3,6 +3,7 @@ import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.views.*;
 
 import com.google.gson.*;
+import org.apache.log4j.*;
 
 import javax.swing.*;
 import java.io.*;
@@ -22,6 +23,7 @@ public class CardViewTest extends JFrame {
     }
 
     public static void main(String[] args) throws Exception {
+        BasicConfigurator.configure();
         new CardViewTest();
     }
 }

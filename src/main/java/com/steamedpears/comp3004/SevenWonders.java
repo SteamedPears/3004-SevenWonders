@@ -4,6 +4,8 @@ import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.BasicConfigurator;
 
+import org.apache.log4j.*;
+
 import javax.swing.*;
 
 public class SevenWonders {
@@ -18,6 +20,8 @@ public class SevenWonders {
     public static final int MAX_PLAYERS = 7;
     public static final int MIN_PLAYERS = 3;
 
+    static Logger logger = Logger.getLogger(SevenWonders.class);
+
     public static void main(String[] args){
         BasicConfigurator.configure();
         new SevenWonders();
@@ -31,13 +35,13 @@ public class SevenWonders {
     HighLevelView highLevelView;
 
     public SevenWonders() {
-        view = new ViewFrame(this);
-        newGameDialog = new NewGameDialog(view,this);
-        showNewGameDialog();
+        view = new ViewFrame();
+        openNewGameDialog();
     }
 
     public void createGame(boolean isHost, String ipAddress, int port, int players) {
-        hideNewGameDialog();
+        logger.info("Creating game");
+        closeNewGameDialog();
         if(isHost){
             router = Router.getHostRouter(port, players);
             dialog = new HostGameDialog(view,this);
@@ -49,23 +53,31 @@ public class SevenWonders {
     }
 
     public void startGame() {
+        closeDialog();
         router.beginGame();
         playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
         highLevelView = new HighLevelView(this);
         view.setView(playerView);
     }
 
-    public void showNewGameDialog() {
-        if(dialog != null) {
-            dialog.setVisible(false);
-            dialog.dispose();
-            dialog = null;
-        }
+    public void closeDialog() {
+        if(dialog == null) return;
+        dialog.setVisible(false);
+        dialog.dispose();
+        dialog = null;
+    }
+
+    public void openNewGameDialog() {
+        closeDialog();
+        newGameDialog = new NewGameDialog(view,this);
         newGameDialog.setVisible(true);
     }
 
-    public void hideNewGameDialog() {
+    public void closeNewGameDialog() {
+        if(newGameDialog == null) return;
         newGameDialog.setVisible(false);
+        newGameDialog.dispose();
+        newGameDialog = null;
     }
 
     public void exit() {
