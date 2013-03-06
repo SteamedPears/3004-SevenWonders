@@ -42,6 +42,7 @@ public abstract class Player extends Thread{
     private List<Integer> militaryResults;
     private int gold;
     private int id;
+    private Map<String, Integer> stagedCommandResult;
 
     //constructor///////////////////////////////////////////////////////////
     public Player(Wonder wonder, SevenWondersGame game, int id){
@@ -58,43 +59,99 @@ public abstract class Player extends Thread{
         this(wonder, game, getNextId());
     }
 
-    private void discardCard(Card card){
-        //TODO: remove card from hand, get 3 gold
+    private void discardCard(Card card, boolean isFinal){
+        if(isFinal){
+            game.discard(card);
+            hand.remove(card);
+        }else{
+            Map<String, Integer> result = new HashMap<String, Integer>();
+            result.put(ASSET_GOLD, 3);
+
+            stagedCommandResult = sumAssets(stagedCommandResult, result);
+        }
+
     }
 
-    private void buildWonder(Card card){
-        //TODO: buildup wonder, return whether successful
+    private void buildWonder(Card card, boolean isFinal){
+        Card stage = wonder.getNextStage();
+        if(isFinal){
+            hand.remove(card);
+        }else{
+            stagedCommandResult = sumAssets(stagedCommandResult, stage.getAssets(this));
+        }
     }
 
-    private void playCard(Card card){
-        //TODO: play card, return whether successful
+    private void playCard(Card card, boolean isFinal){
+        if(isFinal){
+            playedCards.add(card);
+            hand.remove(card);
+        }else{
+            stagedCommandResult = sumAssets(stagedCommandResult, card.getAssets(this));
+        }
     }
 
-    private void undiscard(Card card){
-        //TODO: take this card out of this discard, and play it
+    private void undiscard(Card card, boolean isFinal){
+        if(isFinal){
+            playedCards.add(card);
+            game.undiscard(card);
+        }else{
+            stagedCommandResult = sumAssets(stagedCommandResult, card.getAssets(this));
+        }
     }
 
-    private void playFree(Card card){
-        //TODO: take this card out of this discard, and play it
+    private void playFree(Card card, boolean isFinal){
+        playCard(card, isFinal);
+        if(isFinal){
+            wonder.expendLimitedResource(ASSET_BUILD_FREE);
+        }
     }
 
     public final void takeTurn(PlayerCommand command) throws Exception {
+        PlayerCommand temp = command;
+        while(temp!=null){
+            if(!isValid(command)){
+                throw new Exception("Given command is invalid: "+ command);
+            }
+            temp = temp.followup;
+        }
+        stagedCommandResult = new HashMap<String, Integer>();
+        takeTurnInternal(command);
+    }
+
+    private void takeTurnInternal(PlayerCommand command){
         if(command!=null){
-            Card card = game.getCardById(command.card);
-            if(command.action.equals(BUILD)){
-                buildWonder(card);
-            }else if(command.action.equals(PLAY)){
-                playCard(card);
-            }else if(command.action.equals(DISCARD)){
-                discardCard(card);
-            }else if(command.action.equals(UNDISCARD)){
-                undiscard(card);
-            }else if(command.action.equals(PLAY_FREE)){
-                playFree(card);
+            resolveTurn(command, false);
+            if(command.followup!=null){
+                takeTurnInternal(command.followup);
             }
         }
-        if(command.followup!=null){
-            takeTurn(command.followup);
+    }
+
+    private void resolveTurn(PlayerCommand command, boolean isFinal){
+        Card card = game.getCardById(command.card);
+        if(command.action.equals(BUILD)){
+            buildWonder(card, isFinal);
+        }else if(command.action.equals(PLAY)){
+            playCard(card, isFinal);
+        }else if(command.action.equals(DISCARD)){
+            discardCard(card, isFinal);
+        }else if(command.action.equals(UNDISCARD)){
+            undiscard(card, isFinal);
+        }else if(command.action.equals(PLAY_FREE)){
+            playFree(card, isFinal);
+        }
+    }
+
+    public final void finalizeTurn(PlayerCommand command){
+        if(stagedCommandResult.containsKey(ASSET_GOLD)){
+            this.gold+=stagedCommandResult.get(ASSET_GOLD);
+        }
+        while(command!=null){
+            resolveTurn(command, true);
+            if(command.followup!=null && command.followup.action!=UNDISCARD){
+                wonder.expendLimitedResource(ASSET_DOUBLE_PLAY);
+            }
+            command = command.followup;
         }
     }
 
@@ -125,9 +182,75 @@ public abstract class Player extends Thread{
 
     //getters///////////////////////////////////////////////////////////////////
     public final boolean isValid(PlayerCommand command){
-        //TODO: determine if the given command is a valid one for the player to perform
+        //TODO: determine if further validation necessary
 
-        return false;
+        //initial result: either they're doing one action, or their other action is UNDISCARD
+        boolean result = command.followup==null
+                || command.followup.action==UNDISCARD;
+
+        if(!result){
+            //if above is false, then they must be using an ASSET_DOUBLE_PLAY
+            Map<String, Integer> assets = getAssets();
+            result = assets.containsKey(ASSET_DOUBLE_PLAY)
+                    && assets.get(ASSET_DOUBLE_PLAY)>0
+                    && hand.size()==2
+                    && !command.action.equals(UNDISCARD);
+        }
+
+        //if everything is good so far, perform specific validation
+        if(command.action.equals(BUILD)){
+            result = result && validateBuildWonder(command);
+        }else if(command.action.equals(PLAY)){
+            result = result && validatePlayCard(command);
+        }else if(command.action.equals(DISCARD)){
+            result = result && validateDiscard(command);
+        }else if(command.action.equals(UNDISCARD)){
+            result = result && validateUndiscard(command);
+        }else if(command.action.equals(PLAY_FREE)){
+            result = result && validatePlayFree(command);
+        }
+
+        return result;
+    }
+
+    private boolean validateHasCard(PlayerCommand command){
+        return hand.contains(game.getCardById(command.card));
+    }
+
+    private boolean validateHasNotPlayedCard(PlayerCommand command){
+        Card card = game.getCardById(command.card);
+        for(Card playedCard: playedCards){
+            if(playedCard.getName().equals(card.getName())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validatePlayFree(PlayerCommand command) {
+        return validateHasCard(command)
+                && validateHasNotPlayedCard(command);
+    }
+
+    private boolean validateUndiscard(PlayerCommand command) {
+        return game.getDiscard().contains(game.getCardById(command.card))
+                && validateHasNotPlayedCard(command);
+    }
+
+    private boolean validateDiscard(PlayerCommand command) {
+        return validateHasCard(command);
+    }
+
+    private boolean validatePlayCard(PlayerCommand command) {
+        return validateHasCard(command)
+                && validateHasNotPlayedCard(command)
+                && game.getCardById(command.card).canAfford(this, command);
+    }
+
+    private boolean validateBuildWonder(PlayerCommand command) {
+        return validateHasCard(command)
+                && wonder.getNextStage()!=null
+                && wonder.getNextStage().canAfford(this, command);
     }
 
     public final Player getPlayerLeft(){

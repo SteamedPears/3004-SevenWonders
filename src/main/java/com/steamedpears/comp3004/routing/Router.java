@@ -39,9 +39,9 @@ public abstract class Router extends Thread{
     public static String PROP_ROUTE_PLAYERS = "players";
     public static String PROP_ROUTE_YOU_ARE = "ur";
 
-    public static String COMMAND_ROUTE_TAKE_TURN = "takeTurn";
-    public static String COMMAND_ROUTE_OK = "ok";
-    public static String COMMAND_ROUTE_CONNECT = "hello";
+    public static String COMMAND_ROUTE_TAKE_TURN = "takeUrTurn";
+    public static String COMMAND_ROUTE_OK = "k";
+    public static String COMMAND_ROUTE_CONNECT = "ohai";
 
 
     //localGame#handleMoves should be called when every player has decided on a command

@@ -43,11 +43,6 @@ public class Card {
         return cards;
     }
 
-    public static List<List<Card>> generateRandomDeck(List<Card> cards, int numPlayers){
-        //TODO: implement this
-        return null;
-    }
-
     //instance variables////////////////////////////////////////////
     private String color;
     private String name;
@@ -83,7 +78,7 @@ public class Card {
         this.image = new ImageIcon(SevenWonders.PATH_IMG_CARDS+getId()+".png").getImage();
 
         //figure out what this card actually does
-        this.baseAssets = convertJSONToAssetMap(obj,PROP_CARD_BASE_ASSETS);
+        this.baseAssets = convertJSONToAssetMap(obj, PROP_CARD_BASE_ASSETS);
         this.multiplierAssets = convertJSArrayToSet(obj,PROP_CARD_MULTIPLIER_ASSETS);
         this.multiplierTargets = convertJSArrayToSet(obj,PROP_CARD_MULTIPLIER_TARGETS);
         this.discountsAssets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_ASSETS);
@@ -147,5 +142,11 @@ public class Card {
     @Override
     public int hashCode(){
         return getId().hashCode();
+    }
+
+    public boolean canAfford(Player player, PlayerCommand command) {
+        //TODO: determine if the given player can play this card with the given command's trades
+
+        return true;
     }
 }
