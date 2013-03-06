@@ -112,9 +112,10 @@ public class Wonder {
         }
     }
 
-    public Map<String, Integer> getCostOfNextStage(){
-        //TODO: return cost of next stage
-
+    public Card getNextStage(){
+        if(currentStage<getStages().size()){
+            return getStages().get(currentStage);
+        }
         return null;
     }
 
