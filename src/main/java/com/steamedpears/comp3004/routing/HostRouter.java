@@ -47,6 +47,7 @@ class HostRouter extends Router {
         }
         this.clients = new ArrayList<Client>();
         this.maxPlayers = maxPlayers;
+        localPlayerId = 0;
     }
 
     @Override

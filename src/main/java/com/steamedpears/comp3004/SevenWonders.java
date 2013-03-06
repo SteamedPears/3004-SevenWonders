@@ -11,6 +11,8 @@ public class SevenWonders {
     public static final String PATH_RESOURCE = "src/main/resources/";
     public static final String PATH_DATA = PATH_RESOURCE + "data/";
     public static final String PATH_IMG = PATH_RESOURCE + "img/";
+    public static final String PATH_IMG_CARDS = PATH_IMG + "cards/";
+    public static final String PATH_IMG_WONDERS = PATH_IMG + "wonders/";
     public static final String PATH_CARDS = PATH_DATA + "cards.json";
     public static final String PATH_WONDERS = PATH_DATA + "wonderlist.json";
 
@@ -44,7 +46,7 @@ public class SevenWonders {
         router.beginGame();
         dialog.setVisible(false);
         // TODO: make sure this next line is the right way of getting a player's hand
-        playerView = new PlayerView((router.getLocalGame()).getPlayerById((int)router.getId()));
+        playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
         highLevelView = new HighLevelView(this);
         view.setView(playerView);
     }
