@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.models;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.steamedpears.comp3004.SevenWonders;
 
 import javax.swing.*;
 import java.awt.Image;
@@ -22,7 +23,10 @@ public class Wonder {
 
         public WonderSide(JsonObject obj){
             this.stages = Card.parseDeck(obj.getAsJsonArray(PROP_WONDER_STAGES));
-            this.image = new ImageIcon(obj.getAsJsonPrimitive(PROP_WONDER_IMAGE).getAsString()).getImage();
+            this.image = new ImageIcon(SevenWonders.PATH_IMG_WONDERS+
+                    obj.getAsJsonPrimitive(PROP_WONDER_IMAGE).getAsString()
+                    +".png"
+            ).getImage();
             this.startResource = obj.getAsJsonPrimitive(PROP_WONDER_START_RESOURCE).getAsString();
         }
     }
@@ -80,6 +84,14 @@ public class Wonder {
             this.currentSide = sideA;
         }else if(side==PROP_WONDER_SIDE_B){
             this.currentSide = sideB;
+        }
+    }
+
+    public void randomizeSide(){
+        if(Math.random()>0.5){
+            setSide(PROP_WONDER_SIDE_A);
+        }else{
+            setSide(PROP_WONDER_SIDE_B);
         }
     }
 

@@ -145,7 +145,7 @@ public class SevenWondersGame extends Thread{
             if(card.getMinPlayers()==0){
                 guilds.add(card);
             }else if(card.getMinPlayers()<=numPlayers){
-                result.get(card.getAge()).add(card);
+                result.get(card.getAge()-1).add(card);
             }
         }
 
@@ -184,6 +184,10 @@ public class SevenWondersGame extends Thread{
 
     public int getAge(){
         return age;
+    }
+
+    public List<List<Card>> getDeck(){
+        return deck;
     }
 
     public Player getPlayerById(int id){
