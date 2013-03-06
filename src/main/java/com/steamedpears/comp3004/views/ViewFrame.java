@@ -19,8 +19,10 @@ public class ViewFrame extends JFrame {
 
     public void setView(JPanel view) {
         logger.info("Setting view to " + view);
+        getContentPane().removeAll();
         getContentPane().add(view);
         validate();
+        repaint();
     }
 
     public ViewFrame() {
