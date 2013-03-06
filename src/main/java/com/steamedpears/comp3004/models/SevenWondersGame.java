@@ -19,6 +19,7 @@ import java.util.concurrent.Future;
 public class SevenWondersGame implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
+    private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;
     private Set<Player> localPlayers;
@@ -30,8 +31,7 @@ public class SevenWondersGame implements Runnable{
     private Router router;
     private final ExecutorService pool;
     private Map<Future, Player> runningPlayers;
-
-    private static Logger log = Logger.getLogger(SevenWondersGame.class);
+    private boolean gameOver;
 
     public SevenWondersGame(Router router){
         this.players = new ArrayList<Player>();
@@ -40,9 +40,10 @@ public class SevenWondersGame implements Runnable{
         this.age = 1;
         this.router = router;
         this.pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+1);
+        this.gameOver = false;
     }
 
-    public void applyCommands(Map<Player, PlayerCommand> commands){
+    public boolean applyCommands(Map<Player, PlayerCommand> commands){
         log.debug("Applying player commands");
         for(Player player: commands.keySet()){
             PlayerCommand command = commands.get(player);
@@ -50,6 +51,7 @@ public class SevenWondersGame implements Runnable{
                 player.applyCommand(command);
             } catch (Exception e) {
                 try {
+                    log.debug("Player made invalid move, using null move");
                     command = PlayerCommand.getNullCommand(player);
                     commands.put(player, command);
                     player.applyCommand(command);
@@ -65,6 +67,11 @@ public class SevenWondersGame implements Runnable{
             PlayerCommand command = commands.get(player);
             player.finalizeCommand(command);
         }
+
+        if(age==MAX_AGES && shouldDeal()){
+            gameOver = true;
+        }
+        return gameOver;
     }
 
     private void takeTurnsInternal(){
@@ -119,11 +126,27 @@ public class SevenWondersGame implements Runnable{
 
     private void changeHands(){
         log.debug("Changing hands");
-        if(players.get(0).getHand().size()==0){
+        if(shouldDeal()){
+            discardExtraCards();
             deal();
+            age++;
+
         }else{
             rotateHands();
         }
+    }
+
+    private void discardExtraCards(){
+        for(Player player: players){
+            List<Card> hand = player.getHand();
+            if(hand!= null && hand.size()==1){
+                discard(hand.get(0));
+            }
+        }
+    }
+
+    private boolean shouldDeal(){
+        return players.get(0).getHand().size()<2;
     }
 
     private void rotateHands(){

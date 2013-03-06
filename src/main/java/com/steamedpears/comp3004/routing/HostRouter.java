@@ -63,6 +63,7 @@ class HostRouter extends Router {
 
     @Override
     public synchronized void registerMove(Player player, PlayerCommand command) {
+        log.debug("registering move");
         registeredMoves.put(player, command);
     }
 
@@ -173,6 +174,9 @@ class HostRouter extends Router {
             SevenWondersGame game = getLocalGame();
             if(registeredMoves.size()==game.getPlayers().size()){
                 log.debug("All player commands received");
+
+                boolean gameOver = game.applyCommands(registeredMoves);
+
                 broadcastPlayerCommands();
 
                 //TODO: wait for clients to actually respond before doing this
@@ -186,9 +190,11 @@ class HostRouter extends Router {
                     System.exit(-1);
                 }
 
-                game.applyCommands(registeredMoves);
-
-                startNextTurn();
+                if(!gameOver){
+                    startNextTurn();
+                }else{
+                    log.info("game is over");
+                }
             }
             try {
                 Thread.sleep(100);

@@ -1,6 +1,7 @@
 package com.steamedpears.comp3004.models;
 
 import com.steamedpears.comp3004.models.players.AIPlayer;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import static com.steamedpears.comp3004.models.Asset.*;
 public abstract class Player implements Runnable{
     //static variables//////////////////////////////////////////////////////
     private static int currentId = 0;
+    private static Logger log = Logger.getLogger(Player.class);
 
     //static methods////////////////////////////////////////////////////////
     private static int getNextId(){
@@ -60,6 +62,7 @@ public abstract class Player implements Runnable{
     }
 
     private void discardCard(Card card, boolean isFinal){
+        log.debug("discarding card: "+isFinal);
         if(isFinal){
             game.discard(card);
             hand.remove(card);
@@ -73,6 +76,7 @@ public abstract class Player implements Runnable{
     }
 
     private void buildWonder(Card card, boolean isFinal){
+        log.debug("building wonder: "+isFinal);
         Card stage = wonder.getNextStage();
         if(isFinal){
             hand.remove(card);
@@ -82,6 +86,7 @@ public abstract class Player implements Runnable{
     }
 
     private void playCard(Card card, boolean isFinal){
+        log.debug("playing card: "+isFinal);
         if(isFinal){
             playedCards.add(card);
             hand.remove(card);
@@ -91,6 +96,7 @@ public abstract class Player implements Runnable{
     }
 
     private void undiscard(Card card, boolean isFinal){
+        log.debug("undiscarding card: "+isFinal);
         if(isFinal){
             playedCards.add(card);
             game.undiscard(card);
@@ -100,6 +106,7 @@ public abstract class Player implements Runnable{
     }
 
     private void playFree(Card card, boolean isFinal){
+        log.debug("playing free: "+isFinal);
         playCard(card, isFinal);
         if(isFinal){
             wonder.expendLimitedResource(ASSET_BUILD_FREE);
@@ -107,6 +114,7 @@ public abstract class Player implements Runnable{
     }
 
     public final void applyCommand(PlayerCommand command) throws Exception {
+        log.debug("applying command");
         PlayerCommand temp = command;
         while(temp!=null){
             if(!isValid(command)){
@@ -143,6 +151,7 @@ public abstract class Player implements Runnable{
     }
 
     public final void finalizeCommand(PlayerCommand command){
+        log.debug("finalizing command");
         if(stagedCommandResult.containsKey(ASSET_GOLD)){
             this.gold+=stagedCommandResult.get(ASSET_GOLD);
         }
