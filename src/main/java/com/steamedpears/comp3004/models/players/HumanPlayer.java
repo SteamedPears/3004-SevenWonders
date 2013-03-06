@@ -14,6 +14,6 @@ public class HumanPlayer extends Player {
     @Override
     protected PlayerCommand handleTurn() {
         //TODO: implement this
-        return null;
+        return PlayerCommand.getNullCommand(this);
     }
 }

@@ -2,7 +2,6 @@ package com.steamedpears.comp3004.routing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
@@ -13,7 +12,7 @@ import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
-import com.steamedpears.comp3004.views.NewGameDialog;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -28,7 +27,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 class HostRouter extends Router {
     private ServerSocket serverSocket;
@@ -37,7 +39,12 @@ class HostRouter extends Router {
     private JsonArray wonderJSON;
     private Map<String, Wonder> wonders;
     private Map<Player, PlayerCommand> registeredMoves;
+    private ExecutorService pool;
+    private Future lobbyThread;
+    private Future listenerThread;
     private int maxPlayers;
+
+    private static Logger log = Logger.getLogger(Router.class);
 
     public HostRouter(int port, int maxPlayers) {
         try {
@@ -51,20 +58,20 @@ class HostRouter extends Router {
         localPlayerId = 0;
 
         registeredMoves = new HashMap<Player, PlayerCommand>();
+        pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+2);
     }
 
     @Override
-    public void registerMove(Player player, PlayerCommand command) {
-        //TODO: make this threadsafe
+    public synchronized void registerMove(Player player, PlayerCommand command) {
+        log.debug("registering move");
         registeredMoves.put(player, command);
-
-        if(registeredMoves.size()>getLocalGame().getPlayers().size()){
-            broadcastPlayerCommands();
-        }
     }
 
     @Override
     public void beginGame() {
+        log.debug("Beginning game");
+        lobbyThread.cancel(true);
+
         loadModelConfigs();
 
         SevenWondersGame game = getLocalGame();
@@ -72,12 +79,21 @@ class HostRouter extends Router {
 
         constructPlayers();
 
+        this.setPlaying(true);
+
+        listenerThread = pool.submit(new Runnable() {
+            public void run() {
+                listenForCommands();
+            }
+        });
+
         broadcastInitialConfig();
 
-        game.start();
+        startNextTurn();
     }
 
     private void loadModelConfigs(){
+        log.debug("Loading model config");
         try {
             JsonParser parser = new JsonParser();
             this.cardJSON = parser
@@ -100,6 +116,7 @@ class HostRouter extends Router {
     }
 
     private void constructPlayers(){
+        log.debug("Constructing players");
         List<Wonder> wonderList = new ArrayList<Wonder>();
         wonderList.addAll(wonders.values());
 
@@ -130,17 +147,18 @@ class HostRouter extends Router {
         }
     }
 
-    @Override
-    public void run(){
-        if(isPlaying()){
-            waitForClients();
-        }else{
-            listenForCommands();
-        }
+    public void start(){
+        log.debug("Starting Host Router");
+        lobbyThread = pool.submit(new Runnable() {
+            public void run() {
+                waitForClients();
+            }
+        });
     }
 
     private void waitForClients(){
-        while(true){
+        log.debug("Waiting for clients to connect");
+        while(!Thread.interrupted()){
             try{
                 clients.add(new Client(serverSocket.accept()));
             }catch(IOException e){
@@ -151,9 +169,46 @@ class HostRouter extends Router {
     }
 
     private void listenForCommands(){
-        for(Client client: clients){
-            //TODO: ..?
+        log.debug("Listening for commands");
+        while(true){
+            SevenWondersGame game = getLocalGame();
+            if(registeredMoves.size()==game.getPlayers().size()){
+                log.debug("All player commands received");
+
+                boolean gameOver = game.applyCommands(registeredMoves);
+
+                broadcastPlayerCommands();
+
+                //TODO: wait for clients to actually respond before doing this
+                try {
+                    log.debug("Waiting for game to finish up");
+                    while(!game.isDone()){
+                        Thread.sleep(100);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    System.exit(-1);
+                }
+
+                if(!gameOver){
+                    startNextTurn();
+                }else{
+                    log.info("game is over");
+                }
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
         }
+    }
+
+    private void startNextTurn(){
+        log.debug("Starting next turn");
+        getLocalGame().takeTurns();
+        broadcastTakeTurn();
     }
 
     private void broadcastInitialConfig(){
@@ -186,7 +241,7 @@ class HostRouter extends Router {
 
     private void broadcastPlayerCommands(){
         broadcast(playerCommandsToJson(registeredMoves).toString());
-        registeredMoves.clear();
+        registeredMoves = new HashMap<Player, PlayerCommand>();
     }
 
     private void broadcast(String message){

@@ -46,7 +46,7 @@ public class Card {
     //instance variables////////////////////////////////////////////
     private String color;
     private String name;
-    private Image image;
+    private String image;
     private int minPlayers;
     private int age;
     //The base amount of assets this card yields
@@ -75,7 +75,7 @@ public class Card {
         this.minPlayers = obj.has(PROP_CARD_MIN_PLAYERS) ? obj.getAsJsonPrimitive(PROP_CARD_MIN_PLAYERS).getAsInt() : 0;
         this.age = obj.has(PROP_CARD_AGE) ? obj.getAsJsonPrimitive(PROP_CARD_AGE).getAsInt() : 0;
         this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
-        this.image = new ImageIcon(SevenWonders.PATH_IMG_CARDS+getId()+".png").getImage();
+        this.image = SevenWonders.PATH_IMG_CARDS+getId()+".png";
 
         //figure out what this card actually does
         this.baseAssets = convertJSONToAssetMap(obj, PROP_CARD_BASE_ASSETS);
@@ -96,7 +96,12 @@ public class Card {
         return color;
     }
 
+    @Deprecated
     public Image getImage(){
+        return new ImageIcon(getImagePath()).getImage();
+    }
+
+    public String getImagePath(){
         return image;
     }
 
