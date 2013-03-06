@@ -42,6 +42,7 @@ public abstract class Player extends Thread{
     private List<Integer> militaryResults;
     private int gold;
     private int id;
+    private Map<String, Integer> stagedCommandResult;
 
     //constructor///////////////////////////////////////////////////////////
     public Player(Wonder wonder, SevenWondersGame game, int id){
@@ -79,6 +80,9 @@ public abstract class Player extends Thread{
     }
 
     public final void takeTurn(PlayerCommand command) throws Exception {
+        if(!isValid(command)){
+            throw new Exception("Given command is invalid: "+ command);
+        }
         if(command!=null){
             Card card = game.getCardById(command.card);
             if(command.action.equals(BUILD)){
@@ -96,6 +100,10 @@ public abstract class Player extends Thread{
         if(command.followup!=null){
             takeTurn(command.followup);
         }
+    }
+
+    private final void takeTurn(PlayerCommand command, boolean isFirst){
+
     }
 
     //extend with a GUI or AI
