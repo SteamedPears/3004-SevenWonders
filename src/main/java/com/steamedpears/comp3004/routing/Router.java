@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Router extends Thread{
+public abstract class Router{
 
     public static Router getHostRouter(int port, int totalPlayers){
-        totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS),SevenWonders.MIN_PLAYERS);
+        totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS);
         Router router = new HostRouter(port, totalPlayers);
         router.start();
         return router;
@@ -44,7 +44,7 @@ public abstract class Router extends Thread{
     public static String COMMAND_ROUTE_CONNECT = "ohai";
 
 
-    //localGame#handleMoves should be called when every player has decided on a command
+    //localGame#applyCommands should be called when every player has decided on a command
     private SevenWondersGame localGame;
     private boolean playing;
     protected int localPlayerId;
@@ -57,6 +57,12 @@ public abstract class Router extends Thread{
     public abstract void registerMove(Player player, PlayerCommand command);
 
     public abstract void beginGame();
+
+    public abstract void start();
+
+    protected void setPlaying(boolean playing){
+        this.playing = playing;
+    }
 
     public SevenWondersGame getLocalGame(){
         return localGame;

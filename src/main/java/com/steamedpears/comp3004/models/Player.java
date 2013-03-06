@@ -1,6 +1,7 @@
 package com.steamedpears.comp3004.models;
 
 import com.steamedpears.comp3004.models.players.AIPlayer;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +12,10 @@ import java.util.Set;
 import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
 import static com.steamedpears.comp3004.models.Asset.*;
 
-public abstract class Player extends Thread{
+public abstract class Player implements Runnable{
     //static variables//////////////////////////////////////////////////////
     private static int currentId = 0;
+    private static Logger log = Logger.getLogger(Player.class);
 
     //static methods////////////////////////////////////////////////////////
     private static int getNextId(){
@@ -60,6 +62,7 @@ public abstract class Player extends Thread{
     }
 
     private void discardCard(Card card, boolean isFinal){
+        log.debug("discarding card: "+isFinal);
         if(isFinal){
             game.discard(card);
             hand.remove(card);
@@ -73,6 +76,7 @@ public abstract class Player extends Thread{
     }
 
     private void buildWonder(Card card, boolean isFinal){
+        log.debug("building wonder: "+isFinal);
         Card stage = wonder.getNextStage();
         if(isFinal){
             hand.remove(card);
@@ -82,6 +86,7 @@ public abstract class Player extends Thread{
     }
 
     private void playCard(Card card, boolean isFinal){
+        log.debug("playing card: "+isFinal);
         if(isFinal){
             playedCards.add(card);
             hand.remove(card);
@@ -91,6 +96,7 @@ public abstract class Player extends Thread{
     }
 
     private void undiscard(Card card, boolean isFinal){
+        log.debug("undiscarding card: "+isFinal);
         if(isFinal){
             playedCards.add(card);
             game.undiscard(card);
@@ -100,13 +106,15 @@ public abstract class Player extends Thread{
     }
 
     private void playFree(Card card, boolean isFinal){
+        log.debug("playing free: "+isFinal);
         playCard(card, isFinal);
         if(isFinal){
             wonder.expendLimitedResource(ASSET_BUILD_FREE);
         }
     }
 
-    public final void takeTurn(PlayerCommand command) throws Exception {
+    public final void applyCommand(PlayerCommand command) throws Exception {
+        log.debug("applying command");
         PlayerCommand temp = command;
         while(temp!=null){
             if(!isValid(command)){
@@ -115,19 +123,19 @@ public abstract class Player extends Thread{
             temp = temp.followup;
         }
         stagedCommandResult = new HashMap<String, Integer>();
-        takeTurnInternal(command);
+        applyCommandInternal(command);
     }
 
-    private void takeTurnInternal(PlayerCommand command){
+    private void applyCommandInternal(PlayerCommand command){
         if(command!=null){
-            resolveTurn(command, false);
+            resolveCommand(command, false);
             if(command.followup!=null){
-                takeTurnInternal(command.followup);
+                applyCommandInternal(command.followup);
             }
         }
     }
 
-    private void resolveTurn(PlayerCommand command, boolean isFinal){
+    private void resolveCommand(PlayerCommand command, boolean isFinal){
         Card card = game.getCardById(command.card);
         if(command.action.equals(BUILD)){
             buildWonder(card, isFinal);
@@ -142,12 +150,13 @@ public abstract class Player extends Thread{
         }
     }
 
-    public final void finalizeTurn(PlayerCommand command){
+    public final void finalizeCommand(PlayerCommand command){
+        log.debug("finalizing command");
         if(stagedCommandResult.containsKey(ASSET_GOLD)){
             this.gold+=stagedCommandResult.get(ASSET_GOLD);
         }
         while(command!=null){
-            resolveTurn(command, true);
+            resolveCommand(command, true);
             if(command.followup!=null && command.followup.action!=UNDISCARD){
                 wonder.expendLimitedResource(ASSET_DOUBLE_PLAY);
             }
@@ -160,7 +169,7 @@ public abstract class Player extends Thread{
     protected abstract PlayerCommand handleTurn();
 
     public final void run(){
-        handleTurn();
+        this.currentCommand = handleTurn();
     }
 
     //setters///////////////////////////////////////////////////////////////////

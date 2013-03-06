@@ -18,15 +18,14 @@ public class Wonder {
     private class WonderSide{
         //stages are represented by cards for simplicity
         public List<Card> stages;
-        public Image image;
+        public String image;
         public String startResource;
 
         public WonderSide(JsonObject obj){
             this.stages = Card.parseDeck(obj.getAsJsonArray(PROP_WONDER_STAGES));
-            this.image = new ImageIcon(SevenWonders.PATH_IMG_WONDERS+
+            this.image = SevenWonders.PATH_IMG_WONDERS+
                     obj.getAsJsonPrimitive(PROP_WONDER_IMAGE).getAsString()
-                    +".png"
-            ).getImage();
+                    +".png";
             this.startResource = obj.getAsJsonPrimitive(PROP_WONDER_START_RESOURCE).getAsString();
         }
     }
@@ -110,6 +109,10 @@ public class Wonder {
         }else{
             return PROP_WONDER_SIDE_A;
         }
+    }
+
+    public String getImagePath(){
+        return currentSide.image;
     }
 
     public Card getNextStage(){

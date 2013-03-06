@@ -1,9 +1,9 @@
 package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.routing.Router;
-import sun.security.krb5.internal.crypto.DesMacCksumType;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,10 +12,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class SevenWondersGame extends Thread{
+public class SevenWondersGame implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
+    private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;
     private Set<Player> localPlayers;
@@ -25,6 +29,9 @@ public class SevenWondersGame extends Thread{
     private int age;
     private int maxPlayers; //useless?
     private Router router;
+    private final ExecutorService pool;
+    private Map<Future, Player> runningPlayers;
+    private boolean gameOver;
 
     public SevenWondersGame(Router router){
         this.players = new ArrayList<Player>();
@@ -32,16 +39,22 @@ public class SevenWondersGame extends Thread{
         this.discard = new HashSet<Card>();
         this.age = 1;
         this.router = router;
+        this.pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+1);
+        this.gameOver = false;
     }
 
-    public void handleMoves(Map<Player, PlayerCommand> commands){
+    public boolean applyCommands(Map<Player, PlayerCommand> commands){
+        log.debug("Applying player commands");
         for(Player player: commands.keySet()){
             PlayerCommand command = commands.get(player);
             try {
-                player.takeTurn(command);
+                player.applyCommand(command);
             } catch (Exception e) {
                 try {
-                    player.takeTurn(PlayerCommand.getNullCommand(player));
+                    log.debug("Player made invalid move, using null move");
+                    command = PlayerCommand.getNullCommand(player);
+                    commands.put(player, command);
+                    player.applyCommand(command);
                 } catch (Exception e1) {
                     //OH GOD EVERYTHING IS BROKEN
                     e1.printStackTrace();
@@ -52,48 +65,92 @@ public class SevenWondersGame extends Thread{
 
         for(Player player: commands.keySet()){
             PlayerCommand command = commands.get(player);
-            player.finalizeTurn(command);
+            player.finalizeCommand(command);
         }
+
+        if(age==MAX_AGES && shouldDeal()){
+            gameOver = true;
+        }
+        return gameOver;
     }
 
-    private void takeTurn(){
+    private void takeTurnsInternal(){
         changeHands();
-        Set<Player> runningPlayers = new HashSet<Player>();
+
+        runningPlayers = new HashMap<Future, Player>();
 
         for(Player player: localPlayers){
-            player.start();
-            runningPlayers.add(player);
+            Future future = pool.submit(player);
+            runningPlayers.put(future, player);
         }
 
+        Set<Future> finishedPlayers = new HashSet<Future>();
+
+        //TODO: do this without polling
         while(runningPlayers.size()>0){
-            //TODO: timeout slow players
-            for(Player player: runningPlayers){
-                if(!player.isAlive()){
-                    router.registerMove(player, player.getCurrentCommand());
-                }
-            }
             try{
                 Thread.sleep(100);
             }catch(InterruptedException ex){
                 ex.printStackTrace();
                 System.exit(-1);
             }
+            //TODO: timeout slow players
+            finishedPlayers.clear();
+            for(Future future: runningPlayers.keySet()){
+                if(future.isDone()){
+                    log.debug("Player returned with command");
+                    finishedPlayers.add(future);
+                    Player player = runningPlayers.get(future);
+                    router.registerMove(player, player.getCurrentCommand());
+                }
+            }
+
+            for(Future future: finishedPlayers){
+                runningPlayers.remove(future);
+            }
         }
     }
 
+    public boolean isDone(){
+        return runningPlayers==null || runningPlayers.size()==0;
+    }
+
+    public void takeTurns(){
+        log.debug("Taking turns");
+        pool.submit(this);
+    }
+
     public void run(){
-        takeTurn();
+        takeTurnsInternal();
     }
 
     private void changeHands(){
-        if(players.get(0).getHand().size()==0){
+        log.debug("Changing hands");
+        if(shouldDeal()){
+            discardExtraCards();
             deal();
+            age++;
+
         }else{
             rotateHands();
         }
     }
 
+    private void discardExtraCards(){
+        for(Player player: players){
+            List<Card> hand = player.getHand();
+            if(hand!= null && hand.size()==1){
+                discard(hand.get(0));
+            }
+        }
+    }
+
+    private boolean shouldDeal(){
+        return players.get(0).getHand().size()<2;
+    }
+
     private void rotateHands(){
+        log.debug("Rotating hands");
         if(getAge()==2){  //rotate cards to the right
             Player curPlayer = players.get(players.size()-1);
             List<Card> oldHand = curPlayer.getHand();
@@ -118,6 +175,7 @@ public class SevenWondersGame extends Thread{
     }
 
     private void deal(){
+        log.debug("Dealing hands");
         List<Card> currentDeck = deck.get(age-1);
         List<List<Card>> hands = new ArrayList<List<Card>>();
         for(int i=0; i<players.size(); ++i){

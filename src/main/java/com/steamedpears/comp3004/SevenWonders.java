@@ -2,6 +2,7 @@ package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
+import org.apache.log4j.BasicConfigurator;
 
 import org.apache.log4j.*;
 
