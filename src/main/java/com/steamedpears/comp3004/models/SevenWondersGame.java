@@ -35,9 +35,25 @@ public class SevenWondersGame extends Thread{
     }
 
     public void handleMoves(Map<Player, PlayerCommand> commands){
-        //TODO: locally apply these moves sent from the Router
-        //note: all player moves must be verified before any player move is actually applied
-        //at the end just call takeTurn()? Maybe?
+        for(Player player: commands.keySet()){
+            PlayerCommand command = commands.get(player);
+            try {
+                player.takeTurn(command);
+            } catch (Exception e) {
+                try {
+                    player.takeTurn(PlayerCommand.getNullCommand(player));
+                } catch (Exception e1) {
+                    //OH GOD EVERYTHING IS BROKEN
+                    e1.printStackTrace();
+                    System.exit(-1);
+                }
+            }
+        }
+
+        for(Player player: commands.keySet()){
+            PlayerCommand command = commands.get(player);
+            player.finalizeTurn(command);
+        }
     }
 
     private void takeTurn(){
