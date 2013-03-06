@@ -120,7 +120,8 @@ public abstract class Player extends Thread{
         return playerRight;
     }
 
-    public final List<Card> getHand(){
+    // probably not going to break anything if this isn't final
+    public List<Card> getHand(){
         return hand;
     }
 
