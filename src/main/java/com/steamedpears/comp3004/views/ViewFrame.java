@@ -2,11 +2,13 @@ package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.SevenWonders;
 import net.miginfocom.swing.MigLayout;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.*;
 
 public class ViewFrame extends JFrame {
+    static Logger logger = Logger.getLogger(ViewFrame.class);
     private JPanel panel;
     public SevenWonders controller;
 
@@ -20,6 +22,7 @@ public class ViewFrame extends JFrame {
     public void setView(JPanel view) {
         removeAll();
         add(view);
+        repaint();
     }
 
     public ViewFrame(SevenWonders controller) {

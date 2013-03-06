@@ -3,6 +3,8 @@ package com.steamedpears.comp3004;
 import com.google.gson.*;
 import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.views.*;
+import org.apache.log4j.*;
+
 import static org.mockito.Mockito.*;
 
 import javax.swing.*;
@@ -28,6 +30,8 @@ public class PlayerViewTest extends JFrame {
         // build player
         Player player = mock(Player.class);
         when(player.getHand()).thenReturn(hand);
+        when(player.getMilitaryResults()).thenReturn(Arrays.asList(2,3,-5,1));
+        when(player.getGold()).thenReturn(42);
 
         // create view
         PlayerView view = new PlayerView(player);
@@ -36,6 +40,7 @@ public class PlayerViewTest extends JFrame {
     }
 
     public static void main(String[] args) throws Exception {
+        BasicConfigurator.configure();
         new PlayerViewTest();
     }
 }
