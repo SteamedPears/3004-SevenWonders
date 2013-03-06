@@ -11,7 +11,7 @@ import java.util.Set;
 import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
 import static com.steamedpears.comp3004.models.Asset.*;
 
-public abstract class Player extends Thread{
+public abstract class Player implements Runnable{
     //static variables//////////////////////////////////////////////////////
     private static int currentId = 0;
 
@@ -106,7 +106,7 @@ public abstract class Player extends Thread{
         }
     }
 
-    public final void takeTurn(PlayerCommand command) throws Exception {
+    public final void applyCommand(PlayerCommand command) throws Exception {
         PlayerCommand temp = command;
         while(temp!=null){
             if(!isValid(command)){
@@ -115,19 +115,19 @@ public abstract class Player extends Thread{
             temp = temp.followup;
         }
         stagedCommandResult = new HashMap<String, Integer>();
-        takeTurnInternal(command);
+        applyCommandInternal(command);
     }
 
-    private void takeTurnInternal(PlayerCommand command){
+    private void applyCommandInternal(PlayerCommand command){
         if(command!=null){
-            resolveTurn(command, false);
+            resolveCommand(command, false);
             if(command.followup!=null){
-                takeTurnInternal(command.followup);
+                applyCommandInternal(command.followup);
             }
         }
     }
 
-    private void resolveTurn(PlayerCommand command, boolean isFinal){
+    private void resolveCommand(PlayerCommand command, boolean isFinal){
         Card card = game.getCardById(command.card);
         if(command.action.equals(BUILD)){
             buildWonder(card, isFinal);
@@ -142,12 +142,12 @@ public abstract class Player extends Thread{
         }
     }
 
-    public final void finalizeTurn(PlayerCommand command){
+    public final void finalizeCommand(PlayerCommand command){
         if(stagedCommandResult.containsKey(ASSET_GOLD)){
             this.gold+=stagedCommandResult.get(ASSET_GOLD);
         }
         while(command!=null){
-            resolveTurn(command, true);
+            resolveCommand(command, true);
             if(command.followup!=null && command.followup.action!=UNDISCARD){
                 wonder.expendLimitedResource(ASSET_DOUBLE_PLAY);
             }
@@ -160,7 +160,7 @@ public abstract class Player extends Thread{
     protected abstract PlayerCommand handleTurn();
 
     public final void run(){
-        handleTurn();
+        this.currentCommand = handleTurn();
     }
 
     //setters///////////////////////////////////////////////////////////////////

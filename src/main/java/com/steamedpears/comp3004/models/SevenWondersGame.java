@@ -1,9 +1,8 @@
 package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.routing.Router;
-import sun.security.krb5.internal.crypto.DesMacCksumType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,8 +11,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class SevenWondersGame extends Thread{
+public class SevenWondersGame implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
 
@@ -25,6 +27,8 @@ public class SevenWondersGame extends Thread{
     private int age;
     private int maxPlayers; //useless?
     private Router router;
+    private final ExecutorService pool;
+    private Map<Future, Player> runningPlayers;
 
     public SevenWondersGame(Router router){
         this.players = new ArrayList<Player>();
@@ -32,16 +36,19 @@ public class SevenWondersGame extends Thread{
         this.discard = new HashSet<Card>();
         this.age = 1;
         this.router = router;
+        this.pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+1);
     }
 
-    public void handleMoves(Map<Player, PlayerCommand> commands){
+    public void applyCommands(Map<Player, PlayerCommand> commands){
         for(Player player: commands.keySet()){
             PlayerCommand command = commands.get(player);
             try {
-                player.takeTurn(command);
+                player.applyCommand(command);
             } catch (Exception e) {
                 try {
-                    player.takeTurn(PlayerCommand.getNullCommand(player));
+                    command = PlayerCommand.getNullCommand(player);
+                    commands.put(player, command);
+                    player.applyCommand(command);
                 } catch (Exception e1) {
                     //OH GOD EVERYTHING IS BROKEN
                     e1.printStackTrace();
@@ -52,37 +59,54 @@ public class SevenWondersGame extends Thread{
 
         for(Player player: commands.keySet()){
             PlayerCommand command = commands.get(player);
-            player.finalizeTurn(command);
+            player.finalizeCommand(command);
         }
     }
 
-    private void takeTurn(){
+    private void takeTurnsInternal(){
         changeHands();
-        Set<Player> runningPlayers = new HashSet<Player>();
+
+        runningPlayers = new HashMap<Future, Player>();
 
         for(Player player: localPlayers){
-            player.start();
-            runningPlayers.add(player);
+            Future future = pool.submit(player);
+            runningPlayers.put(future, player);
         }
 
+        Set<Future> finishedPlayers = new HashSet<Future>();
         while(runningPlayers.size()>0){
-            //TODO: timeout slow players
-            for(Player player: runningPlayers){
-                if(!player.isAlive()){
-                    router.registerMove(player, player.getCurrentCommand());
-                }
-            }
             try{
                 Thread.sleep(100);
             }catch(InterruptedException ex){
                 ex.printStackTrace();
                 System.exit(-1);
             }
+            //TODO: timeout slow players
+            finishedPlayers.clear();
+            for(Future future: runningPlayers.keySet()){
+                if(future.isDone()){
+                    finishedPlayers.add(future);
+                    Player player = runningPlayers.get(future);
+                    router.registerMove(player, player.getCurrentCommand());
+                }
+            }
+
+            for(Future future: finishedPlayers){
+                runningPlayers.remove(future);
+            }
         }
     }
 
+    public boolean isDone(){
+        return runningPlayers==null || runningPlayers.size()==0;
+    }
+
+    public void takeTurns(){
+        pool.submit(this);
+    }
+
     public void run(){
-        takeTurn();
+        takeTurnsInternal();
     }
 
     private void changeHands(){

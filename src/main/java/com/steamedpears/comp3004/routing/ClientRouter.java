@@ -24,6 +24,11 @@ class ClientRouter extends Router {
     }
 
     @Override
+    public void start(){
+
+    }
+
+    @Override
     public void registerMove(Player player, PlayerCommand command) {
         //TODO: send this to the host
     }

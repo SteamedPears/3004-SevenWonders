@@ -2,7 +2,6 @@ package com.steamedpears.comp3004.routing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
@@ -13,7 +12,6 @@ import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
-import com.steamedpears.comp3004.views.NewGameDialog;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -28,7 +26,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 class HostRouter extends Router {
     private ServerSocket serverSocket;
@@ -37,6 +38,9 @@ class HostRouter extends Router {
     private JsonArray wonderJSON;
     private Map<String, Wonder> wonders;
     private Map<Player, PlayerCommand> registeredMoves;
+    private ExecutorService pool;
+    private Future lobbyThread;
+    private Future listenerThread;
     private int maxPlayers;
 
     public HostRouter(int port, int maxPlayers) {
@@ -51,25 +55,18 @@ class HostRouter extends Router {
         localPlayerId = 0;
 
         registeredMoves = new HashMap<Player, PlayerCommand>();
+        pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+2);
     }
 
     @Override
-    public void registerMove(Player player, PlayerCommand command) {
-        //TODO: make this threadsafe
+    public synchronized void registerMove(Player player, PlayerCommand command) {
         registeredMoves.put(player, command);
-
-        SevenWondersGame game = getLocalGame();
-        if(registeredMoves.size()==game.getPlayers().size()){
-            broadcastPlayerCommands();
-            game.handleMoves(registeredMoves);
-
-            //TODO: wait for clients to actually respond before doing this
-            game.start();
-        }
     }
 
     @Override
     public void beginGame() {
+        lobbyThread.cancel(true);
+
         loadModelConfigs();
 
         SevenWondersGame game = getLocalGame();
@@ -77,9 +74,17 @@ class HostRouter extends Router {
 
         constructPlayers();
 
+        this.setPlaying(true);
+
+        listenerThread = pool.submit(new Runnable(){
+            public void run(){
+                listenForCommands();
+            }
+        });
+
         broadcastInitialConfig();
 
-        game.start();
+        game.takeTurns();
     }
 
     private void loadModelConfigs(){
@@ -135,13 +140,17 @@ class HostRouter extends Router {
         }
     }
 
+    public void start(){
+        lobbyThread = pool.submit(new Runnable(){
+            public void run(){
+                waitForClients();
+            }
+        });
+    }
+
     @Override
     public void run(){
-        if(isPlaying()){
-            waitForClients();
-        }else{
-            listenForCommands();
-        }
+
     }
 
     private void waitForClients(){
@@ -156,8 +165,30 @@ class HostRouter extends Router {
     }
 
     private void listenForCommands(){
-        for(Client client: clients){
-            //TODO: ..?
+        while(true){
+            SevenWondersGame game = getLocalGame();
+            if(registeredMoves.size()==game.getPlayers().size()){
+                broadcastPlayerCommands();
+
+                //TODO: wait for clients to actually respond before doing this
+                try {
+                    while(!game.isDone()){
+                        Thread.sleep(100);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    System.exit(-1);
+                }
+                game.applyCommands(registeredMoves);
+
+                game.takeTurns();
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
         }
     }
 
