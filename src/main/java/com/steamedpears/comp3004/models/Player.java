@@ -275,11 +275,13 @@ public abstract class Player implements Runnable{
         return hand;
     }
 
-    public final int getGold(){
+    // probably fine to mock this out
+    public int getGold(){
         return gold;
     }
 
-    public final List<Integer> getMilitaryResults(){
+    // probably fine to mock this out
+    public List<Integer> getMilitaryResults(){
         return militaryResults;
     }
 

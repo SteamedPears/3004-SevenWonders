@@ -2,13 +2,13 @@ package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.SevenWonders;
 import net.miginfocom.swing.MigLayout;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.*;
 
 public class ViewFrame extends JFrame {
-    private JPanel panel;
-    public SevenWonders controller;
+    static Logger logger = Logger.getLogger(ViewFrame.class);
 
     private void init() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -18,12 +18,14 @@ public class ViewFrame extends JFrame {
     }
 
     public void setView(JPanel view) {
-        removeAll();
-        add(view);
+        logger.info("Setting view to " + view);
+        getContentPane().removeAll();
+        getContentPane().add(view);
+        validate();
+        repaint();
     }
 
-    public ViewFrame(SevenWonders controller) {
-        this.controller = controller;
+    public ViewFrame() {
         init();
     }
 }
