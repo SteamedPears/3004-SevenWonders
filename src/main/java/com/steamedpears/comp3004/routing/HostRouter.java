@@ -12,6 +12,7 @@ import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -43,6 +44,8 @@ class HostRouter extends Router {
     private Future listenerThread;
     private int maxPlayers;
 
+    private static Logger log = Logger.getLogger(Router.class);
+
     public HostRouter(int port, int maxPlayers) {
         try {
             this.serverSocket = new ServerSocket(port);
@@ -65,6 +68,7 @@ class HostRouter extends Router {
 
     @Override
     public void beginGame() {
+        log.debug("Beginning game");
         lobbyThread.cancel(true);
 
         loadModelConfigs();
@@ -76,18 +80,19 @@ class HostRouter extends Router {
 
         this.setPlaying(true);
 
-        listenerThread = pool.submit(new Runnable(){
-            public void run(){
+        listenerThread = pool.submit(new Runnable() {
+            public void run() {
                 listenForCommands();
             }
         });
 
         broadcastInitialConfig();
 
-        game.takeTurns();
+        startNextTurn();
     }
 
     private void loadModelConfigs(){
+        log.debug("Loading model config");
         try {
             JsonParser parser = new JsonParser();
             this.cardJSON = parser
@@ -110,6 +115,7 @@ class HostRouter extends Router {
     }
 
     private void constructPlayers(){
+        log.debug("Constructing players");
         List<Wonder> wonderList = new ArrayList<Wonder>();
         wonderList.addAll(wonders.values());
 
@@ -141,20 +147,17 @@ class HostRouter extends Router {
     }
 
     public void start(){
-        lobbyThread = pool.submit(new Runnable(){
-            public void run(){
+        log.debug("Starting Host Router");
+        lobbyThread = pool.submit(new Runnable() {
+            public void run() {
                 waitForClients();
             }
         });
     }
 
-    @Override
-    public void run(){
-
-    }
-
     private void waitForClients(){
-        while(true){
+        log.debug("Waiting for clients to connect");
+        while(!Thread.interrupted()){
             try{
                 clients.add(new Client(serverSocket.accept()));
             }catch(IOException e){
@@ -165,13 +168,16 @@ class HostRouter extends Router {
     }
 
     private void listenForCommands(){
+        log.debug("Listening for commands");
         while(true){
             SevenWondersGame game = getLocalGame();
             if(registeredMoves.size()==game.getPlayers().size()){
+                log.debug("All player commands received");
                 broadcastPlayerCommands();
 
                 //TODO: wait for clients to actually respond before doing this
                 try {
+                    log.debug("Waiting for game to finish up");
                     while(!game.isDone()){
                         Thread.sleep(100);
                     }
@@ -179,9 +185,10 @@ class HostRouter extends Router {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     System.exit(-1);
                 }
+
                 game.applyCommands(registeredMoves);
 
-                game.takeTurns();
+                startNextTurn();
             }
             try {
                 Thread.sleep(100);
@@ -190,6 +197,12 @@ class HostRouter extends Router {
                 System.exit(-1);
             }
         }
+    }
+
+    private void startNextTurn(){
+        log.debug("Starting next turn");
+        getLocalGame().takeTurns();
+        broadcastTakeTurn();
     }
 
     private void broadcastInitialConfig(){

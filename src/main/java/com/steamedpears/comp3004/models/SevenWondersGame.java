@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.models;
 import com.google.gson.JsonArray;
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.routing.Router;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +31,8 @@ public class SevenWondersGame implements Runnable{
     private final ExecutorService pool;
     private Map<Future, Player> runningPlayers;
 
+    private static Logger log = Logger.getLogger(SevenWondersGame.class);
+
     public SevenWondersGame(Router router){
         this.players = new ArrayList<Player>();
         this.localPlayers = new HashSet<Player>();
@@ -40,6 +43,7 @@ public class SevenWondersGame implements Runnable{
     }
 
     public void applyCommands(Map<Player, PlayerCommand> commands){
+        log.debug("Applying player commands");
         for(Player player: commands.keySet()){
             PlayerCommand command = commands.get(player);
             try {
@@ -74,6 +78,8 @@ public class SevenWondersGame implements Runnable{
         }
 
         Set<Future> finishedPlayers = new HashSet<Future>();
+
+        //TODO: do this without polling
         while(runningPlayers.size()>0){
             try{
                 Thread.sleep(100);
@@ -85,6 +91,7 @@ public class SevenWondersGame implements Runnable{
             finishedPlayers.clear();
             for(Future future: runningPlayers.keySet()){
                 if(future.isDone()){
+                    log.debug("Player returned with command");
                     finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
                     router.registerMove(player, player.getCurrentCommand());
@@ -102,6 +109,7 @@ public class SevenWondersGame implements Runnable{
     }
 
     public void takeTurns(){
+        log.debug("Taking turns");
         pool.submit(this);
     }
 
@@ -110,6 +118,7 @@ public class SevenWondersGame implements Runnable{
     }
 
     private void changeHands(){
+        log.debug("Changing hands");
         if(players.get(0).getHand().size()==0){
             deal();
         }else{
@@ -118,6 +127,7 @@ public class SevenWondersGame implements Runnable{
     }
 
     private void rotateHands(){
+        log.debug("Rotating hands");
         if(getAge()==2){  //rotate cards to the right
             Player curPlayer = players.get(players.size()-1);
             List<Card> oldHand = curPlayer.getHand();
@@ -142,6 +152,7 @@ public class SevenWondersGame implements Runnable{
     }
 
     private void deal(){
+        log.debug("Dealing hands");
         List<Card> currentDeck = deck.get(age-1);
         List<List<Card>> hands = new ArrayList<List<Card>>();
         for(int i=0; i<players.size(); ++i){

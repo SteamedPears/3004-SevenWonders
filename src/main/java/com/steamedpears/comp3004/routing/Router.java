@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Router implements Runnable{
+public abstract class Router{
 
     public static Router getHostRouter(int port, int totalPlayers){
         totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS);
