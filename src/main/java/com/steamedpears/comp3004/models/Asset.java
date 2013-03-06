@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -103,6 +104,13 @@ public final class Asset {
         }
 
         return result;
+    }
+
+    public static Map<String, Integer> sumAssets(Map<String, Integer> first, Map<String, Integer> last){
+        Collection<Map<String, Integer>> col = new ArrayList<Map<String, Integer>>();
+        col.add(first);
+        col.add(last);
+        return sumAssets(col);
     }
 
 }
