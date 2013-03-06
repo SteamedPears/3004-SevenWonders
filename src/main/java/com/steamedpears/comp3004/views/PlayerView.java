@@ -17,7 +17,7 @@ public class PlayerView extends JPanel {
             cardViews.add(new CardView(c));
         }
         for(CardView cv : cardViews) {
-            add(cv);
+            add(cv,"aligny top");
         }
         // TODO: add some way to switch to high level view
         // TODO: add tabular view of resources
