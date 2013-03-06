@@ -58,8 +58,13 @@ class HostRouter extends Router {
         //TODO: make this threadsafe
         registeredMoves.put(player, command);
 
-        if(registeredMoves.size()>getLocalGame().getPlayers().size()){
+        SevenWondersGame game = getLocalGame();
+        if(registeredMoves.size()==game.getPlayers().size()){
             broadcastPlayerCommands();
+            game.handleMoves(registeredMoves);
+
+            //TODO: wait for clients to actually respond before doing this
+            game.start();
         }
     }
 
@@ -186,7 +191,7 @@ class HostRouter extends Router {
 
     private void broadcastPlayerCommands(){
         broadcast(playerCommandsToJson(registeredMoves).toString());
-        registeredMoves.clear();
+        registeredMoves = new HashMap<Player, PlayerCommand>();
     }
 
     private void broadcast(String message){
