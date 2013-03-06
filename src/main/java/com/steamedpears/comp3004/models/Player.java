@@ -48,6 +48,7 @@ public abstract class Player extends Thread{
         this.wonder = wonder;
         this.game = game;
         this.playedCards = new ArrayList<Card>();
+        this.hand = new ArrayList<Card>();
         this.gold = 0;
         this.militaryResults = new ArrayList<Integer>();
         this.id = id;
