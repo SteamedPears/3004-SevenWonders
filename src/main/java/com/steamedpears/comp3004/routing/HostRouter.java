@@ -60,12 +60,14 @@ class HostRouter extends Router {
     public void beginGame() {
         loadModelConfigs();
 
-        constructPlayers();
-
         SevenWondersGame game = getLocalGame();
         game.setDeck(game.generateRandomDeck(maxPlayers));
 
+        constructPlayers();
+
         broadcastInitialConfig();
+
+        game.start();
     }
 
     private void loadModelConfigs(){

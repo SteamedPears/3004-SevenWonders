@@ -43,7 +43,9 @@ public class SevenWonders {
         }else{
             router = Router.getClientRouter(ipAddress, Router.HOST_PORT);
         }
+        //note: skips lobby matchmaking
         router.beginGame();
+
         dialog.setVisible(false);
         // TODO: make sure this next line is the right way of getting a player's hand
         playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
