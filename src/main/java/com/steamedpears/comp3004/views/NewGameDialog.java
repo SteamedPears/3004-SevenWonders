@@ -19,11 +19,14 @@ public class NewGameDialog extends JDialog {
     private boolean isHost = true;
     private String ipAddress = "127.0.0.1";
     private Integer port = Router.HOST_PORT;
+    private int players = 3;
 
     // Interface elements
     private JLabel addressLabel;
     private JTextField addressField;
     private JTextField portField;
+    private JLabel playersLabel;
+    private JComboBox playersComboBox;
 
     private void selectHost() {
         isHost = true;
@@ -47,13 +50,15 @@ public class NewGameDialog extends JDialog {
 
     public boolean isHostSelected() { return isHost; }
     public String getIpAddress() { return ipAddress; }
+    public int getPort() { return port; }
+    public int getPlayers() { return players; }
 
     public NewGameDialog(ViewFrame f, SevenWonders controller) {
         super(f,"New Game",true);
 
         // initialization
         this.controller = controller;
-        setLayout(new MigLayout());
+        setLayout(new MigLayout("wrap 4"));
         setBounds((f.getWidth() / 2) - (width / 2), (f.getHeight() / 2) - (height / 2), width, height);
         addWindowListener(new DialogClosingListener());
         setResizable(false);
@@ -83,7 +88,7 @@ public class NewGameDialog extends JDialog {
 
         // address field
         addressLabel = new JLabel("IP:");
-        add(addressLabel);
+        add(addressLabel,"split 2");
         addressField = new JTextField(ipAddress);
         addressField.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -91,10 +96,10 @@ public class NewGameDialog extends JDialog {
                 ipAddress = addressField.getText();
             }
         });
-        add(addressField,"span");
+        add(addressField);
 
         // port field
-        add(new JLabel("Port:"));
+        add(new JLabel("Port:"),"split 2");
         portField = new JTextField(port.toString());
         portField.addPropertyChangeListener(new PropertyChangeListener(){
             @Override
@@ -105,7 +110,22 @@ public class NewGameDialog extends JDialog {
                 port = Integer.parseInt(portField.getText(),10);
             }
         });
-        add(portField);
+        add(portField,"grow");
+
+        // players dropdown
+        playersLabel = new JLabel("Players:");
+        add(playersLabel);
+        playersComboBox = new JComboBox();
+        for(int i = SevenWonders.MIN_PLAYERS; i <= SevenWonders.MAX_PLAYERS; ++i) {
+            playersComboBox.addItem(new Integer(i));
+        }
+        playersComboBox.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                players = (Integer)playersComboBox.getSelectedItem();
+            }
+        });
+        add(playersComboBox);
 
         // by default, offer to host
         hostButton.setSelected(true);
@@ -125,7 +145,7 @@ public class NewGameDialog extends JDialog {
     private class StartGameListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            controller.startGame(isHostSelected(),getIpAddress());
+            controller.createGame(isHostSelected(), getIpAddress(), getPort(), getPlayers());
         }
     }
 
