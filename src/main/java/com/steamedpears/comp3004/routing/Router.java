@@ -47,6 +47,7 @@ public abstract class Router extends Thread{
     //localGame#handleMoves should be called when every player has decided on a command
     private SevenWondersGame localGame;
     private boolean playing;
+    protected int localPlayerId;
 
     protected Router() {
         this.localGame = new SevenWondersGame(this);
@@ -63,6 +64,10 @@ public abstract class Router extends Thread{
 
     public boolean isPlaying(){
         return playing;
+    }
+
+    public int getLocalPlayerId(){
+        return localPlayerId;
     }
 
     protected JsonObject playerCommandsToJson(Map<Player, PlayerCommand> commands){
