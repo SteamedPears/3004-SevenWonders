@@ -26,7 +26,7 @@ public abstract class Player extends Thread{
 
             @Override
             protected PlayerCommand handleTurn() {
-                return null;
+                return PlayerCommand.getNullCommand(this);
             }
         };
     }
