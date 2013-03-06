@@ -424,4 +424,17 @@ public abstract class Player implements Runnable{
         return collectedAssets;
     }
 
+    /**
+     * get the total value of all military wins
+     * @return value of all military wins
+     */
+    public int getMilitaryWins() {
+        int wins = 0;
+        for(int i : getMilitaryResults()) {
+            if(i > 0) {
+                wins += i;
+            }
+        }
+        return wins;
+    }
 }

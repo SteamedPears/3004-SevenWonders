@@ -7,6 +7,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class SevenWonders {
     public static final String PATH_RESOURCE = "src/main/resources/";
@@ -32,6 +34,11 @@ public class SevenWonders {
     JDialog dialog;
     Router router;
     PlayerView playerView;
+
+    public static enum View { PLAYER_VIEW, HIGHLEVEL_VIEW };
+    private View currentView;
+
+    // TODO: build this
     HighLevelView highLevelView;
 
     public SevenWonders() {
@@ -49,15 +56,42 @@ public class SevenWonders {
             router = Router.getClientRouter(ipAddress, port);
             dialog = new JoinGameDialog(view,this);
         }
+        router.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                try {
+                    updateView();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    System.exit(-1);
+                }
+            }
+        });
         dialog.setVisible(true);
     }
 
     public void startGame() {
         closeDialog();
+        selectPlayerView();
         router.beginGame();
-        playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
-        highLevelView = new HighLevelView(this);
-        view.setView(playerView);
+    }
+
+    private void selectPlayerView() {
+        currentView = View.PLAYER_VIEW;
+    }
+
+    private void updateView() throws Exception {
+        switch(currentView) {
+            case PLAYER_VIEW:
+                playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
+                view.setView(playerView);
+                break;
+            case HIGHLEVEL_VIEW:
+                // do stuff
+                break;
+            default:
+                throw new Exception("Unknown view selected");
+        }
     }
 
     public void closeDialog() {
