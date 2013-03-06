@@ -14,6 +14,8 @@ import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
 import org.apache.log4j.Logger;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -156,6 +158,8 @@ class HostRouter extends Router {
         });
     }
 
+
+
     private void waitForClients(){
         log.debug("Waiting for clients to connect");
         while(!Thread.interrupted()){
@@ -178,6 +182,7 @@ class HostRouter extends Router {
                 boolean gameOver = game.applyCommands(registeredMoves);
 
                 broadcastPlayerCommands();
+                announceChange();
 
                 //TODO: wait for clients to actually respond before doing this
                 try {
