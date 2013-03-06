@@ -25,6 +25,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,12 +49,18 @@ class HostRouter extends Router {
         this.clients = new ArrayList<Client>();
         this.maxPlayers = maxPlayers;
         localPlayerId = 0;
+
+        registeredMoves = new HashMap<Player, PlayerCommand>();
     }
 
     @Override
     public void registerMove(Player player, PlayerCommand command) {
         //TODO: make this threadsafe
         registeredMoves.put(player, command);
+
+        if(registeredMoves.size()>getLocalGame().getPlayers().size()){
+            broadcastPlayerCommands();
+        }
     }
 
     @Override
@@ -179,6 +186,7 @@ class HostRouter extends Router {
 
     private void broadcastPlayerCommands(){
         broadcast(playerCommandsToJson(registeredMoves).toString());
+        registeredMoves.clear();
     }
 
     private void broadcast(String message){
