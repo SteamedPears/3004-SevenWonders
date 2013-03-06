@@ -1,5 +1,4 @@
 package com.steamedpears.comp3004.views;
-import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Card;
 import com.steamedpears.comp3004.models.Player;
 
@@ -28,7 +27,8 @@ public class PlayerView extends JPanel {
 
         // add cards in hand
         cardViews = new ArrayList<CardView>();
-        for(Card c : player.getHand()) {
+        List<Card> hand = player.getHand();
+        for(Card c : hand) {
             cardViews.add(new CardView(c));
         }
         for(CardView cv : cardViews) {
@@ -37,7 +37,7 @@ public class PlayerView extends JPanel {
 
         // shield count labels
         add(new JLabel("Shields:"),"split 2,newline");
-        add(new JLabel(getMilitaryWins(player).toString()));
+        add(new JLabel(""+player.getMilitaryWins()));
 
         // gold count labels
         add(new JLabel("Gold:"),"split 2");
@@ -48,16 +48,5 @@ public class PlayerView extends JPanel {
         // TODO: add tabular view of resources
         // TODO: add tabular view of sciences
         // TODO: add victory point count
-    }
-
-    // WHY DO I HAVE TO DO THIS?!  ARRGGHHH
-    private static Integer getMilitaryWins(Player p) {
-        int wins = 0;
-        for(int i : p.getMilitaryResults()) {
-            if(i > 0) {
-                wins += i;
-            }
-        }
-        return wins;
     }
 }

@@ -9,30 +9,25 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class CardView extends JLabel {
-    public static final int WIDTH_MULTIPLIER = 2;
-    private int width = 200;
+    public static final int DEFAULT_WIDTH = 100;
     private Card card;
     private SelectionListener selectionListener;
     static Logger logger = Logger.getLogger(SevenWonders.class);
 
     public CardView(Card card) {
-        addMouseListener(new MouseOverListener());
-        this.card = card;
-        shrink();
+        this(card, DEFAULT_WIDTH);
     }
 
-    public void grow() {
-        setIcon(getIconOfSize(card, width * WIDTH_MULTIPLIER));
+    public CardView(Card card, int width) {
+        addMouseListener(new CardMouseListener());
+        setCard(card);
+        setCardWidth(width);
     }
 
-    public void shrink() {
-        setIcon(getIconOfSize(card, width));
-    }
+    public void setCard(Card card) { this.card = card; }
 
     public void setCardWidth(int width) {
-        logger.debug("Setting width to: " + width);
-        this.width = width;
-        shrink();
+        setIcon(getIconOfSize(card, width));
     }
 
     public void setSelectionListener(SelectionListener selectionListener) {
@@ -44,18 +39,11 @@ public class CardView extends JLabel {
     }
 
     private static Icon getIconOfSize(Card card, int width) {
-        return new ImageIcon(card.getImage().getScaledInstance(width, -1, Image.SCALE_FAST));
+        return new ImageIcon((new ImageIcon(card.getImagePath()))
+                .getImage().getScaledInstance(width, -1, Image.SCALE_FAST));
     }
 
-    private class MouseOverListener extends MouseAdapter {
-        public void mouseEntered(MouseEvent e) {
-            grow();
-        }
-
-        public void mouseExited(MouseEvent e) {
-            shrink();
-        }
-
+    private class CardMouseListener extends MouseAdapter {
         public void mouseClicked(MouseEvent e) {
             if(selectionListener != null) {
                 selectionListener.handleSelection(card);
