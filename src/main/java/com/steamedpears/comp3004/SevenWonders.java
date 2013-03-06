@@ -35,7 +35,7 @@ public class SevenWonders {
     HighLevelView highLevelView;
 
     public SevenWonders() {
-        view = new ViewFrame(this);
+        view = new ViewFrame();
         openNewGameDialog();
     }
 

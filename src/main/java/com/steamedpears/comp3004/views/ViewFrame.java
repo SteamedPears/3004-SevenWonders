@@ -9,8 +9,6 @@ import java.awt.event.*;
 
 public class ViewFrame extends JFrame {
     static Logger logger = Logger.getLogger(ViewFrame.class);
-    private JPanel panel;
-    public SevenWonders controller;
 
     private void init() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -20,13 +18,12 @@ public class ViewFrame extends JFrame {
     }
 
     public void setView(JPanel view) {
-        removeAll();
-        add(view);
-        repaint();
+        logger.info("Setting view to " + view);
+        getContentPane().add(view);
+        validate();
     }
 
-    public ViewFrame(SevenWonders controller) {
-        this.controller = controller;
+    public ViewFrame() {
         init();
     }
 }
