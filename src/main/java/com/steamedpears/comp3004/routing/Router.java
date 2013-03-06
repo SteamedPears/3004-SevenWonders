@@ -8,6 +8,8 @@ import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -48,10 +50,12 @@ public abstract class Router{
     private SevenWondersGame localGame;
     private boolean playing;
     protected int localPlayerId;
+    protected List<ChangeListener> changeListeners;
 
     protected Router() {
         this.localGame = new SevenWondersGame(this);
         playing = false;
+        changeListeners = new ArrayList<ChangeListener>();
     }
 
     public abstract void registerMove(Player player, PlayerCommand command);
@@ -59,6 +63,17 @@ public abstract class Router{
     public abstract void beginGame();
 
     public abstract void start();
+
+    public void addChangeListener(ChangeListener listener) {
+        this.changeListeners.add(listener);
+    }
+
+    protected void announceChange(){
+        ChangeEvent event = new ChangeEvent(getLocalGame());
+        for(ChangeListener listener: changeListeners){
+            listener.stateChanged(event);
+        }
+    }
 
     protected void setPlaying(boolean playing){
         this.playing = playing;
