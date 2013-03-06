@@ -83,6 +83,14 @@ public class Wonder {
         }
     }
 
+    public void randomizeSide(){
+        if(Math.random()>0.5){
+            setSide(PROP_WONDER_SIDE_A);
+        }else{
+            setSide(PROP_WONDER_SIDE_B);
+        }
+    }
+
     //getters///////////////////////////////////////////////////////
     public String getName(){
         return name;

@@ -10,7 +10,10 @@ import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Card;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
+import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
+import com.steamedpears.comp3004.models.players.HumanPlayer;
+import com.steamedpears.comp3004.views.NewGameDialog;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,27 +24,29 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 class HostRouter extends Router {
-    ServerSocket serverSocket;
-    List<Client> clients;
-    JsonArray cardJSON;
-    JsonArray wonderJSON;
-    Map<String, Wonder> wonders;
+    private ServerSocket serverSocket;
+    private List<Client> clients;
+    private JsonArray cardJSON;
+    private JsonArray wonderJSON;
+    private Map<String, Wonder> wonders;
     private Map<Player, PlayerCommand> registeredMoves;
+    private int maxPlayers;
 
-
-    public HostRouter(int port) {
+    public HostRouter(int port, int maxPlayers) {
         try {
-            serverSocket = new ServerSocket(port);
+            this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
-        clients = new ArrayList<Client>();
+        this.clients = new ArrayList<Client>();
+        this.maxPlayers = maxPlayers;
     }
 
     @Override
@@ -52,8 +57,14 @@ class HostRouter extends Router {
 
     @Override
     public void beginGame() {
-        //TODO: load in wonders, decks;
+        loadModelConfigs();
 
+        constructPlayers();
+
+        broadcastInitialConfig();
+    }
+
+    private void loadModelConfigs(){
         try {
             JsonParser parser = new JsonParser();
             this.cardJSON = parser
@@ -73,11 +84,28 @@ class HostRouter extends Router {
 
         getLocalGame().setCards(this.cardJSON);
         this.wonders = Wonder.parseWonders(this.wonderJSON);
+    }
 
-        //TODO: build Players;
-        //TODO: send all this info to each client;
-        //TODO: tell each client what player they are?
+    private void constructPlayers(){
+        List<Wonder> wonderList = new ArrayList<Wonder>();
+        wonderList.addAll(wonders.values());
 
+        Collections.shuffle(wonderList);
+
+        SevenWondersGame game = getLocalGame();
+        for(int i=0; i<maxPlayers; ++i){
+            Player player;
+            Wonder wonder = wonderList.get(i);
+            wonder.randomizeSide();
+            if(i<clients.size()){
+                player = new HumanPlayer(wonder, game);
+            }else{
+                player = Player.getAIPlayer(wonder, game);
+            }
+            if(i==0 || i>=clients.size()){
+                game.addLocalPlayer(player);
+            }
+        }
     }
 
     @Override

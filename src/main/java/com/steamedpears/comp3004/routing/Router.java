@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.routing;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
@@ -17,8 +18,9 @@ import java.util.Set;
 
 public abstract class Router extends Thread{
 
-    public static Router getHostRouter(int port){
-        Router router = new HostRouter(port);
+    public static Router getHostRouter(int port, int totalPlayers){
+        totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS),SevenWonders.MIN_PLAYERS);
+        Router router = new HostRouter(port, totalPlayers);
         router.start();
         return router;
     }

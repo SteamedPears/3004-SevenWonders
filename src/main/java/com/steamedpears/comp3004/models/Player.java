@@ -1,5 +1,7 @@
 package com.steamedpears.comp3004.models;
 
+import com.steamedpears.comp3004.models.players.AIPlayer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,17 @@ public abstract class Player extends Thread{
     //static methods////////////////////////////////////////////////////////
     private static int getNextId(){
         return currentId++;
+    }
+
+    public static Player getAIPlayer(Wonder wonder, SevenWondersGame game){
+        //TODO: actually get an AI player
+        return new AIPlayer(wonder, game){
+
+            @Override
+            protected PlayerCommand handleTurn() {
+                return null;
+            }
+        };
     }
 
     //instance variables////////////////////////////////////////////////////

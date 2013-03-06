@@ -14,6 +14,9 @@ public class SevenWonders {
     public static final String PATH_CARDS = PATH_DATA + "cards.json";
     public static final String PATH_WONDERS = PATH_DATA + "wonderlist.json";
 
+    public static final int MAX_PLAYERS = 7;
+    public static final int MIN_PLAYERS = 3;
+
     public static void main(String[] args){
         new SevenWonders();
     }
@@ -33,7 +36,8 @@ public class SevenWonders {
     public void startGame(boolean isHost,String ipAddress) {
         // TODO: make sure this is the correct way to instantiate a router/game/player
         if(isHost){
-            router = Router.getHostRouter(Router.HOST_PORT);
+            //TODO: set the second arg properly
+            router = Router.getHostRouter(Router.HOST_PORT, 0);
         }else{
             router = Router.getClientRouter(ipAddress, Router.HOST_PORT);
         }
