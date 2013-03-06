@@ -7,6 +7,14 @@ public class PlayerCommand{
         DISCARD, BUILD, PLAY, UNDISCARD, PLAY_FREE
     }
 
+    public static PlayerCommand getNullCommand(Player player){
+        PlayerCommand result = new PlayerCommand();
+        result.action = PlayerCardAction.DISCARD;
+        result.card = player.getHand().get(0).getId();
+
+        return result;
+    }
+
     public PlayerCardAction action;
     public String card;
     public Map<String, Integer> leftPurchases;
