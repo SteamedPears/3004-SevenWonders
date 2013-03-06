@@ -1,11 +1,9 @@
 package com.steamedpears.comp3004;
 
-import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.*;
 
 public class SevenWonders {
     public static final String PATH_RESOURCE = "src/main/resources/";
@@ -24,38 +22,48 @@ public class SevenWonders {
     }
 
     ViewFrame view;
-    NewGameDialog dialog;
+    NewGameDialog newGameDialog;
+    JDialog dialog;
     Router router;
     PlayerView playerView;
     HighLevelView highLevelView;
 
     public SevenWonders() {
         view = new ViewFrame(this);
-        dialog = new NewGameDialog(view,this);
+        newGameDialog = new NewGameDialog(view,this);
+        showNewGameDialog();
+    }
+
+    public void createGame(boolean isHost, String ipAddress, int port, int players) {
+        hideNewGameDialog();
+        if(isHost){
+            router = Router.getHostRouter(port, players);
+            dialog = new HostGameDialog(view,this);
+        }else{
+            router = Router.getClientRouter(ipAddress, port);
+            dialog = new JoinGameDialog(view,this);
+        }
         dialog.setVisible(true);
     }
 
-    public void startGame(boolean isHost,String ipAddress) {
-        // TODO: make sure this is the correct way to instantiate a router/game/player
-        if(isHost){
-            //TODO: set the second arg properly
-            router = Router.getHostRouter(Router.HOST_PORT, 0);
-        }else{
-            router = Router.getClientRouter(ipAddress, Router.HOST_PORT);
-        }
-        //note: skips lobby matchmaking
+    public void startGame() {
         router.beginGame();
-
-        dialog.setVisible(false);
-        // TODO: make sure this next line is the right way of getting a player's hand
         playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
         highLevelView = new HighLevelView(this);
         view.setView(playerView);
     }
 
-    public List<Card> getHand() {
-        // TODO: actually get player's hand
-        return new ArrayList<Card>();
+    public void showNewGameDialog() {
+        if(dialog != null) {
+            dialog.setVisible(false);
+            dialog.dispose();
+            dialog = null;
+        }
+        newGameDialog.setVisible(true);
+    }
+
+    public void hideNewGameDialog() {
+        newGameDialog.setVisible(false);
     }
 
     public void exit() {
