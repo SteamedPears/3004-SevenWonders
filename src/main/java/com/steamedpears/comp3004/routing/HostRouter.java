@@ -112,6 +112,15 @@ class HostRouter extends Router {
                 game.addLocalPlayer(player);
             }
         }
+
+        List<Player> players = game.getPlayers();
+        Player oldPlayer = players.get(players.size()-1);
+        Player newPlayer;
+        for(int i=0; i<players.size(); ++i){
+            newPlayer = players.get(i);
+            newPlayer.setPlayerLeft(oldPlayer);
+            oldPlayer.setPlayerRight(newPlayer);
+        }
     }
 
     @Override
