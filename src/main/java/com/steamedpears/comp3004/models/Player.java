@@ -424,4 +424,13 @@ public abstract class Player implements Runnable{
         return collectedAssets;
     }
 
+    public int getMilitaryWins() {
+        int wins = 0;
+        for(int i : getMilitaryResults()) {
+            if(i > 0) {
+                wins += i;
+            }
+        }
+        return wins;
+    }
 }
