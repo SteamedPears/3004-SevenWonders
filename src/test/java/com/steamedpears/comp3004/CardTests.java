@@ -52,15 +52,15 @@ public class CardTests {
 
         log.info("Testing " + cards.size() + "/149 cards.");
         for(Card c : cards) {
-            assertNotEquals(c.getImagePath().getPath(), blankurl.getPath());
+            assertNotEquals(c.getId()+" image not found",c.getImagePath().getPath(), blankurl.getPath());
         }
 
         log.info("Testing " + wonders.size() + "/7 wonders.");
         for(Wonder w : wonders.values()) {
             w.setSide(Wonder.PROP_WONDER_SIDE_A);
-            assertNotEquals(w.getImagePath().getPath(), blankurl.getPath());
+            assertNotEquals(w.getId()+" image not found",w.getImagePath().getPath(), blankurl.getPath());
             w.setSide(Wonder.PROP_WONDER_SIDE_B);
-            assertNotEquals(w.getImagePath().getPath(), blankurl.getPath());
+            assertNotEquals(w.getId()+" image not found", w.getImagePath().getPath(), blankurl.getPath());
         }
     }
 }

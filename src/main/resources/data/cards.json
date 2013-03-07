@@ -2,7 +2,6 @@
    "cards":[
       {
          "name":"Lumber Yard",
-         "image":"01",
          "players":3,
          "age":1,
          "guild":"brown",
@@ -14,8 +13,19 @@
          }
       },
       {
+         "name":"Lumber Yard",
+         "players":4,
+         "age":1,
+         "guild":"brown",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "w":1
+         }
+      },
+      {
          "name":"Stone Pit",
-         "image":"02",
          "players":3,
          "age":1,
          "guild":"brown",
@@ -27,8 +37,19 @@
          }
       },
       {
+         "name":"Stone Pit",
+         "players":5,
+         "age":1,
+         "guild":"brown",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "s":1
+         }
+      },
+      {
          "name":"Clay Pool",
-         "image":"03",
          "players":3,
          "age":1,
          "guild":"brown",
@@ -40,8 +61,19 @@
          }
       },
       {
+         "name":"Clay Pool",
+         "players":5,
+         "age":1,
+         "guild":"brown",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "c":1
+         }
+      },
+      {
          "name":"Ore Vein",
-         "image":"04",
          "players":3,
          "age":1,
          "guild":"brown",
@@ -53,8 +85,19 @@
          }
       },
       {
+         "name":"Ore Vein",
+         "players":4,
+         "age":1,
+         "guild":"brown",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "o":1
+         }
+      },
+      {
          "name":"Tree Farm",
-         "image":"05",
          "players":6,
          "age":1,
          "guild":"brown",
@@ -69,7 +112,6 @@
       },
       {
          "name":"Excavation",
-         "image":"06",
          "players":4,
          "age":1,
          "guild":"brown",
@@ -84,7 +126,6 @@
       },
       {
          "name":"Clay Pit",
-         "image":"07",
          "players":3,
          "age":1,
          "guild":"brown",
@@ -99,7 +140,6 @@
       },
       {
          "name":"Timber Yard",
-         "image":"08",
          "players":3,
          "age":1,
          "guild":"brown",
@@ -114,7 +154,6 @@
       },
       {
          "name":"Forest Cave",
-         "image":"09",
          "players":5,
          "age":1,
          "guild":"brown",
@@ -129,7 +168,6 @@
       },
       {
          "name":"Mine",
-         "image":"10",
          "players":6,
          "age":1,
          "guild":"brown",
@@ -144,7 +182,6 @@
       },
       {
          "name":"Sawmill",
-         "image":"11",
          "players":3,
          "age":2,
          "guild":"brown",
@@ -156,8 +193,19 @@
          }
       },
       {
+         "name":"Sawmill",
+         "players":4,
+         "age":2,
+         "guild":"brown",
+         "cost":{
+            "coin":1
+         },
+         "baseAssets":{
+            "w":2
+         }
+      },
+      {
          "name":"Quarry",
-         "image":"12",
          "players":3,
          "age":2,
          "guild":"brown",
@@ -169,8 +217,19 @@
          }
       },
       {
+         "name":"Quarry",
+         "players":4,
+         "age":2,
+         "guild":"brown",
+         "cost":{
+            "coin":1
+         },
+         "baseAssets":{
+            "s":2
+         }
+      },
+      {
          "name":"Brickyard",
-         "image":"13",
          "players":3,
          "age":2,
          "guild":"brown",
@@ -183,7 +242,6 @@
       },
       {
          "name":"Brickyard",
-         "image":"13",
          "players":4,
          "age":2,
          "guild":"brown",
@@ -196,7 +254,6 @@
       },
       {
          "name":"Foundry",
-         "image":"14",
          "players":3,
          "age":2,
          "guild":"brown",
@@ -208,8 +265,19 @@
          }
       },
       {
+         "name":"Foundry",
+         "players":4,
+         "age":2,
+         "guild":"brown",
+         "cost":{
+            "coin":1
+         },
+         "baseAssets":{
+            "o":2
+         }
+      },
+      {
          "name":"Loom",
-         "image":"15",
          "players":3,
          "age":1,
          "guild":"gray",
@@ -221,8 +289,43 @@
          }
       },
       {
+         "name":"Loom",
+         "players":6,
+         "age":1,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "l":1
+         }
+      },
+      {
+         "name":"Loom",
+         "players":3,
+         "age":2,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "l":1
+         }
+      },
+      {
+         "name":"Loom",
+         "players":5,
+         "age":2,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "l":1
+         }
+      },
+      {
          "name":"Glassworks",
-         "image":"16",
          "players":3,
          "age":1,
          "guild":"gray",
@@ -235,7 +338,6 @@
       },
       {
          "name":"Glassworks",
-         "image":"16",
          "players":6,
          "age":1,
          "guild":"gray",
@@ -248,7 +350,6 @@
       },
       {
          "name":"Glassworks",
-         "image":"16",
          "players":3,
          "age":2,
          "guild":"gray",
@@ -261,7 +362,6 @@
       },
       {
          "name":"Glassworks",
-         "image":"16",
          "players":5,
          "age":2,
          "guild":"gray",
@@ -274,7 +374,6 @@
       },
       {
          "name":"Press",
-         "image":"17",
          "players":3,
          "age":1,
          "guild":"gray",
@@ -286,8 +385,43 @@
          }
       },
       {
+         "name":"Press",
+         "players":6,
+         "age":1,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "p":1
+         }
+      },
+      {
+         "name":"Press",
+         "players":3,
+         "age":2,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "p":1
+         }
+      },
+      {
+         "name":"Press",
+         "players":5,
+         "age":2,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "p":1
+         }
+      },
+      {
          "name":"Workers Guild",
-         "image":"18",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -311,7 +445,6 @@
       },
       {
          "name":"Craftsmens Guild",
-         "image":"19",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -332,7 +465,6 @@
       },
       {
          "name":"Traders Guild",
-         "image":"20",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -354,7 +486,6 @@
       },
       {
          "name":"Philosophers Guild",
-         "image":"21",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -376,7 +507,6 @@
       },
       {
          "name":"Spies Guild",
-         "image":"22",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -397,7 +527,6 @@
       },
       {
          "name":"Strategists Guild",
-         "image":"23",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -419,7 +548,6 @@
       },
       {
          "name":"Shipowners Guild",
-         "image":"24",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -439,7 +567,6 @@
       },
       {
          "name":"Scientists Guild",
-         "image":"25",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -457,7 +584,6 @@
       },
       {
          "name":"Magistrates Guild",
-         "image":"26",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -479,7 +605,6 @@
       },
       {
          "name":"Builders Guild",
-         "image":"27",
          "players":0,
          "age":3,
          "guild":"purple",
@@ -502,7 +627,6 @@
       },
       {
          "name":"Pawnshop",
-         "image":"28",
          "players":4,
          "age":1,
          "guild":"blue",
@@ -514,8 +638,19 @@
          }
       },
       {
+         "name":"Pawnshop",
+         "players":7,
+         "age":1,
+         "guild":"blue",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "victory":3
+         }
+      },
+      {
          "name":"Baths",
-         "image":"29",
          "players":3,
          "age":1,
          "guild":"blue",
@@ -527,8 +662,43 @@
          }
       },
       {
+         "name":"Baths",
+         "players":7,
+         "age":1,
+         "guild":"blue",
+         "cost":{
+            "s":1
+         },
+         "baseAssets":{
+            "victory":3
+         }
+      },
+      {
          "name":"Altar",
-         "image":"30",
+         "players":3,
+         "age":1,
+         "guild":"blue",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "victory":2
+         }
+      },
+      {
+         "name":"Altar",
+         "players":5,
+         "age":1,
+         "guild":"blue",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "victory":2
+         }
+      },
+      {
+         "name":"Theater",
          "players":3,
          "age":1,
          "guild":"blue",
@@ -541,8 +711,7 @@
       },
       {
          "name":"Theater",
-         "image":"31",
-         "players":3,
+         "players":6,
          "age":1,
          "guild":"blue",
          "cost":{
@@ -554,7 +723,6 @@
       },
       {
          "name":"Aqueduct",
-         "image":"32",
          "players":3,
          "age":2,
          "guild":"blue",
@@ -566,8 +734,19 @@
          }
       },
       {
+         "name":"Aqueduct",
+         "players":7,
+         "age":2,
+         "guild":"blue",
+         "cost":{
+            "s":3
+         },
+         "baseAssets":{
+            "victory":5
+         }
+      },
+      {
          "name":"Temple",
-         "image":"33",
          "players":3,
          "age":2,
          "guild":"blue",
@@ -581,8 +760,21 @@
          }
       },
       {
+         "name":"Temple",
+         "players":6,
+         "age":2,
+         "guild":"blue",
+         "cost":{
+            "w":1,
+            "c":1,
+            "g":1
+         },
+         "baseAssets":{
+            "victory":3
+         }
+      },
+      {
          "name":"Statue",
-         "image":"34",
          "players":3,
          "age":2,
          "guild":"blue",
@@ -595,8 +787,20 @@
          }
       },
       {
+         "name":"Statue",
+         "players":7,
+         "age":2,
+         "guild":"blue",
+         "cost":{
+            "o":2,
+            "w":1
+         },
+         "baseAssets":{
+            "victory":4
+         }
+      },
+      {
          "name":"Pantheon",
-         "image":"35",
          "players":3,
          "age":3,
          "guild":"blue",
@@ -612,8 +816,23 @@
          }
       },
       {
+         "name":"Pantheon",
+         "players":6,
+         "age":3,
+         "guild":"blue",
+         "cost":{
+            "c":2,
+            "o":1,
+            "g":1,
+            "p":1,
+            "l":1
+         },
+         "baseAssets":{
+            "victory":7
+         }
+      },
+      {
          "name":"Gardens",
-         "image":"36",
          "players":3,
          "age":3,
          "guild":"blue",
@@ -626,8 +845,20 @@
          }
       },
       {
+         "name":"Gardens",
+         "players":4,
+         "age":3,
+         "guild":"blue",
+         "cost":{
+            "c":2,
+            "w":1
+         },
+         "baseAssets":{
+            "victory":5
+         }
+      },
+      {
          "name":"Town Hall",
-         "image":"37",
          "players":3,
          "age":3,
          "guild":"blue",
@@ -641,8 +872,35 @@
          }
       },
       {
+         "name":"Town Hall",
+         "players":5,
+         "age":3,
+         "guild":"blue",
+         "cost":{
+            "s":2,
+            "o":1,
+            "g":1
+         },
+         "baseAssets":{
+            "victory":6
+         }
+      },
+      {
+         "name":"Town Hall",
+         "players":6,
+         "age":3,
+         "guild":"blue",
+         "cost":{
+            "s":2,
+            "o":1,
+            "g":1
+         },
+         "baseAssets":{
+            "victory":6
+         }
+      },
+      {
          "name":"Palace",
-         "image":"38",
          "players":3,
          "age":3,
          "guild":"blue",
@@ -661,7 +919,6 @@
       },
       {
          "name":"Courthouse",
-         "image":"39",
          "players":3,
          "age":2,
          "guild":"blue",
@@ -674,8 +931,20 @@
          }
       },
       {
+         "name":"Courthouse",
+         "players":5,
+         "age":2,
+         "guild":"blue",
+         "cost":{
+            "c":2,
+            "l":1
+         },
+         "baseAssets":{
+            "victory":4
+         }
+      },
+      {
          "name":"Senate",
-         "image":"40",
          "players":3,
          "age":3,
          "guild":"blue",
@@ -689,8 +958,21 @@
          }
       },
       {
+         "name":"Senate",
+         "players":5,
+         "age":3,
+         "guild":"blue",
+         "cost":{
+            "w":2,
+            "s":1,
+            "o":1
+         },
+         "baseAssets":{
+            "victory":6
+         }
+      },
+      {
          "name":"Stockade",
-         "image":"41",
          "players":3,
          "age":1,
          "guild":"red",
@@ -702,8 +984,19 @@
          }
       },
       {
+         "name":"Stockade",
+         "players":7,
+         "age":1,
+         "guild":"red",
+         "cost":{
+            "w":1
+         },
+         "baseAssets":{
+            "army":1
+         }
+      },
+      {
          "name":"Barracks",
-         "image":"42",
          "players":3,
          "age":1,
          "guild":"red",
@@ -715,8 +1008,19 @@
          }
       },
       {
+         "name":"Barracks",
+         "players":5,
+         "age":1,
+         "guild":"red",
+         "cost":{
+            "o":1
+         },
+         "baseAssets":{
+            "army":1
+         }
+      },
+      {
          "name":"Guard Tower",
-         "image":"43",
          "players":3,
          "age":1,
          "guild":"red",
@@ -728,8 +1032,19 @@
          }
       },
       {
+         "name":"Guard Tower",
+         "players":4,
+         "age":1,
+         "guild":"red",
+         "cost":{
+            "c":1
+         },
+         "baseAssets":{
+            "army":1
+         }
+      },
+      {
          "name":"Walls",
-         "image":"44",
          "players":3,
          "age":2,
          "guild":"red",
@@ -741,8 +1056,19 @@
          }
       },
       {
+         "name":"Walls",
+         "players":7,
+         "age":2,
+         "guild":"red",
+         "cost":{
+            "s":3
+         },
+         "baseAssets":{
+            "army":2
+         }
+      },
+      {
          "name":"Training Ground",
-         "image":"45",
          "players":4,
          "age":2,
          "guild":"red",
@@ -755,8 +1081,33 @@
          }
       },
       {
+         "name":"Training Ground",
+         "players":6,
+         "age":2,
+         "guild":"red",
+         "cost":{
+            "o":2,
+            "w":1
+         },
+         "baseAssets":{
+            "army":1
+         }
+      },
+      {
+         "name":"Training Ground",
+         "players":7,
+         "age":2,
+         "guild":"red",
+         "cost":{
+            "o":2,
+            "w":1
+         },
+         "baseAssets":{
+            "army":1
+         }
+      },
+      {
          "name":"Fortifications",
-         "image":"46",
          "players":3,
          "age":3,
          "guild":"red",
@@ -770,7 +1121,6 @@
       },
       {
          "name":"Circus",
-         "image":"47",
          "players":4,
          "age":3,
          "guild":"red",
@@ -783,8 +1133,33 @@
          }
       },
       {
+         "name":"Circus",
+         "players":5,
+         "age":3,
+         "guild":"red",
+         "cost":{
+            "s":3,
+            "o":1
+         },
+         "baseAssets":{
+            "army":3
+         }
+      },
+      {
+         "name":"Circus",
+         "players":6,
+         "age":3,
+         "guild":"red",
+         "cost":{
+            "s":3,
+            "o":1
+         },
+         "baseAssets":{
+            "army":3
+         }
+      },
+      {
          "name":"Arsenal",
-         "image":"48",
          "players":3,
          "age":3,
          "guild":"red",
@@ -798,8 +1173,21 @@
          }
       },
       {
+         "name":"Arsenal",
+         "players":4,
+         "age":3,
+         "guild":"red",
+         "cost":{
+            "w":2,
+            "o":1,
+            "l":1
+         },
+         "baseAssets":{
+            "army":3
+         }
+      },
+      {
          "name":"Stables",
-         "image":"49",
          "players":3,
          "age":2,
          "guild":"red",
@@ -813,8 +1201,21 @@
          }
       },
       {
+         "name":"Stables",
+         "players":5,
+         "age":2,
+         "guild":"red",
+         "cost":{
+            "c":1,
+            "w":1,
+            "o":1
+         },
+         "baseAssets":{
+            "army":2
+         }
+      },
+      {
          "name":"Archery Range",
-         "image":"50",
          "players":3,
          "age":2,
          "guild":"red",
@@ -827,8 +1228,20 @@
          }
       },
       {
+         "name":"Archery Range",
+         "players":6,
+         "age":2,
+         "guild":"red",
+         "cost":{
+            "w":2,
+            "o":1
+         },
+         "baseAssets":{
+            "army":2
+         }
+      },
+      {
          "name":"Siege Workshop",
-         "image":"51",
          "players":3,
          "age":3,
          "guild":"red",
@@ -841,8 +1254,20 @@
          }
       },
       {
+         "name":"Siege Workshop",
+         "players":5,
+         "age":3,
+         "guild":"red",
+         "cost":{
+            "c":3,
+            "w":1
+         },
+         "baseAssets":{
+            "army":3
+         }
+      },
+      {
          "name":"Tavern",
-         "image":"52",
          "players":4,
          "age":1,
          "guild":"yellow",
@@ -854,9 +1279,53 @@
          }
       },
       {
+         "name":"Tavern",
+         "players":5,
+         "age":1,
+         "guild":"yellow",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "coin":5
+         }
+      },
+      {
+         "name":"Tavern",
+         "players":7,
+         "age":1,
+         "guild":"yellow",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "coin":5
+         }
+      },
+      {
          "name":"East Trading Post",
-         "image":"53",
          "players":3,
+         "age":1,
+         "guild":"yellow",
+         "cost":{
+
+         },
+         "baseAssets":{
+
+         },
+         "discountsAssets":[
+            "c",
+            "o",
+            "w",
+            "s"
+         ],
+         "discountsTargets":[
+            "right"
+         ]
+      },
+      {
+         "name":"East Trading Post",
+         "players":7,
          "age":1,
          "guild":"yellow",
          "cost":{
@@ -877,7 +1346,6 @@
       },
       {
          "name":"West Trading Post",
-         "image":"54",
          "players":3,
          "age":1,
          "guild":"yellow",
@@ -898,8 +1366,28 @@
          ]
       },
       {
+         "name":"West Trading Post",
+         "players":7,
+         "age":1,
+         "guild":"yellow",
+         "cost":{
+
+         },
+         "baseAssets":{
+
+         },
+         "discountsAssets":[
+            "c",
+            "o",
+            "w",
+            "s"
+         ],
+         "discountsTargets":[
+            "left"
+         ]
+      },
+      {
          "name":"Marketplace",
-         "image":"55",
          "players":3,
          "age":1,
          "guild":"yellow",
@@ -920,8 +1408,28 @@
          ]
       },
       {
+         "name":"Marketplace",
+         "players":6,
+         "age":1,
+         "guild":"yellow",
+         "cost":{
+
+         },
+         "baseAssets":{
+
+         },
+         "discountsAssets":[
+            "g",
+            "p",
+            "l"
+         ],
+         "discountsTargets":[
+            "right",
+            "left"
+         ]
+      },
+      {
          "name":"Forum",
-         "image":"56",
          "players":3,
          "age":2,
          "guild":"yellow",
@@ -936,8 +1444,37 @@
          "isChoice":true
       },
       {
+         "name":"Forum",
+         "players":6,
+         "age":2,
+         "guild":"yellow",
+         "cost":{
+            "c":2
+         },
+         "baseAssets":{
+            "g":1,
+            "l":1,
+            "p":1
+         },
+         "isChoice":true
+      },
+      {
+         "name":"Forum",
+         "players":7,
+         "age":2,
+         "guild":"yellow",
+         "cost":{
+            "c":2
+         },
+         "baseAssets":{
+            "g":1,
+            "l":1,
+            "p":1
+         },
+         "isChoice":true
+      },
+      {
          "name":"Caravansery",
-         "image":"57",
          "players":3,
          "age":2,
          "guild":"yellow",
@@ -953,9 +1490,60 @@
          "isChoice":true
       },
       {
+         "name":"Caravansery",
+         "players":5,
+         "age":2,
+         "guild":"yellow",
+         "cost":{
+            "w":2
+         },
+         "baseAssets":{
+            "c":1,
+            "s":1,
+            "o":1,
+            "w":1
+         },
+         "isChoice":true
+      },
+      {
+         "name":"Caravansery",
+         "players":6,
+         "age":2,
+         "guild":"yellow",
+         "cost":{
+            "w":2
+         },
+         "baseAssets":{
+            "c":1,
+            "s":1,
+            "o":1,
+            "w":1
+         },
+         "isChoice":true
+      },
+      {
          "name":"Vineyard",
-         "image":"58",
          "players":3,
+         "age":2,
+         "guild":"yellow",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "coin":1
+         },
+         "multiplierAssets":[
+            "brown"
+         ],
+         "multiplierTargets":[
+            "left",
+            "self",
+            "right"
+         ]
+      },
+      {
+         "name":"Vineyard",
+         "players":6,
          "age":2,
          "guild":"yellow",
          "cost":{
@@ -975,7 +1563,6 @@
       },
       {
          "name":"Bazar",
-         "image":"59",
          "players":4,
          "age":2,
          "guild":"yellow",
@@ -995,8 +1582,27 @@
          ]
       },
       {
+         "name":"Bazar",
+         "players":7,
+         "age":2,
+         "guild":"yellow",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "coin":2
+         },
+         "multiplierAssets":[
+            "gray"
+         ],
+         "multiplierTargets":[
+            "left",
+            "self",
+            "right"
+         ]
+      },
+      {
          "name":"Haven",
-         "image":"60",
          "players":3,
          "age":3,
          "guild":"yellow",
@@ -1015,8 +1621,26 @@
          ]
       },
       {
+         "name":"Haven",
+         "players":4,
+         "age":3,
+         "guild":"yellow",
+         "cost":{
+            "w":1,
+            "o":1,
+            "l":1
+         },
+         "baseAssets":{
+            "victory":1,
+            "coin":1
+         },
+         "multiplierAssets":[
+            "brown",
+            "brown"
+         ]
+      },
+      {
          "name":"Lighthouse",
-         "image":"61",
          "players":3,
          "age":3,
          "guild":"yellow",
@@ -1034,8 +1658,25 @@
          ]
       },
       {
-         "name":"Chamber of Commerce",
-         "image":"62",
+         "name":"Lighthouse",
+         "players":6,
+         "age":3,
+         "guild":"yellow",
+         "cost":{
+            "s":1,
+            "g":1
+         },
+         "baseAssets":{
+            "victory":1,
+            "coin":1
+         },
+         "multiplierAssets":[
+            "yellow",
+            "yellow"
+         ]
+      },
+      {
+         "name":"Chamber Of Commerce",
          "players":4,
          "age":3,
          "guild":"yellow",
@@ -1053,8 +1694,25 @@
          ]
       },
       {
+         "name":"Chamber Of Commerce",
+         "players":6,
+         "age":3,
+         "guild":"yellow",
+         "cost":{
+            "c":2,
+            "p":1
+         },
+         "baseAssets":{
+            "victory":1,
+            "coin":1
+         },
+         "multiplierAssets":[
+            "gray",
+            "gray"
+         ]
+      },
+      {
          "name":"Arena",
-         "image":"63",
          "players":3,
          "age":3,
          "guild":"yellow",
@@ -1072,8 +1730,25 @@
          ]
       },
       {
+         "name":"Arena",
+         "players":5,
+         "age":3,
+         "guild":"yellow",
+         "cost":{
+            "s":2,
+            "o":1
+         },
+         "baseAssets":{
+            "victory":1,
+            "coin":3
+         },
+         "multiplierAssets":[
+            "wonderstages",
+            "wonderstages"
+         ]
+      },
+      {
          "name":"Apothecary",
-         "image":"64",
          "players":3,
          "age":1,
          "guild":"green",
@@ -1088,8 +1763,22 @@
          "isChoice":true
       },
       {
+         "name":"Apothecary",
+         "players":5,
+         "age":1,
+         "guild":"green",
+         "cost":{
+            "l":1
+         },
+         "baseAssets":{
+            "tab":1,
+            "comp":1,
+            "gear":1
+         },
+         "isChoice":true
+      },
+      {
          "name":"Workshop",
-         "image":"65",
          "players":3,
          "age":1,
          "guild":"green",
@@ -1101,8 +1790,19 @@
          }
       },
       {
+         "name":"Workshop",
+         "players":7,
+         "age":1,
+         "guild":"green",
+         "cost":{
+            "g":1
+         },
+         "baseAssets":{
+            "comp":1
+         }
+      },
+      {
          "name":"Scriptorium",
-         "image":"66",
          "players":3,
          "age":1,
          "guild":"green",
@@ -1114,8 +1814,19 @@
          }
       },
       {
+         "name":"Scriptorium",
+         "players":4,
+         "age":1,
+         "guild":"green",
+         "cost":{
+            "p":1
+         },
+         "baseAssets":{
+            "tab":1
+         }
+      },
+      {
          "name":"Dispensary",
-         "image":"67",
          "players":3,
          "age":2,
          "guild":"green",
@@ -1128,8 +1839,20 @@
          }
       },
       {
+         "name":"Dispensary",
+         "players":4,
+         "age":2,
+         "guild":"green",
+         "cost":{
+            "o":2,
+            "g":1
+         },
+         "baseAssets":{
+            "comp":1
+         }
+      },
+      {
          "name":"Laboratory",
-         "image":"68",
          "players":3,
          "age":2,
          "guild":"green",
@@ -1142,8 +1865,20 @@
          }
       },
       {
+         "name":"Laboratory",
+         "players":5,
+         "age":2,
+         "guild":"green",
+         "cost":{
+            "c":2,
+            "p":1
+         },
+         "baseAssets":{
+            "gear":1
+         }
+      },
+      {
          "name":"Library",
-         "image":"69",
          "players":3,
          "age":2,
          "guild":"green",
@@ -1156,8 +1891,20 @@
          }
       },
       {
+         "name":"Library",
+         "players":6,
+         "age":2,
+         "guild":"green",
+         "cost":{
+            "s":2,
+            "l":1
+         },
+         "baseAssets":{
+            "tab":1
+         }
+      },
+      {
          "name":"School",
-         "image":"70",
          "players":3,
          "age":2,
          "guild":"green",
@@ -1170,8 +1917,20 @@
          }
       },
       {
+         "name":"School",
+         "players":7,
+         "age":2,
+         "guild":"green",
+         "cost":{
+            "w":1,
+            "p":1
+         },
+         "baseAssets":{
+            "tab":1
+         }
+      },
+      {
          "name":"Lodge",
-         "image":"71",
          "players":3,
          "age":3,
          "guild":"green",
@@ -1185,8 +1944,21 @@
          }
       },
       {
+         "name":"Lodge",
+         "players":6,
+         "age":3,
+         "guild":"green",
+         "cost":{
+            "c":2,
+            "p":1,
+            "l":1
+         },
+         "baseAssets":{
+            "comp":1
+         }
+      },
+      {
          "name":"Observatory",
-         "image":"72",
          "players":3,
          "age":3,
          "guild":"green",
@@ -1201,7 +1973,6 @@
       },
       {
          "name":"University",
-         "image":"73",
          "players":3,
          "age":3,
          "guild":"green",
@@ -1215,8 +1986,21 @@
          }
       },
       {
+         "name":"University",
+         "players":4,
+         "age":3,
+         "guild":"green",
+         "cost":{
+            "w":2,
+            "p":1,
+            "g":1
+         },
+         "baseAssets":{
+            "tab":1
+         }
+      },
+      {
          "name":"Academy",
-         "image":"74",
          "players":3,
          "age":3,
          "guild":"green",
@@ -1230,8 +2014,21 @@
       },
       {
          "name":"Study",
-         "image":"75",
          "players":3,
+         "age":3,
+         "guild":"green",
+         "cost":{
+            "w":2,
+            "p":1,
+            "l":1
+         },
+         "baseAssets":{
+            "gear":1
+         }
+      },
+      {
+         "name":"Study",
+         "players":5,
          "age":3,
          "guild":"green",
          "cost":{
