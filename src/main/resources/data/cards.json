@@ -115,7 +115,7 @@
       {
          "name":"Forest Cave",
          "image":"09",
-         "players":3,
+         "players":5,
          "age":1,
          "guild":"brown",
          "cost":{
@@ -171,7 +171,20 @@
       {
          "name":"Brickyard",
          "image":"13",
-         "players":2,
+         "players":3,
+         "age":2,
+         "guild":"brown",
+         "cost":{
+            "coin":1
+         },
+         "baseAssets":{
+            "c":2
+         }
+      },
+      {
+         "name":"Brickyard",
+         "image":"13",
+         "players":4,
          "age":2,
          "guild":"brown",
          "cost":{
@@ -210,8 +223,47 @@
       {
          "name":"Glassworks",
          "image":"16",
-         "players":2,
+         "players":3,
          "age":1,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "g":1
+         }
+      },
+      {
+         "name":"Glassworks",
+         "image":"16",
+         "players":6,
+         "age":1,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "g":1
+         }
+      },
+      {
+         "name":"Glassworks",
+         "image":"16",
+         "players":3,
+         "age":2,
+         "guild":"gray",
+         "cost":{
+
+         },
+         "baseAssets":{
+            "g":1
+         }
+      },
+      {
+         "name":"Glassworks",
+         "image":"16",
+         "players":5,
+         "age":2,
          "guild":"gray",
          "cost":{
 

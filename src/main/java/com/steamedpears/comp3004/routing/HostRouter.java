@@ -180,7 +180,6 @@ class HostRouter extends Router {
                 boolean gameOver = game.applyCommands(registeredMoves);
 
                 broadcastPlayerCommands();
-                announceChange();
 
                 //TODO: wait for clients to actually respond before doing this
                 try {
@@ -195,10 +194,10 @@ class HostRouter extends Router {
 
                 if(!gameOver){
                     startNextTurn();
-                    announceChange();
                 }else{
                     log.info("game is over");
                 }
+                announceChange();
             }
             try {
                 Thread.sleep(100);
