@@ -6,6 +6,8 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.*;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 public class PlayerView extends JPanel {
@@ -48,5 +50,14 @@ public class PlayerView extends JPanel {
         // TODO: add tabular view of resources
         // TODO: add tabular view of sciences
         // TODO: add victory point count
+
+        JButton go = new JButton("Go");
+        go.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                player.wake();
+            }
+        });
+        add(go);
     }
 }
