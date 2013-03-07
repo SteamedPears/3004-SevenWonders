@@ -92,26 +92,24 @@ class HostRouter extends Router {
         broadcastInitialConfig();
 
         startNextTurn();
+        announceChange();
     }
 
     private void loadModelConfigs(){
         log.debug("Loading model config");
-        try {
-            JsonParser parser = new JsonParser();
-            this.cardJSON = parser
-                    .parse(new FileReader(SevenWonders.PATH_CARDS))
-                    .getAsJsonObject()
-                    .get(Router.PROP_ROUTE_CARDS)
-                    .getAsJsonArray();
-            this.wonderJSON = parser
-                    .parse(new FileReader(SevenWonders.PATH_WONDERS))
-                    .getAsJsonObject()
-                    .get(Router.PROP_ROUTE_WONDERS)
-                    .getAsJsonArray();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+
+        JsonParser parser = new JsonParser();
+        this.cardJSON = parser
+                .parse(new InputStreamReader(HostRouter.class.getResourceAsStream(SevenWonders.PATH_CARDS)))
+                .getAsJsonObject()
+                .get(Router.PROP_ROUTE_CARDS)
+                .getAsJsonArray();
+        this.wonderJSON = parser
+                .parse(new InputStreamReader(HostRouter.class.getResourceAsStream(SevenWonders.PATH_WONDERS)))
+                .getAsJsonObject()
+                .get(Router.PROP_ROUTE_WONDERS)
+                .getAsJsonArray();
+
 
         getLocalGame().setCards(this.cardJSON);
         this.wonders = Wonder.parseWonders(this.wonderJSON);
@@ -129,7 +127,7 @@ class HostRouter extends Router {
             Player player;
             Wonder wonder = wonderList.get(i);
             wonder.randomizeSide();
-            if(i<clients.size()){
+            if(i<=clients.size()){
                 player = new HumanPlayer(wonder, game);
             }else{
                 player = Player.getAIPlayer(wonder, game);
@@ -182,7 +180,6 @@ class HostRouter extends Router {
                 boolean gameOver = game.applyCommands(registeredMoves);
 
                 broadcastPlayerCommands();
-                announceChange();
 
                 //TODO: wait for clients to actually respond before doing this
                 try {
@@ -200,6 +197,7 @@ class HostRouter extends Router {
                 }else{
                     log.info("game is over");
                 }
+                announceChange();
             }
             try {
                 Thread.sleep(100);

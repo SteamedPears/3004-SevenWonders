@@ -4,9 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.Image;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,8 @@ public class Card {
     public static final String PROP_CARD_DISCOUNTS_TARGETS =    "discountsTargets";
     public static final String PROP_CARD_CHOICE =               "isChoice";
     public static final String PROP_CARD_FREE_FOR =             "freeFor";
+
+    private static Logger log = Logger.getLogger(Card.class);
 
     //static methods////////////////////////////////////////////////
     public static List<Card> parseDeck(JsonArray deck){
@@ -96,13 +101,17 @@ public class Card {
         return color;
     }
 
-    @Deprecated
-    public Image getImage(){
-        return new ImageIcon(getImagePath()).getImage();
-    }
-
-    public String getImagePath(){
-        return image;
+    public URL getImagePath(){
+        URL result = Card.class.getResource(image);
+        if(result==null){
+           log.warn("Missing file " + image);
+            try {
+                result = new URL("file://");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     public int getMinPlayers(){
