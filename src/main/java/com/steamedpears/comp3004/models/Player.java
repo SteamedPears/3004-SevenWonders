@@ -25,8 +25,7 @@ public abstract class Player implements Runnable{
 
     public static Player getAIPlayer(Wonder wonder, SevenWondersGame game){
         //TODO: actually get an AI player
-        return new AIPlayer(wonder, game){
-        };
+        return new AIPlayer(wonder, game);
     }
 
     //instance variables////////////////////////////////////////////////////
