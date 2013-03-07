@@ -9,13 +9,15 @@ import org.apache.log4j.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.io.File;
+import java.net.URL;
 
 public class SevenWonders {
-    public static final String PATH_RESOURCE = "src/main/resources/";
-    public static final String PATH_DATA = PATH_RESOURCE + "data/";
-    public static final String PATH_IMG = PATH_RESOURCE + "img/";
-    public static final String PATH_IMG_CARDS = PATH_IMG + "cards/";
-    public static final String PATH_IMG_WONDERS = PATH_IMG + "wonders/";
+    public static final String PATH_RESOURCE = File.separator;
+    public static final String PATH_DATA = PATH_RESOURCE + "data"+ File.separator;
+    public static final String PATH_IMG = PATH_RESOURCE + "img"+File.separator;
+    public static final String PATH_IMG_CARDS = PATH_IMG + "cards"+File.separator;
+    public static final String PATH_IMG_WONDERS = PATH_IMG + "wonders"+File.separator;
     public static final String PATH_CARDS = PATH_DATA + "cards.json";
     public static final String PATH_WONDERS = PATH_DATA + "wonderlist.json";
 
