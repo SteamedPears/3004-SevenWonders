@@ -12,7 +12,7 @@ public class ViewFrame extends JFrame {
 
     private void init() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setBounds(0,0,640,480);
+        setBounds(0,0,800,600);
         setResizable(false);
         setVisible(true);
     }

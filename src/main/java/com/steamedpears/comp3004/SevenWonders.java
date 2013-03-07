@@ -27,6 +27,7 @@ public class SevenWonders {
     static Logger logger = Logger.getLogger(SevenWonders.class);
 
     public static void main(String[] args){
+        //Logger.getRootLogger().setLevel(Level.INFO);
         BasicConfigurator.configure();
         new SevenWonders();
     }
