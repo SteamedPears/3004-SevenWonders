@@ -3,7 +3,7 @@
       {
          "name":"Gizah",
          "a":{
-            "image":"Gizah_A",
+            "image":"Gizah_a",
             "stages":[
                {
                   "cost":{
@@ -33,7 +33,7 @@
             "startResource":"s"
          },
          "b":{
-            "image":"Gizah_B",
+            "image":"Gizah_b",
             "stages":[
                {
                   "cost":{
@@ -75,7 +75,7 @@
       {
          "name":"Rhodos",
          "a":{
-            "image":"Rhodos_A",
+            "image":"Rhodos_a",
             "stages":[
                {
                   "cost":{
@@ -105,7 +105,7 @@
             "startResource":"o"
          },
          "b":{
-            "image":"Rhodos_B",
+            "image":"Rhodos_b",
             "stages":[
                {
                   "cost":{
@@ -134,7 +134,7 @@
       {
          "name":"Alexandria",
          "a":{
-            "image":"Alexandria_A",
+            "image":"Alexandria_a",
             "stages":[
                {
                   "cost":{
@@ -168,7 +168,7 @@
             "startResource":"g"
          },
          "b":{
-            "image":"Alexandria_B",
+            "image":"Alexandria_b",
             "stages":[
                {
                   "cost":{
@@ -208,7 +208,7 @@
       {
          "name":"Babylon",
          "a":{
-            "image":"Babylon_A",
+            "image":"Babylon_a",
             "stages":[
                {
                   "cost":{
@@ -241,7 +241,7 @@
             "startResource":"c"
          },
          "b":{
-            "image":"Babylon_B",
+            "image":"Babylon_b",
             "stages":[
                {
                   "cost":{
@@ -280,7 +280,7 @@
       {
          "name":"Ephesos",
          "a":{
-            "image":"Ephesos_A",
+            "image":"Ephesos_a",
             "stages":[
                {
                   "cost":{
@@ -310,7 +310,7 @@
             "startResource":"p"
          },
          "b":{
-            "image":"Ephesos_B",
+            "image":"Ephesos_b",
             "stages":[
                {
                   "cost":{
@@ -348,7 +348,7 @@
       {
          "name":"Olympia",
          "a":{
-            "image":"Olympia_A",
+            "image":"Olympia_a",
             "stages":[
                {
                   "cost":{
@@ -378,7 +378,7 @@
             "startResource":"w"
          },
          "b":{
-            "image":"Olympia_B",
+            "image":"Olympia_b",
             "stages":[
                {
                   "cost":{
@@ -422,7 +422,7 @@
       {
          "name":"Halikarnassos",
          "a":{
-            "image":"Halikarnassos_A",
+            "image":"Halikarnassos_a",
             "stages":[
                {
                   "cost":{
@@ -452,7 +452,7 @@
             "startResource":"l"
          },
          "b":{
-            "image":"Halikarnassos_B",
+            "image":"Halikarnassos_b",
             "stages":[
                {
                   "cost":{
