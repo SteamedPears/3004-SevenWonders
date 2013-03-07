@@ -15,13 +15,13 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    protected PlayerCommand handleTurn() {
+    protected void handleTurn() {
         log.info("handleTurn called");
+        setCurrentCommand(PlayerCommand.getNullCommand(this));
         try {
             Thread.sleep(TURN_LENGTH);
         } catch(InterruptedException e) {
             log.info("Player thread interrupted while waiting for input");
         }
-        return PlayerCommand.getNullCommand(this);
     }
 }

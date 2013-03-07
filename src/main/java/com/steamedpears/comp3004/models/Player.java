@@ -16,6 +16,7 @@ public abstract class Player implements Runnable{
     //static variables//////////////////////////////////////////////////////
     private static int currentId = 0;
     private static Logger log = Logger.getLogger(Player.class);
+    private Thread thread;
 
     //static methods////////////////////////////////////////////////////////
     private static int getNextId(){
@@ -25,11 +26,6 @@ public abstract class Player implements Runnable{
     public static Player getAIPlayer(Wonder wonder, SevenWondersGame game){
         //TODO: actually get an AI player
         return new AIPlayer(wonder, game){
-
-            @Override
-            protected PlayerCommand handleTurn() {
-                return PlayerCommand.getNullCommand(this);
-            }
         };
     }
 
@@ -166,10 +162,15 @@ public abstract class Player implements Runnable{
 
     //extend with a GUI or AI
     //when handleTurn terminates, currentCommand should be set with the Player's desired command
-    protected abstract PlayerCommand handleTurn();
+    protected abstract void handleTurn();
 
     public final void run(){
-        this.currentCommand = handleTurn();
+        thread = Thread.currentThread();
+        handleTurn();
+    }
+
+    public void wake() {
+        thread.interrupt();
     }
 
     //setters///////////////////////////////////////////////////////////////////
