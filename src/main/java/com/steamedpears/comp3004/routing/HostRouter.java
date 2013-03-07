@@ -92,6 +92,7 @@ class HostRouter extends Router {
         broadcastInitialConfig();
 
         startNextTurn();
+        announceChange();
     }
 
     private void loadModelConfigs(){
@@ -129,7 +130,7 @@ class HostRouter extends Router {
             Player player;
             Wonder wonder = wonderList.get(i);
             wonder.randomizeSide();
-            if(i<clients.size()){
+            if(i<=clients.size()){
                 player = new HumanPlayer(wonder, game);
             }else{
                 player = Player.getAIPlayer(wonder, game);
@@ -197,6 +198,7 @@ class HostRouter extends Router {
 
                 if(!gameOver){
                     startNextTurn();
+                    announceChange();
                 }else{
                     log.info("game is over");
                 }
