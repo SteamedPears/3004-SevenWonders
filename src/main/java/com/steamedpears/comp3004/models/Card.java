@@ -7,6 +7,8 @@ import com.steamedpears.comp3004.SevenWonders;
 
 import javax.swing.*;
 import java.awt.Image;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,13 +98,16 @@ public class Card {
         return color;
     }
 
-    @Deprecated
-    public Image getImage(){
-        return new ImageIcon(getImagePath()).getImage();
-    }
-
-    public String getImagePath(){
-        return image;
+    public URL getImagePath(){
+        URL result = Card.class.getResource(image);
+        if(result==null){
+            try {
+                result = new URL("file://");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     public int getMinPlayers(){

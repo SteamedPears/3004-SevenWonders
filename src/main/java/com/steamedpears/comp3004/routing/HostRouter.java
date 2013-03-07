@@ -97,22 +97,19 @@ class HostRouter extends Router {
 
     private void loadModelConfigs(){
         log.debug("Loading model config");
-        try {
-            JsonParser parser = new JsonParser();
-            this.cardJSON = parser
-                    .parse(new FileReader(SevenWonders.PATH_CARDS))
-                    .getAsJsonObject()
-                    .get(Router.PROP_ROUTE_CARDS)
-                    .getAsJsonArray();
-            this.wonderJSON = parser
-                    .parse(new FileReader(SevenWonders.PATH_WONDERS))
-                    .getAsJsonObject()
-                    .get(Router.PROP_ROUTE_WONDERS)
-                    .getAsJsonArray();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+
+        JsonParser parser = new JsonParser();
+        this.cardJSON = parser
+                .parse(new InputStreamReader(HostRouter.class.getResourceAsStream(SevenWonders.PATH_CARDS)))
+                .getAsJsonObject()
+                .get(Router.PROP_ROUTE_CARDS)
+                .getAsJsonArray();
+        this.wonderJSON = parser
+                .parse(new InputStreamReader(HostRouter.class.getResourceAsStream(SevenWonders.PATH_WONDERS)))
+                .getAsJsonObject()
+                .get(Router.PROP_ROUTE_WONDERS)
+                .getAsJsonArray();
+
 
         getLocalGame().setCards(this.cardJSON);
         this.wonders = Wonder.parseWonders(this.wonderJSON);

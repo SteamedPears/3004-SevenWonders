@@ -7,6 +7,8 @@ import com.steamedpears.comp3004.SevenWonders;
 
 import javax.swing.*;
 import java.awt.Image;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -111,8 +113,16 @@ public class Wonder {
         }
     }
 
-    public String getImagePath(){
-        return currentSide.image;
+    public URL getImagePath(){
+        URL result = Card.class.getResource(currentSide.image);
+        if(result==null){
+            try {
+                result = new URL("file://");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     public Card getNextStage(){
