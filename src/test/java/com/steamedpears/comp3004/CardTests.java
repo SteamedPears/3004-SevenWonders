@@ -6,6 +6,7 @@ import com.steamedpears.comp3004.models.Card;
 import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.routing.Router;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.junit.*;
 
 import java.io.InputStreamReader;
@@ -18,6 +19,8 @@ import java.util.Map;
 import static org.junit.Assert.assertNotEquals;
 
 public class CardTests {
+
+    private static Logger log = Logger.getLogger(CardTests.class);
 
     @Before
     public void setUp() throws Exception {
@@ -47,10 +50,12 @@ public class CardTests {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+        log.info("Testing " + cards.size() + "/149 cards.");
         for(Card c : cards) {
             assertNotEquals(c.getImagePath().getPath(), blankurl.getPath());
         }
 
+        log.info("Testing " + wonders.size() + "/7 wonders.");
         for(Wonder w : wonders.values()) {
             w.setSide(Wonder.PROP_WONDER_SIDE_A);
             assertNotEquals(w.getImagePath().getPath(), blankurl.getPath());
