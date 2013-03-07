@@ -68,7 +68,7 @@ public class SevenWondersGame implements Runnable{
             player.finalizeCommand(command);
         }
 
-        if(age==MAX_AGES && shouldDeal()){
+        if(age>MAX_AGES && shouldDeal()){
             gameOver = true;
         }
         return gameOver;
