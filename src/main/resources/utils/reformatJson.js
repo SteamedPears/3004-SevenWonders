@@ -57,6 +57,7 @@ function reformatCards(data){
 		}
 		
 		delete card.effects;
+		delete card.image;
 		
 		card.baseAssets = baseAssets;
 		if(multiplierAssets.length) card.multiplierAssets = multiplierAssets;
