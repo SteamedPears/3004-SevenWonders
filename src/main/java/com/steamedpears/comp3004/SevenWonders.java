@@ -9,9 +9,10 @@ import org.apache.log4j.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.net.URL;
 
 public class SevenWonders {
-    public static final String PATH_RESOURCE = "src/main/resources/";
+    public static final String PATH_RESOURCE = SevenWonders.class.getResource("/").getPath();
     public static final String PATH_DATA = PATH_RESOURCE + "data/";
     public static final String PATH_IMG = PATH_RESOURCE + "img/";
     public static final String PATH_IMG_CARDS = PATH_IMG + "cards/";
