@@ -5,13 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
 
-import javax.swing.*;
-import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -104,9 +100,9 @@ public class Wonder {
      * @param side the to side use
      */
     public void setSide(String side){
-        if(side==PROP_WONDER_SIDE_A){
+        if(side.equals(PROP_WONDER_SIDE_A)){
             this.currentSide = sideA;
-        }else if(side==PROP_WONDER_SIDE_B){
+        }else if(side.equals(PROP_WONDER_SIDE_B)){
             this.currentSide = sideB;
         }
     }
@@ -139,6 +135,10 @@ public class Wonder {
         }
     }
 
+    /**
+     * Get the URL to the image representation of this Card
+     * @return the URL of this card's image
+     */
     public URL getImagePath(){
         if(currentSide.imageURL==null){
             URL result = Card.class.getResource(currentSide.image);
@@ -154,6 +154,10 @@ public class Wonder {
         return currentSide.imageURL;
     }
 
+    /**
+     * Get the Card representing the next stage of this Wonder
+     * @return the next stage of the Wonder, or null if none exists
+     */
     public Card getNextStage(){
         if(currentStage<getStages().size()){
             return getStages().get(currentStage);
@@ -161,22 +165,40 @@ public class Wonder {
         return null;
     }
 
+    /**
+     * Get a List of the Card representations of this Wonder's stages
+     * @return the stages of the Wonder
+     */
     public List<Card> getStages(){
         return currentSide.stages;
     }
 
+    /**
+     * Gets the Assets this Wonder currently yields the given Player, without making ny optional choices
+     * @param p the Player that owns the Wonder
+     * @return the Assets this Wonder definitely yields
+     */
     public Map<String, Integer> getAssets(Player p){
         //TODO: get the assets this wonder definitely has
 
         return null;
     }
 
+    /**
+     * Gets a List of the choices of Assets this Wonder currently yields for the given Player
+     * @param p the Player that owns the Wonder
+     * @return a List of choices of Assets this Wonder currently yields
+     */
     public List<Set<String>> getOptionalAssetsComplete(Player p){
         //TODO: get a list of all the asset choices this wonder can make
 
         return null;
     }
 
+    /**
+     * Gets all the tradeable Assets this Wonder yields (just the start resource)
+     * @return the tradeable Assets this Wonder yields
+     */
     public Map<String, Integer> getTradeableAssets(){
         Map<String, Integer> result = new HashMap<String, Integer>();
         result.put(currentSide.startResource, 1);
