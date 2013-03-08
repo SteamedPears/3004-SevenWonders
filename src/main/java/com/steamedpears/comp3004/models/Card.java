@@ -6,8 +6,6 @@ import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
-import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,7 +23,6 @@ public class Card {
 
     public static final String PROP_CARD_NAME =                 "name";
     public static final String PROP_CARD_COLOR =                "guild";
-    public static final String PROP_CARD_IMAGE =                "image";
     public static final String PROP_CARD_COST =                 "cost";
     public static final String PROP_CARD_MIN_PLAYERS =          "players";
     public static final String PROP_CARD_AGE =                  "age";
