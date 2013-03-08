@@ -119,14 +119,27 @@ public class Wonder {
     }
 
     //getters///////////////////////////////////////////////////////
+
+    /**
+     * Gets the name of the Wonder
+     * @return the name of the Wonder
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * Gets the current stage of the Wonder
+     * @return the current stage of the Wonder
+     */
     public int getCurrentStage(){
         return currentStage;
     }
 
+    /**
+     * Gets the current side of the Wonder
+     * @return the current side of the Wonder
+     */
     public String getSide(){
         if(currentSide==sideB){
             return PROP_WONDER_SIDE_B;
@@ -206,6 +219,10 @@ public class Wonder {
         return result;
     }
 
+    /**
+     * Gets the unique id of the Wonder (factoring in also the side it is on)
+     * @return a unique id
+     */
     public String getId(){
         return this.getName()+"_"+this.getSide();
     }
