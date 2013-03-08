@@ -71,6 +71,7 @@ public class SevenWondersGame implements Runnable{
         }
 
         if(shouldDeal()){
+            discardExtraCards();
             runMilitaryConflict();
             if(age>MAX_AGES){
                 gameOver = true;
@@ -147,7 +148,6 @@ public class SevenWondersGame implements Runnable{
     private void changeHands(){
         log.debug("Changing hands");
         if(shouldDeal()){
-            discardExtraCards();
             deal();
             age++;
 
