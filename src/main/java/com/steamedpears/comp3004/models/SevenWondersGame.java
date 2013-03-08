@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.concurrent.Future;
 public class SevenWondersGame implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
+    public static int TURN_LENGTH = 1000*60*2; // 2 minutes
     private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;
@@ -86,7 +88,8 @@ public class SevenWondersGame implements Runnable{
 
         Set<Future> finishedPlayers = new HashSet<Future>();
 
-        //TODO: do this without polling
+        long startTime = new Date().getTime();
+
         while(runningPlayers.size()>0){
             try{
                 Thread.sleep(100);
@@ -94,14 +97,23 @@ public class SevenWondersGame implements Runnable{
                 ex.printStackTrace();
                 System.exit(-1);
             }
-            //TODO: timeout slow players
+
+            boolean timeUp = (new Date().getTime())-startTime>TURN_LENGTH;
+
             finishedPlayers.clear();
+
             for(Future future: runningPlayers.keySet()){
                 if(future.isDone()){
                     log.debug("Player returned with command");
                     finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
                     router.registerMove(player, player.getCurrentCommand());
+                }else if(timeUp){
+                    log.debug("Player timed out");
+                    finishedPlayers.add(future);
+                    Player player = runningPlayers.get(future);
+                    future.cancel(true);
+                    router.registerMove(player, PlayerCommand.getNullCommand(player));
                 }
             }
 
