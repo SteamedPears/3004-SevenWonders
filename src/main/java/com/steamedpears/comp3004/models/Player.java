@@ -476,7 +476,7 @@ public abstract class Player implements Runnable{
     }
 
     private int getMaximumPotentialSciencePoints(Map<String,Integer> assets, List<Set<String>> optionalAssets) {
-        int total = 0;
+        int total;
 
         int science1 = getAsset(assets, ASSET_SCIENCE_1);
         int science2 = getAsset(assets, ASSET_SCIENCE_2);
