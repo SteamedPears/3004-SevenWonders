@@ -83,6 +83,7 @@ public abstract class Player implements Runnable{
     private void playCard(Card card, boolean isFinal){
         log.debug("playing card: "+isFinal);
         if(isFinal){
+            card.playCard(this);
             playedCards.add(card);
             hand.remove(card);
         }else{
