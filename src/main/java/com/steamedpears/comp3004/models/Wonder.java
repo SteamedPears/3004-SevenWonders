@@ -40,6 +40,12 @@ public class Wonder {
     public static final String PROP_WONDER_START_RESOURCE =     "startResource";
 
     //static methods///////////////////////////////////////////////
+
+    /**
+     * Interprets the JSON description of a list of wonders, and creates them
+     * @param wonderList a JSON description of the wonders
+     * @return a Map of ids to Wonders
+     */
     public static Map<String,Wonder> parseWonders(JsonArray wonderList){
         Map<String, Wonder> wonders = new HashMap<String, Wonder>();
         for(JsonElement element: wonderList){
@@ -65,13 +71,23 @@ public class Wonder {
     }
 
     //methods//////////////////////////////////////////////////////
+
+    /**
+     * resets the Wonder's state for a new game
+     */
     public void reset(){
         currentStage = 0;
         currentSide = sideA;
     }
 
+    /**
+     * builds the next stage of the Wonder with the given card, and removes the card from the Player's hand
+     * @param player the Player building the Wonder's stage
+     * @param card the Card being used to pay for the stage
+     * @return
+     */
     public boolean buildNextStage(Player player, Card card){
-        //TODO: remove card from player's hand
+        //TODO: build the next stage of the Wonder
         return false;
     }
 

@@ -73,7 +73,7 @@ public abstract class Player implements Runnable{
         log.debug("building wonder: "+isFinal);
         Card stage = wonder.getNextStage();
         if(isFinal){
-            hand.remove(card);
+            wonder.buildNextStage(this, card);
         }else{
             stagedCommandResult = sumAssets(stagedCommandResult, stage.getAssets(this));
         }
