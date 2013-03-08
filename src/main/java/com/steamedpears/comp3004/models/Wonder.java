@@ -81,14 +81,11 @@ public class Wonder {
     }
 
     /**
-     * builds the next stage of the Wonder with the given card, and removes the card from the Player's hand
+     * builds the next stage of the Wonder and charges the Player the stage's cost
      * @param player the Player building the Wonder's stage
-     * @param card the Card being used to pay for the stage
-     * @return
      */
-    public boolean buildNextStage(Player player, Card card){
-        //TODO: build the next stage of the Wonder
-        return false;
+    public void buildNextStage(Player player){
+        //TODO: build the next stage of the Wonder, and charge the Player for the cost of the stage
     }
 
     public void expendLimitedResource(String resourceName){
