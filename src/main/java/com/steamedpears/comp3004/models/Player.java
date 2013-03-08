@@ -23,7 +23,13 @@ public abstract class Player implements Runnable{
         return currentId++;
     }
 
-    public static Player getAIPlayer(Wonder wonder, SevenWondersGame game){
+    /**
+     * Get a new AIPlayer
+     * @param wonder the Wonder it should have
+     * @param game the SevenWondersGame it is part of
+     * @return an AIPlayer
+     */
+    public static Player newAIPlayer(Wonder wonder, SevenWondersGame game){
         return new AIPlayer(wonder, game);
     }
 

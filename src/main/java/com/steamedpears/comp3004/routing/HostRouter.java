@@ -14,11 +14,7 @@ import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
 import org.apache.log4j.Logger;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -29,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -130,7 +125,7 @@ class HostRouter extends Router {
             if(i<=clients.size()){
                 player = new HumanPlayer(wonder, game);
             }else{
-                player = Player.getAIPlayer(wonder, game);
+                player = Player.newAIPlayer(wonder, game);
             }
             if(i==0 || i>=clients.size()){
                 game.addLocalPlayer(player);
