@@ -82,7 +82,22 @@ public class SevenWondersGame implements Runnable{
     }
 
     private void runMilitaryConflict() {
-        //TODO: run the military conflict at the end of this age
+        Map<Player, Map<String, Integer>> assets = new HashMap<Player, Map<String, Integer>>();
+        for(Player p: players){
+            assets.put(p, p.getAssets());
+        }
+        Player oldPlayer = players.get(players.size()-1);
+        for(Player curPlayer: players){
+            int oldPlayerMilitary = Asset.getAsset(oldPlayer.getAssets(), Asset.ASSET_MILITARY_POWER);
+            int newPlayerMilitary = Asset.getAsset(curPlayer.getAssets(), Asset.ASSET_MILITARY_POWER);
+            if(oldPlayerMilitary>newPlayerMilitary){
+                oldPlayer.registerMilitaryVictory(age);
+                curPlayer.registerMilitaryDefeat(age);
+            }else if(newPlayerMilitary>oldPlayerMilitary){
+                curPlayer.registerMilitaryVictory(age);
+                oldPlayer.registerMilitaryDefeat(age);
+            }
+        }
     }
 
     private void takeTurnsInternal(){
@@ -304,7 +319,12 @@ public class SevenWondersGame implements Runnable{
     }
 
     public Map<Player, Integer> tabulateResults() {
-        //TODO: tabulate the victory points for each player
-        return new HashMap<Player, Integer>();
+        Map<Player, Integer> results = new HashMap<Player, Integer>();
+
+        for(Player player: players){
+            results.put(player, player.getFinalVictoryPoints());
+        }
+
+        return results;
     }
 }

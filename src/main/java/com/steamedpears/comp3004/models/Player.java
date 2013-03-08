@@ -23,6 +23,16 @@ public abstract class Player implements Runnable{
         return currentId++;
     }
 
+    public static int getTotalSciencePoints(int science1, int science2, int science3) {
+        int total = Math.min(Math.min(science1, science2), science3)*7;
+
+        total += science1*science1;
+        total += science2*science2;
+        total += science3*science3;
+
+        return total;
+    }
+
     /**
      * Get a new AIPlayer
      * @param wonder the Wonder it should have
@@ -52,7 +62,7 @@ public abstract class Player implements Runnable{
         this.game = game;
         this.playedCards = new ArrayList<Card>();
         this.hand = new ArrayList<Card>();
-        this.gold = 9;
+        this.gold = 3;
         this.militaryResults = new ArrayList<Integer>();
         this.id = id;
     }
@@ -198,8 +208,6 @@ public abstract class Player implements Runnable{
 
     //getters///////////////////////////////////////////////////////////////////
     public final boolean isValid(PlayerCommand command){
-        //TODO: determine if further validation necessary
-
         //initial result: either they're doing one action, or their other action is UNDISCARD
         boolean result = command.followup==null
                 || command.followup.action==UNDISCARD;
@@ -327,7 +335,8 @@ public abstract class Player implements Runnable{
     public final Map<String, Integer> getPrivateAssets(){
         Map<String, Integer> privateAssets = new HashMap<String, Integer>();
         privateAssets.put(ASSET_GOLD, getGold());
-        privateAssets.put(ASSET_DEFEAT, getMilitaryDefeats());
+        privateAssets.put(ASSET_MILITARY_DEFEAT, getMilitaryDefeats());
+        privateAssets.put(ASSET_MILITARY_VICTORY, getMilitaryWins());
 
         return privateAssets;
     }
@@ -444,4 +453,54 @@ public abstract class Player implements Runnable{
         }
         return wins;
     }
+
+    public void registerMilitaryVictory(int age) {
+        militaryResults.add(age*2-1);
+    }
+
+    public void registerMilitaryDefeat(int age){
+        militaryResults.add(-1);
+    }
+
+    public int getFinalVictoryPoints() {
+        int total = 0;
+        Map<String, Integer> assets = getAssets();
+        List<Set<String>> optionalAssets = getOptionalAssetsComplete();
+
+        total+=getAsset(assets, ASSET_GOLD)/3;
+        total+=getAsset(assets, ASSET_MILITARY_VICTORY)-getAsset(assets, ASSET_MILITARY_DEFEAT);
+        total+=getAsset(assets, ASSET_VICTORY_POINTS);
+        total+=getMaximumPotentialSciencePoints(assets, optionalAssets);
+
+        return total;
+    }
+
+    private int getMaximumPotentialSciencePoints(Map<String,Integer> assets, List<Set<String>> optionalAssets) {
+        int total = 0;
+
+        int science1 = getAsset(assets, ASSET_SCIENCE_1);
+        int science2 = getAsset(assets, ASSET_SCIENCE_2);
+        int science3 = getAsset(assets, ASSET_SCIENCE_3);
+
+        int numScienceChoices = 0;
+        for(Set<String> choices: optionalAssets){
+            if(choices.contains(ASSET_SCIENCE_1)){
+                numScienceChoices++;
+            }
+        }
+
+        total = Player.getTotalSciencePoints(science1, science2, science3);
+
+        //totally legit
+        for(int i=0; i<=numScienceChoices; i++){
+            for(int j=0; j<=numScienceChoices-i; j++){
+                for(int k=0; k<=numScienceChoices-j-i; k++){
+                   total = Math.max(total, getTotalSciencePoints(science1+i, science2+j, science3+k));
+                }
+            }
+        }
+
+        return total;
+    }
+
 }
