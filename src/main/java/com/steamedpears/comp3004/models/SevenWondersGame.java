@@ -178,7 +178,7 @@ public class SevenWondersGame implements Runnable{
         log.debug("Dealing hands");
         List<Card> currentDeck = deck.get(age-1);
         List<List<Card>> hands = new ArrayList<List<Card>>();
-        for(int i=0; i<players.size(); ++i){
+        for (Player player : players) {
             hands.add(new ArrayList<Card>());
         }
         int numPlayers = players.size();

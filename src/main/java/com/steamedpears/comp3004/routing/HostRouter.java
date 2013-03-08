@@ -134,9 +134,7 @@ class HostRouter extends Router {
 
         List<Player> players = game.getPlayers();
         Player oldPlayer = players.get(players.size()-1);
-        Player newPlayer;
-        for(int i=0; i<players.size(); ++i){
-            newPlayer = players.get(i);
+        for(Player newPlayer: players){
             newPlayer.setPlayerLeft(oldPlayer);
             oldPlayer.setPlayerRight(newPlayer);
         }
