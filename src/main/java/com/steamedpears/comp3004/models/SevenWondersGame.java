@@ -70,10 +70,18 @@ public class SevenWondersGame implements Runnable{
             player.finalizeCommand(command);
         }
 
-        if(age>MAX_AGES && shouldDeal()){
-            gameOver = true;
+        if(shouldDeal()){
+            runMilitaryConflict();
+            if(age>MAX_AGES){
+                gameOver = true;
+            }
         }
+
         return gameOver;
+    }
+
+    private void runMilitaryConflict() {
+        //TODO: run the military conflict at the end of this age
     }
 
     private void takeTurnsInternal(){
@@ -287,5 +295,14 @@ public class SevenWondersGame implements Runnable{
 
     public Card getCardById(String id){
         return cards.get(id);
+    }
+
+    public boolean isGameOver(){
+        return gameOver;
+    }
+
+    public Map<Player, Integer> tabulateResults() {
+        //TODO: tabulate the victory points for each player
+        return new HashMap<Player, Integer>();
     }
 }
