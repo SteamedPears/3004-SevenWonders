@@ -22,6 +22,7 @@ public class Wonder {
         public List<Card> stages;
         public String image;
         public String startResource;
+        public URL imageURL;
 
         public WonderSide(JsonObject obj){
             this.stages = Card.parseDeck(obj.getAsJsonArray(PROP_WONDER_STAGES));
@@ -139,15 +140,18 @@ public class Wonder {
     }
 
     public URL getImagePath(){
-        URL result = Card.class.getResource(currentSide.image);
-        if(result==null){
-            try {
-                result = new URL("file://");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+        if(currentSide.imageURL==null){
+            URL result = Card.class.getResource(currentSide.image);
+            if(result==null){
+                try {
+                    result = new URL("file://");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
+            currentSide.imageURL = result;
         }
-        return result;
+        return currentSide.imageURL;
     }
 
     public Card getNextStage(){

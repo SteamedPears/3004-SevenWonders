@@ -52,6 +52,7 @@ public class Card {
     private String color;
     private String name;
     private String image;
+    private URL imageURL;
     private int minPlayers;
     private int age;
     //The base amount of assets this card yields
@@ -102,16 +103,19 @@ public class Card {
     }
 
     public URL getImagePath(){
-        URL result = Card.class.getResource(image);
-        if(result==null){
-           log.warn("Missing file " + image);
-            try {
-                result = new URL("file://");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+        if(imageURL==null){
+            URL result = Card.class.getResource(image);
+            if(result==null){
+               log.warn("Missing file " + image);
+                try {
+                    result = new URL("file://");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
+            imageURL = result;
         }
-        return result;
+        return imageURL;
     }
 
     public int getMinPlayers(){
