@@ -23,7 +23,13 @@ public abstract class Player implements Runnable{
         return currentId++;
     }
 
-    public static Player getAIPlayer(Wonder wonder, SevenWondersGame game){
+    /**
+     * Get a new AIPlayer
+     * @param wonder the Wonder it should have
+     * @param game the SevenWondersGame it is part of
+     * @return an AIPlayer
+     */
+    public static Player newAIPlayer(Wonder wonder, SevenWondersGame game){
         return new AIPlayer(wonder, game);
     }
 
@@ -73,6 +79,7 @@ public abstract class Player implements Runnable{
         log.debug("building wonder: "+isFinal);
         Card stage = wonder.getNextStage();
         if(isFinal){
+            wonder.buildNextStage(this);
             hand.remove(card);
         }else{
             stagedCommandResult = sumAssets(stagedCommandResult, stage.getAssets(this));
@@ -82,6 +89,7 @@ public abstract class Player implements Runnable{
     private void playCard(Card card, boolean isFinal){
         log.debug("playing card: "+isFinal);
         if(isFinal){
+            card.playCard(this);
             playedCards.add(card);
             hand.remove(card);
         }else{
@@ -103,7 +111,7 @@ public abstract class Player implements Runnable{
         log.debug("playing free: "+isFinal);
         playCard(card, isFinal);
         if(isFinal){
-            wonder.expendLimitedResource(ASSET_BUILD_FREE);
+            wonder.expendLimitedAsset(ASSET_BUILD_FREE);
         }
     }
 
@@ -152,7 +160,7 @@ public abstract class Player implements Runnable{
         while(command!=null){
             resolveCommand(command, true);
             if(command.followup!=null && command.followup.action!=UNDISCARD){
-                wonder.expendLimitedResource(ASSET_DOUBLE_PLAY);
+                wonder.expendLimitedAsset(ASSET_DOUBLE_PLAY);
             }
             command = command.followup;
         }

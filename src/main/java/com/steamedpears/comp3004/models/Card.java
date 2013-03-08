@@ -6,8 +6,6 @@ import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
-import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,7 +23,6 @@ public class Card {
 
     public static final String PROP_CARD_NAME =                 "name";
     public static final String PROP_CARD_COLOR =                "guild";
-    public static final String PROP_CARD_IMAGE =                "image";
     public static final String PROP_CARD_COST =                 "cost";
     public static final String PROP_CARD_MIN_PLAYERS =          "players";
     public static final String PROP_CARD_AGE =                  "age";
@@ -40,6 +37,12 @@ public class Card {
     private static Logger log = Logger.getLogger(Card.class);
 
     //static methods////////////////////////////////////////////////
+
+    /**
+     * Parses the given JSON array describing a list of cards into a Java List of Cards in the same order
+     * @param deck JSON array of cards
+     * @return the List of Cards
+     */
     public static List<Card> parseDeck(JsonArray deck){
         List<Card> cards = new ArrayList<Card>();
         for(JsonElement element: deck){
@@ -52,6 +55,7 @@ public class Card {
     private String color;
     private String name;
     private String image;
+    private URL imageURL;
     private int minPlayers;
     private int age;
     //The base amount of assets this card yields
@@ -93,62 +97,124 @@ public class Card {
     }
 
     //getters////////////////////////////////////////////////////////
+
+    /**
+     * Gets the name of the Card
+     * @return the name of the Card
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * Gets the colour of the Card
+     * @return the colour of the Card
+     */
     public String getColor(){
         return color;
     }
 
+    /**
+     * Gets the URL of the Card's image
+     * @return the URL of the Card's image
+     */
     public URL getImagePath(){
-        URL result = Card.class.getResource(image);
-        if(result==null){
-           log.warn("Missing file " + image);
-            try {
-                result = new URL("file://");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+        if(imageURL==null){
+            URL result = Card.class.getResource(image);
+            if(result==null){
+               log.warn("Missing file " + image);
+                try {
+                    result = new URL("file://");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
+            imageURL = result;
         }
-        return result;
+        return imageURL;
     }
 
+    /**
+     * Gets the minimum number of Players necessary to use this card in a game
+     * @return the minimum number of Players necessary to use this card in a game
+     */
     public int getMinPlayers(){
         return minPlayers;
     }
 
+    /**
+     * Gets the age this Card is to be part of
+     * @return the age this Card is to be part of
+     */
     public int getAge(){
         return age;
     }
 
+    /**
+     * Gets the name of the building that, if already constructed, makes this Card free to play
+     * @return the name of the building that, if already constructed, makes this Card free to play
+     */
     public String getFreeFor(){
         return freeFor;
     }
 
+    /**
+     * Gets the Asset cost of playing this card
+     * @return the Asset cost of playing this card
+     */
     public Map<String, Integer> getCost(){
         return cost;
     }
 
+    /**
+     * Gets the Assets that this Card will make cheaper to buy from neighbours
+     * @return the Assets that this Card will make cheaper to buy from neighbours
+     */
     public Set<String> getDiscountsAssets(){
         return discountsAssets;
     }
 
+    /**
+     * Gets the neighbours for which #getDiscountsAssets applies to
+     * @return the neighbours for which #getDiscountsAssets applies to
+     */
     public Set<String> getDiscountsTargets(){
         return discountsTargets;
     }
 
+    /**
+     * Charges the given Player the cost of playing this card
+     * @param player the player being charged
+     */
+    public void playCard(Player player){
+        //TODO: charges the Player for the cost of the Card
+    }
+
+    /**
+     * Gets the Assets this Card would yield the given Player, if played, before optional choices
+     * @param player the player that would play this card
+     * @return the Assets
+     */
     public Map<String, Integer> getAssets(Player player){
         //TODO: compute the assets this card yields if played by this player
         return null;
     }
 
+    /**
+     * Gets the optional Assets this Card would yield the given Player, if played
+     * @param player the player that would play this card
+     * @return the Assets
+     */
     public Set<String> getAssetsOptional(Player player){
         //TODO: compute the list of assets this card yields if it isChoice
 
         return null;
     }
 
+    /**
+     * Gets the unique ID for this Card
+     * @return a unique ID
+     */
     public String getId(){
         return this.id;
     }
@@ -158,6 +224,12 @@ public class Card {
         return getId().hashCode();
     }
 
+    /**
+     * Determines whether the given Player can afford this Card, if they perform the purchases stated in the command
+     * @param player the Player that would play the Card
+     * @param command the command that would play the Card
+     * @return whether the Player can afford this Card
+     */
     public boolean canAfford(Player player, PlayerCommand command) {
         //TODO: determine if the given player can play this card with the given command's trades
 
