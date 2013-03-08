@@ -1,9 +1,8 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
-import com.steamedpears.comp3004.models.Card;
-import com.steamedpears.comp3004.models.Wonder;
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.routing.Router;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -12,15 +11,14 @@ import org.junit.*;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertNotEquals;
 
-public class CardTests {
+public class ImageDataLoadingTest {
 
-    private static Logger log = Logger.getLogger(CardTests.class);
+    private static Logger log = Logger.getLogger(ImageDataLoadingTest.class);
 
     @Before
     public void setUp() throws Exception {
@@ -31,12 +29,12 @@ public class CardTests {
     public void testCards() {
         JsonParser parser = new JsonParser();
         JsonArray cardJSON = parser
-                .parse(new InputStreamReader(CardTests.class.getResourceAsStream(SevenWonders.PATH_CARDS)))
+                .parse(new InputStreamReader(ImageDataLoadingTest.class.getResourceAsStream(SevenWonders.PATH_CARDS)))
                 .getAsJsonObject()
                 .get(Router.PROP_ROUTE_CARDS)
                 .getAsJsonArray();
         JsonArray wonderJSON = parser
-                .parse(new InputStreamReader(CardTests.class.getResourceAsStream(SevenWonders.PATH_WONDERS)))
+                .parse(new InputStreamReader(ImageDataLoadingTest.class.getResourceAsStream(SevenWonders.PATH_WONDERS)))
                 .getAsJsonObject()
                 .get(Router.PROP_ROUTE_WONDERS)
                 .getAsJsonArray();

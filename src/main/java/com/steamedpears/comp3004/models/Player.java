@@ -52,7 +52,7 @@ public abstract class Player implements Runnable{
         this.game = game;
         this.playedCards = new ArrayList<Card>();
         this.hand = new ArrayList<Card>();
-        this.gold = 0;
+        this.gold = 9;
         this.militaryResults = new ArrayList<Integer>();
         this.id = id;
     }
