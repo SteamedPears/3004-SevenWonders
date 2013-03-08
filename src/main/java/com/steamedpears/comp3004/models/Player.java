@@ -105,7 +105,7 @@ public abstract class Player implements Runnable{
         log.debug("playing free: "+isFinal);
         playCard(card, isFinal);
         if(isFinal){
-            wonder.expendLimitedResource(ASSET_BUILD_FREE);
+            wonder.expendLimitedAsset(ASSET_BUILD_FREE);
         }
     }
 
@@ -154,7 +154,7 @@ public abstract class Player implements Runnable{
         while(command!=null){
             resolveCommand(command, true);
             if(command.followup!=null && command.followup.action!=UNDISCARD){
-                wonder.expendLimitedResource(ASSET_DOUBLE_PLAY);
+                wonder.expendLimitedAsset(ASSET_DOUBLE_PLAY);
             }
             command = command.followup;
         }

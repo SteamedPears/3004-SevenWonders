@@ -88,11 +88,20 @@ public class Wonder {
         //TODO: build the next stage of the Wonder, and charge the Player for the cost of the stage
     }
 
-    public void expendLimitedResource(String resourceName){
+    /**
+     * informs the Wonder that its parent Player has used one of its limited resources
+     * @param assetName name of resource expended
+     */
+    public void expendLimitedAsset(String assetName){
         //TODO: make it so the Player can't reuse this ever again, somehow (i.e. if this is Asset.ASSET_BUILD_FREE, disable it)
     }
 
     //setters///////////////////////////////////////////////////////
+
+    /**
+     * Set the side the Wonder uses
+     * @param side the to side use
+     */
     public void setSide(String side){
         if(side==PROP_WONDER_SIDE_A){
             this.currentSide = sideA;
@@ -101,6 +110,9 @@ public class Wonder {
         }
     }
 
+    /**
+     * Randomly choose the side of the Wonder in use
+     */
     public void randomizeSide(){
         if(Math.random()>0.5){
             setSide(PROP_WONDER_SIDE_A);
