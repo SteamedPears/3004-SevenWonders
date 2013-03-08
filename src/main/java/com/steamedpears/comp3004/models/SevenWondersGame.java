@@ -159,8 +159,10 @@ public class SevenWondersGame implements Runnable{
     private void discardExtraCards(){
         for(Player player: players){
             List<Card> hand = player.getHand();
-            if(hand!= null && hand.size()==1){
-                discard(hand.get(0));
+            while(hand.size()>0){
+                Card card = hand.get(0);
+                hand.remove(card);
+                discard(card);
             }
         }
     }
