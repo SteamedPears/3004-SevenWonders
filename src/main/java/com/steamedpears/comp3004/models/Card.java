@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -197,7 +199,7 @@ public class Card {
      */
     public Map<String, Integer> getAssets(Player player){
         //TODO: compute the assets this card yields if played by this player
-        return null;
+        return new HashMap<String, Integer>();
     }
 
     /**
@@ -208,7 +210,7 @@ public class Card {
     public Set<String> getAssetsOptional(Player player){
         //TODO: compute the list of assets this card yields if it isChoice
 
-        return null;
+        return new HashSet<String>();
     }
 
     /**

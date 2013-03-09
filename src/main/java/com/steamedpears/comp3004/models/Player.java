@@ -467,7 +467,7 @@ public abstract class Player implements Runnable{
         Map<String, Integer> assets = getAssets();
         List<Set<String>> optionalAssets = getOptionalAssetsComplete();
 
-        total+=getAsset(assets, ASSET_GOLD)/3;
+        total+=getGold()/3;
         total+=getAsset(assets, ASSET_MILITARY_VICTORY)-getAsset(assets, ASSET_MILITARY_DEFEAT);
         total+=getAsset(assets, ASSET_VICTORY_POINTS);
         total+=getMaximumPotentialSciencePoints(assets, optionalAssets);

@@ -88,8 +88,8 @@ public class SevenWondersGame implements Runnable{
         }
         Player oldPlayer = players.get(players.size()-1);
         for(Player curPlayer: players){
-            int oldPlayerMilitary = Asset.getAsset(oldPlayer.getAssets(), Asset.ASSET_MILITARY_POWER);
-            int newPlayerMilitary = Asset.getAsset(curPlayer.getAssets(), Asset.ASSET_MILITARY_POWER);
+            int oldPlayerMilitary = Asset.getAsset(assets.get(oldPlayer), Asset.ASSET_MILITARY_POWER);
+            int newPlayerMilitary = Asset.getAsset(assets.get(curPlayer), Asset.ASSET_MILITARY_POWER);
             if(oldPlayerMilitary>newPlayerMilitary){
                 oldPlayer.registerMilitaryVictory(age);
                 curPlayer.registerMilitaryDefeat(age);

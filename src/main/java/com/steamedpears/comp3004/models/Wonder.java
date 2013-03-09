@@ -7,6 +7,7 @@ import com.steamedpears.comp3004.SevenWonders;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -194,7 +195,7 @@ public class Wonder {
     public Map<String, Integer> getAssets(Player p){
         //TODO: get the assets this wonder definitely has
 
-        return null;
+        return new HashMap<String, Integer>();
     }
 
     /**
@@ -205,7 +206,7 @@ public class Wonder {
     public List<Set<String>> getOptionalAssetsComplete(Player p){
         //TODO: get a list of all the asset choices this wonder can make
 
-        return null;
+        return new ArrayList<Set<String>>();
     }
 
     /**
