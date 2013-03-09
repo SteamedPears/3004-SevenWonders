@@ -37,13 +37,8 @@ public class PlayerView extends JPanel {
             add(cv, "aligny top");
         }
 
-        // shield count labels
-        add(new JLabel("Shields:"),"split 2,newline");
-        add(new JLabel(""+player.getMilitaryWins()));
-
-        // gold count labels
-        add(new JLabel("Gold:"),"split 2");
-        add(new JLabel(""+player.getGold()));
+        add(new AssetHeaderView(),"newline 5px, span, h 20!");
+        add(new AssetView(this.player),"gaptop 1, span, h 20!");
 
         // TODO: add some way to switch to viewing another player
         // TODO: add some way to switch to high level view

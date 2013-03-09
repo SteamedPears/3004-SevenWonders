@@ -345,7 +345,7 @@ public abstract class Player implements Runnable{
      * gets all the Assets the player definitely has before any decisions
      * @return the map
      */
-    public final Map<String, Integer> getAssets(){
+    public Map<String, Integer> getAssets(){
         List<Map<String, Integer>> collectedAssets = new ArrayList<Map<String, Integer>>();
 
         for(Card card: playedCards){
