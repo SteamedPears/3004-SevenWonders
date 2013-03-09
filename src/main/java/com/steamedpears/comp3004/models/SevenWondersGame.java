@@ -262,7 +262,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
         }
 
         Collections.shuffle(guilds);
-        for(int i=0; i<numPlayers; ++i){
+        for(int i=0; i<numPlayers+2; ++i){
             result.get(2).add(guilds.get(i));
         }
 

@@ -48,7 +48,7 @@ public class ImageDataLoadingTest {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        log.info("Testing " + cards.size() + "/149 cards.");
+        log.info("Testing " + cards.size() + "/148 cards.");
         for(Card c : cards) {
             assertNotEquals(c.getId()+" image not found",c.getImagePath().getPath(), blankurl.getPath());
         }
