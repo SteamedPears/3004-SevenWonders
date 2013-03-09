@@ -4,19 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
+import com.steamedpears.comp3004.models.Changeable;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Router{
+public abstract class Router extends Changeable implements ChangeListener {
 
     public static Router getHostRouter(int port, int totalPlayers){
         totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS);
@@ -52,8 +52,8 @@ public abstract class Router{
 
     protected Router() {
         this.localGame = new SevenWondersGame(this);
-        playing = false;
-        changeListeners = new ArrayList<ChangeListener>();
+        localGame.addChangeListener(this);
+        this.playing = false;
     }
 
     public abstract void registerMove(Player player, PlayerCommand command);
@@ -61,17 +61,6 @@ public abstract class Router{
     public abstract void beginGame();
 
     public abstract void start();
-
-    public void addChangeListener(ChangeListener listener) {
-        this.changeListeners.add(listener);
-    }
-
-    protected void announceChange(){
-        ChangeEvent event = new ChangeEvent(getLocalGame());
-        for(ChangeListener listener: changeListeners){
-            listener.stateChanged(event);
-        }
-    }
 
     protected void setPlaying(boolean playing){
         this.playing = playing;
@@ -111,5 +100,9 @@ public abstract class Router{
         }
 
         return result;
+    }
+
+    public void stateChanged(ChangeEvent event){
+        announceChange(event.getSource());
     }
 }

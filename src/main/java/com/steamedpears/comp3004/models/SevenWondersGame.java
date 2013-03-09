@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,9 +17,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class SevenWondersGame implements Runnable{
+public class SevenWondersGame extends Changeable implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
+    public static int TURN_LENGTH = 1000*60*2; // 2 minutes
     private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;
@@ -68,15 +70,40 @@ public class SevenWondersGame implements Runnable{
             player.finalizeCommand(command);
         }
 
-        if(age>MAX_AGES && shouldDeal()){
-            gameOver = true;
+        if(shouldDeal()){
+            discardExtraCards();
+            runMilitaryConflict();
+            if(age>MAX_AGES){
+                gameOver = true;
+                announceChange(this);
+            }
         }
+
         return gameOver;
+    }
+
+    private void runMilitaryConflict() {
+        Map<Player, Map<String, Integer>> assets = new HashMap<Player, Map<String, Integer>>();
+        for(Player p: players){
+            assets.put(p, p.getAssets());
+        }
+        Player oldPlayer = players.get(players.size()-1);
+        for(Player curPlayer: players){
+            int oldPlayerMilitary = Asset.getAsset(assets.get(oldPlayer), Asset.ASSET_MILITARY_POWER);
+            int newPlayerMilitary = Asset.getAsset(assets.get(curPlayer), Asset.ASSET_MILITARY_POWER);
+            if(oldPlayerMilitary>newPlayerMilitary){
+                oldPlayer.registerMilitaryVictory(age);
+                curPlayer.registerMilitaryDefeat(age);
+            }else if(newPlayerMilitary>oldPlayerMilitary){
+                curPlayer.registerMilitaryVictory(age);
+                oldPlayer.registerMilitaryDefeat(age);
+            }
+        }
     }
 
     private void takeTurnsInternal(){
         changeHands();
-
+        announceChange(this);
         runningPlayers = new HashMap<Future, Player>();
 
         for(Player player: localPlayers){
@@ -86,7 +113,8 @@ public class SevenWondersGame implements Runnable{
 
         Set<Future> finishedPlayers = new HashSet<Future>();
 
-        //TODO: do this without polling
+        long startTime = new Date().getTime();
+
         while(runningPlayers.size()>0){
             try{
                 Thread.sleep(100);
@@ -94,14 +122,23 @@ public class SevenWondersGame implements Runnable{
                 ex.printStackTrace();
                 System.exit(-1);
             }
-            //TODO: timeout slow players
+
+            boolean timeUp = (new Date().getTime())-startTime>TURN_LENGTH;
+
             finishedPlayers.clear();
+
             for(Future future: runningPlayers.keySet()){
                 if(future.isDone()){
                     log.debug("Player returned with command");
                     finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
                     router.registerMove(player, player.getCurrentCommand());
+                }else if(timeUp){
+                    log.debug("Player timed out");
+                    finishedPlayers.add(future);
+                    Player player = runningPlayers.get(future);
+                    future.cancel(true);
+                    router.registerMove(player, PlayerCommand.getNullCommand(player));
                 }
             }
 
@@ -127,7 +164,6 @@ public class SevenWondersGame implements Runnable{
     private void changeHands(){
         log.debug("Changing hands");
         if(shouldDeal()){
-            discardExtraCards();
             deal();
             age++;
 
@@ -139,8 +175,10 @@ public class SevenWondersGame implements Runnable{
     private void discardExtraCards(){
         for(Player player: players){
             List<Card> hand = player.getHand();
-            if(hand!= null && hand.size()==1){
-                discard(hand.get(0));
+            while(hand.size()>0){
+                Card card = hand.get(0);
+                hand.remove(card);
+                discard(card);
             }
         }
     }
@@ -276,4 +314,19 @@ public class SevenWondersGame implements Runnable{
     public Card getCardById(String id){
         return cards.get(id);
     }
+
+    public boolean isGameOver(){
+        return gameOver;
+    }
+
+    public Map<Player, Integer> tabulateResults() {
+        Map<Player, Integer> results = new HashMap<Player, Integer>();
+
+        for(Player player: players){
+            results.put(player, player.getFinalVictoryPoints());
+        }
+
+        return results;
+    }
+
 }

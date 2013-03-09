@@ -40,9 +40,10 @@ public final class Asset {
 
     //misc
     public static final String ASSET_GOLD =             "coin";
-    public static final String ASSET_MILITARY =         "army";
-    public static final String ASSET_VICTORY =          "victory";
-    public static final String ASSET_DEFEAT =           "defeat";
+    public static final String ASSET_VICTORY_POINTS =   "victory";
+    public static final String ASSET_MILITARY_POWER =   "army";
+    public static final String ASSET_MILITARY_DEFEAT =  "defeat";
+    public static final String ASSET_MILITARY_VICTORY = "win";
     public static final String ASSET_WONDER_STAGES =    "wonderstages";
 
     //colors

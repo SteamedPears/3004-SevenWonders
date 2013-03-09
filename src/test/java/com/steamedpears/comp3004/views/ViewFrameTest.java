@@ -1,7 +1,4 @@
-package com.steamedpears.comp3004;
-import com.steamedpears.comp3004.views.*;
-
-import static org.mockito.Mockito.*;
+package com.steamedpears.comp3004.views;
 
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.*;
