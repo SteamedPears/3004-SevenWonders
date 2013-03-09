@@ -47,8 +47,12 @@ public class PlayerView extends JPanel {
         // selected card
         if(hand.size() > 0) {
             selectedCardView = new CardView(hand.get(0), CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
-            add(selectedCardView, "newline, span");
+            add(selectedCardView, "newline, span " + SELECTED_MULTIPLIER);
         }
+
+        // group action buttons together
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new MigLayout());
 
         // discard button
         JButton discardButton = new JButton("Discard");
@@ -62,7 +66,7 @@ public class PlayerView extends JPanel {
                 player.wake();
             }
         });
-        add(discardButton,"newline");
+        buttonPanel.add(discardButton,"span");
 
         // play button
         JButton playButton = new JButton("Play");
@@ -77,7 +81,7 @@ public class PlayerView extends JPanel {
             }
         });
         // TODO: disable if can't actually build
-        add(playButton);
+        buttonPanel.add(playButton,"span");
 
         // build wonder button
         JButton buildButton = new JButton("Build Wonder");
@@ -91,7 +95,9 @@ public class PlayerView extends JPanel {
                 player.wake();
             }
         });
-        add(buildButton);
+        buttonPanel.add(buildButton,"span");
+
+        add(buttonPanel,"span");
 
         // assets
         add(new AssetHeaderView(), "newline, gaptop 1, span, h 20!");
