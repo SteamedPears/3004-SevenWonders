@@ -54,6 +54,13 @@ public final class Asset {
     public static final String COLOR_GREEN =        "green";
     public static final String COLOR_BROWN =        "brown";
 
+    // for enumeration
+    public static final String[] AssetTypes = {
+            ASSET_WOOD, ASSET_STONE, ASSET_CLAY, ASSET_ORE, ASSET_LOOM, ASSET_PAPYRUS, ASSET_GLASS,
+            ASSET_SCIENCE_1, ASSET_SCIENCE_2, ASSET_SCIENCE_3, ASSET_GOLD, ASSET_VICTORY_POINTS,
+            ASSET_MILITARY_POWER, ASSET_WONDER_STAGES
+    };
+
     //utility methods
     public static int getAsset(Map<String, Integer> map, String key){
         if(map.containsKey(key)){

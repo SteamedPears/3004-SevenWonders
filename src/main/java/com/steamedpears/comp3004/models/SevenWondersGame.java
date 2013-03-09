@@ -135,10 +135,11 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
             for(Future future: runningPlayers.keySet()){
                 if(future.isDone()){
-                    log.debug("Player returned with command");
                     finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
-                    router.registerMove(player, player.getCurrentCommand());
+                    PlayerCommand command = player.getCurrentCommand();
+                    log.debug("Player returned with command " + command);
+                    router.registerMove(player, command);
                 }else if(timeUp){
                     log.debug("Player timed out");
                     finishedPlayers.add(future);
