@@ -20,15 +20,11 @@ public abstract class Router extends Changeable implements ChangeListener {
 
     public static Router getHostRouter(int port, int totalPlayers){
         totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS);
-        Router router = new HostRouter(port, totalPlayers);
-        router.start();
-        return router;
+        return new HostRouter(port, totalPlayers);
     }
 
     public static Router getClientRouter(String ipAddress, int port){
-        Router router = new ClientRouter(ipAddress, port);
-        router.start();
-        return router;
+        return new ClientRouter(ipAddress, port);
     }
 
     public static final int HOST_PORT = 1567;
@@ -59,8 +55,6 @@ public abstract class Router extends Changeable implements ChangeListener {
     public abstract void registerMove(Player player, PlayerCommand command);
 
     public abstract void beginGame();
-
-    public abstract void start();
 
     protected void setPlaying(boolean playing){
         this.playing = playing;

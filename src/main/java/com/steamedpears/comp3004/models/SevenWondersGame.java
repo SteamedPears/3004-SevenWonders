@@ -1,7 +1,11 @@
 package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.steamedpears.comp3004.SevenWonders;
+import com.steamedpears.comp3004.models.players.HumanPlayer;
 import com.steamedpears.comp3004.routing.Router;
 import org.apache.log4j.Logger;
 
@@ -27,6 +31,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
     private Set<Player> localPlayers;
     private Set<Card> discard;
     private Map<String, Card> cards;
+    private Map<String, Wonder> wonders;
     private List<List<Card>> deck;
     private int age;
     private int maxPlayers; //useless?
@@ -278,6 +283,36 @@ public class SevenWondersGame extends Changeable implements Runnable{
         this.deck = deck;
     }
 
+    public void setDeck(JsonArray deckJSON){
+        List<List<Card>> deck = new ArrayList<List<Card>>();
+        for(JsonElement ageDeckJSON: deckJSON){
+            List<Card> ageDeck = new ArrayList<Card>();
+            for(JsonElement cardJSON: ageDeckJSON.getAsJsonArray()){
+                ageDeck.add(getCardById(cardJSON.getAsString()));
+            }
+            deck.add(ageDeck);
+        }
+        setDeck(deck);
+    }
+
+    public void setPlayers(JsonObject playersJSON){
+        for(Map.Entry<String, JsonElement> entry: playersJSON.entrySet()){
+            int playerId = Integer.parseInt(entry.getKey());
+            String wonderId = entry.getValue().getAsString();
+            if(playerId==router.getLocalPlayerId()){
+                addLocalPlayer(new HumanPlayer(getWonderById(wonderId), this));
+                //addLocalPlayer(Player.newAIPlayer(getWonderById(wonderId), this)); //use this to bypass client GUI (?)
+            }else{
+                addPlayer(Player.newAIPlayer(getWonderById(wonderId), this));
+            }
+        }
+    }
+
+    public void setWonders(JsonArray wonders) {
+        this.wonders = Wonder.parseWonders(wonders);
+    }
+
+
     public void addPlayer(Player player){
         players.add(player);
     }
@@ -303,6 +338,26 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return deck;
     }
 
+    public JsonArray getDeckAsJSON(){
+        JsonArray deckJSON = new JsonArray();
+        for(List<Card> ageDeck: getDeck()){
+            JsonArray ageDeckJSON = new JsonArray();
+            for(Card card: ageDeck){
+                ageDeckJSON.add(new JsonPrimitive(card.getId()));
+            }
+            deckJSON.add(ageDeckJSON);
+        }
+        return deckJSON;
+    }
+
+    public JsonObject getPlayersAsJSON(){
+        JsonObject players = new JsonObject();
+        for(Player player: getPlayers()){
+            players.addProperty("" + player.getPlayerId(), player.getWonder().getId());
+        }
+        return players;
+    }
+
     public Player getPlayerById(int id){
         for(Player player: players){
             if(player.getPlayerId()==id){
@@ -314,6 +369,21 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
     public Card getCardById(String id){
         return cards.get(id);
+    }
+
+    public Wonder getWonderById(String id){
+        String trueID = id;
+        String side = null;
+        if(id.contains("_")){
+            String[] tokens = id.split("_");
+            trueID = tokens[0];
+            side = tokens[1];
+        }
+        Wonder wonder = wonders.get(trueID);
+        if(side!=null){
+            wonder.setSide(side);
+        }
+        return wonder;
     }
 
     public boolean isGameOver(){
@@ -330,4 +400,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return results;
     }
 
+    public Map<String, Wonder> getWonders() {
+        return wonders;
+    }
 }
