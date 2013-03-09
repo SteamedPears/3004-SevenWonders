@@ -64,8 +64,23 @@ public class PlayerView extends JPanel {
         });
         add(discardButton,"newline");
 
-        // build button
-        JButton buildButton = new JButton("Build");
+        // play button
+        JButton playButton = new JButton("Play");
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PlayerCommand move = new PlayerCommand();
+                move.action = PlayerCardAction.PLAY;
+                move.card = selectedCardView.getCard().getId();
+                player.setCurrentCommand(move);
+                player.wake();
+            }
+        });
+        // TODO: disable if can't actually build
+        add(playButton);
+
+        // build wonder button
+        JButton buildButton = new JButton("Build Wonder");
         buildButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -76,10 +91,7 @@ public class PlayerView extends JPanel {
                 player.wake();
             }
         });
-        // TODO: disable if can't actually build
         add(buildButton);
-
-        // TODO: use to build wonder button
 
         // assets
         add(new AssetHeaderView(), "newline, gaptop 1, span, h 20!");
