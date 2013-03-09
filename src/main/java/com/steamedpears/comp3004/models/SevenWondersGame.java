@@ -1,6 +1,5 @@
 package com.steamedpears.comp3004.models;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,7 +24,7 @@ import java.util.concurrent.Future;
 public class SevenWondersGame extends Changeable implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
-    public static int TURN_LENGTH = 1000*2; // 2 seconds
+    public static int TURN_LENGTH = 1000*60*2; // 2 minutes
     private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;
@@ -301,9 +300,8 @@ public class SevenWondersGame extends Changeable implements Runnable{
             int playerId = Integer.parseInt(entry.getKey());
             String wonderId = entry.getValue().getAsString();
             if(playerId==router.getLocalPlayerId()){
-                //TODO: invert commenting of these two lines to let Client take turns (GUI missing)
-                //addLocalPlayer(new HumanPlayer(getWonderById(wonderId), this));
-                addLocalPlayer(Player.newAIPlayer(getWonderById(wonderId), this));
+                addLocalPlayer(new HumanPlayer(getWonderById(wonderId), this));
+                //addLocalPlayer(Player.newAIPlayer(getWonderById(wonderId), this)); //use this to bypass client GUI (?)
             }else{
                 addPlayer(Player.newAIPlayer(getWonderById(wonderId), this));
             }
