@@ -340,14 +340,15 @@ public class SevenWondersGame extends Changeable implements Runnable{
     }
 
     public JsonArray getDeckAsJSON(){
-        JsonArray deck = new JsonArray();
+        JsonArray deckJSON = new JsonArray();
         for(List<Card> ageDeck: getDeck()){
             JsonArray ageDeckJSON = new JsonArray();
             for(Card card: ageDeck){
                 ageDeckJSON.add(new JsonPrimitive(card.getId()));
             }
+            deckJSON.add(ageDeckJSON);
         }
-        return deck;
+        return deckJSON;
     }
 
     public JsonObject getPlayersAsJSON(){
