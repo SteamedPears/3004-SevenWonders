@@ -44,7 +44,7 @@ class HostRouter extends Router {
         try {
             this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error establishing host socket", e);
             System.exit(-1);
         }
         this.clients = new ArrayList<Client>();
@@ -153,11 +153,19 @@ class HostRouter extends Router {
         log.debug("Waiting for clients to connect");
         while(!Thread.interrupted()){
             try{
-                clients.add(new Client(serverSocket.accept()));
+                Client client = new Client(serverSocket.accept(), clients.size()+1);
+                clients.add(client);
             }catch(IOException e){
-                e.printStackTrace();
+                log.error("Error establishing connection to client", e);
                 System.exit(-1);
             }
+        }
+    }
+
+    private void waitForOkays(){
+        log.debug("Waiting for clients to respond 'ok'");
+        for(Client client: clients){
+            client.getOkay();
         }
     }
 
@@ -172,7 +180,7 @@ class HostRouter extends Router {
 
                 broadcastPlayerCommands();
 
-                //TODO: wait for clients to actually respond before doing this
+                waitForOkays();
                 try {
                     log.debug("Waiting for game to finish up");
                     while(!game.isDone()){
@@ -192,7 +200,7 @@ class HostRouter extends Router {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("Error for moves to be registered", e);
                 System.exit(-1);
             }
         }
@@ -233,23 +241,36 @@ class HostRouter extends Router {
     }
 
     private class Client extends Thread{
+        private int clientNumber;
         private BufferedReader in;
         private PrintWriter out;
         private Socket client;
 
-        public Client(Socket client){
+        public Client(Socket client, int clientNumber){
+            log.debug("Establishing connection with client:" +clientNumber);
             try {
-                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                out = new PrintWriter(client.getOutputStream(), true);
+                this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                this.out = new PrintWriter(client.getOutputStream(), true);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Error setting up client streams", e);
                 System.exit(-1);
             }
+
+            this.clientNumber = clientNumber;
+
+            JsonObject obj = new JsonObject();
+            obj.addProperty(PROP_ROUTE_YOU_ARE, clientNumber);
+
+            sendMessage(obj.toString());
         }
 
-        @Override
-        public void run(){
-            //TODO: ...?
+        public void getOkay(){
+            try {
+                while(!in.readLine().equals(COMMAND_ROUTE_OK));
+            } catch (IOException e) {
+                log.error("Error waiting for client okay", e);
+                System.exit(-1);
+            }
         }
 
         public void sendMessage(String message){

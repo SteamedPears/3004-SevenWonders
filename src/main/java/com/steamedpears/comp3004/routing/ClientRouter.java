@@ -1,9 +1,7 @@
 package com.steamedpears.comp3004.routing;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
@@ -66,10 +64,10 @@ class ClientRouter extends Router implements Runnable{
         }
     }
 
-    private void waitForCommands(){
+    private boolean waitForCommands(){
         JsonObject obj = parser.parse(in).getAsJsonObject();
         Map<Player, PlayerCommand> commands = jsonToPlayerCommands(obj);
-        getLocalGame().applyCommands(commands);
+        return getLocalGame().applyCommands(commands);
     }
 
     private void waitForInitialConfig(){
@@ -102,11 +100,13 @@ class ClientRouter extends Router implements Runnable{
         log.debug("Starting Client Router");
         waitForLocalPlayerId();
         waitForInitialConfig();
-        while(true){
+        boolean gameOver = false;
+        while(!gameOver){
             waitForTakeTurn();
             getLocalGame().takeTurns();
-            waitForCommands();
+            gameOver = waitForCommands();
             sendOkay();
         }
+        log.debug("Game over; client router stopping");
     }
 }
