@@ -62,13 +62,27 @@ public class PlayerView extends JPanel {
                 player.wake();
             }
         });
-        add(discardButton,"span");
+        add(discardButton,"newline");
 
-        // TODO: build button
+        // build button
+        JButton buildButton = new JButton("Build");
+        buildButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PlayerCommand move = new PlayerCommand();
+                move.action = PlayerCardAction.BUILD;
+                move.card = selectedCardView.getCard().getId();
+                player.setCurrentCommand(move);
+                player.wake();
+            }
+        });
+        // TODO: disable if can't actually build
+        add(buildButton);
+
         // TODO: use to build wonder button
 
         // assets
-        add(new AssetHeaderView(),"gaptop 1, span, h 20!");
+        add(new AssetHeaderView(), "newline, gaptop 1, span, h 20!");
         add(new AssetView(this.player),"gaptop 1, span, h 20!");
 
         // TODO: add some way to switch to viewing another player
