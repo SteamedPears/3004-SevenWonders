@@ -34,7 +34,6 @@ class HostRouter extends Router {
     private List<Client> clients;
     private JsonArray cardJSON;
     private JsonArray wonderJSON;
-    private Map<String, Wonder> wonders;
     private Map<Player, PlayerCommand> registeredMoves;
     private ExecutorService pool;
     private Future lobbyThread;
@@ -56,6 +55,8 @@ class HostRouter extends Router {
 
         registeredMoves = new HashMap<Player, PlayerCommand>();
         pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+2);
+
+        start();
     }
 
     @Override
@@ -106,13 +107,13 @@ class HostRouter extends Router {
 
 
         getLocalGame().setCards(this.cardJSON);
-        this.wonders = Wonder.parseWonders(this.wonderJSON);
+        getLocalGame().setWonders(this.wonderJSON);
     }
 
     private void constructPlayers(){
         log.debug("Constructing players");
         List<Wonder> wonderList = new ArrayList<Wonder>();
-        wonderList.addAll(wonders.values());
+        wonderList.addAll(getLocalGame().getWonders().values());
 
         Collections.shuffle(wonderList);
 
@@ -211,20 +212,9 @@ class HostRouter extends Router {
         result.add(PROP_ROUTE_CARDS, this.cardJSON);
         result.add(PROP_ROUTE_WONDERS, this.wonderJSON);
 
-        JsonObject players = new JsonObject();
-        for(Player player: getLocalGame().getPlayers()){
-            players.addProperty("" + player.getPlayerId(), player.getWonder().getId());
-        }
-        result.add(PROP_ROUTE_PLAYERS, players);
+        result.add(PROP_ROUTE_PLAYERS, getLocalGame().getPlayersAsJSON());
 
-        JsonArray deck = new JsonArray();
-        for(List<Card> ageDeck: getLocalGame().getDeck()){
-            JsonArray ageDeckJSON = new JsonArray();
-            for(Card card: ageDeck){
-                ageDeckJSON.add(new JsonPrimitive(card.getId()));
-            }
-        }
-        result.add(PROP_ROUTE_DECK, deck);
+        result.add(PROP_ROUTE_DECK, getLocalGame().getDeckAsJSON());
 
         broadcast(result.toString());
     }
