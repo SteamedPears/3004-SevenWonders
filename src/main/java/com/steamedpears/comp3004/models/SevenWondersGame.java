@@ -295,11 +295,11 @@ public class SevenWondersGame extends Changeable implements Runnable{
         setDeck(deck);
     }
 
-    public void setPlayers(JsonObject playersJSON, int yourPlayer){
+    public void setPlayers(JsonObject playersJSON){
         for(Map.Entry<String, JsonElement> entry: playersJSON.entrySet()){
             int playerId = Integer.parseInt(entry.getKey());
             String wonderId = entry.getValue().getAsString();
-            if(playerId==yourPlayer){
+            if(playerId==router.getLocalPlayerId()){
                 addLocalPlayer(new HumanPlayer(getWonderById(wonderId), this));
             }else{
                 addPlayer(Player.newAIPlayer(getWonderById(wonderId), this));

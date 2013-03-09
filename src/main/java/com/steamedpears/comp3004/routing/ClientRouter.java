@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
+import com.steamedpears.comp3004.models.SevenWondersGame;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -71,10 +72,20 @@ class ClientRouter extends Router implements Runnable{
         getLocalGame().applyCommands(commands);
     }
 
-    private void waitForInitialState(){
+    private void waitForInitialConfig(){
         JsonObject obj = parser.parse(in).getAsJsonObject();
-        getLocalGame().setCards(obj.getAsJsonArray(PROP_ROUTE_CARDS));
-        getLocalGame().setDeck();
+
+        SevenWondersGame game = getLocalGame();
+        game.setCards(obj.getAsJsonArray(PROP_ROUTE_CARDS));
+        game.setDeck(obj.getAsJsonArray(PROP_ROUTE_DECK));
+        game.setWonders(obj.getAsJsonArray(PROP_ROUTE_WONDERS));
+        game.setPlayers(obj.getAsJsonObject(PROP_ROUTE_PLAYERS));
+
+    }
+
+    private void waitForLocalPlayerId() {
+        JsonObject obj = parser.parse(in).getAsJsonObject();
+        localPlayerId = obj.get(PROP_ROUTE_YOU_ARE).getAsInt();
     }
 
     @Override
@@ -89,7 +100,8 @@ class ClientRouter extends Router implements Runnable{
     @Override
     public void run() {
         log.debug("Starting Client Router");
-        waitForInitialState();
+        waitForLocalPlayerId();
+        waitForInitialConfig();
         while(true){
             waitForTakeTurn();
             getLocalGame().takeTurns();
