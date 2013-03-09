@@ -87,7 +87,6 @@ class HostRouter extends Router {
         broadcastInitialConfig();
 
         startNextTurn();
-        announceChange();
     }
 
     private void loadModelConfigs(){
@@ -190,7 +189,6 @@ class HostRouter extends Router {
                 }else{
                     log.info("game is over");
                 }
-                announceChange();
             }
             try {
                 Thread.sleep(100);

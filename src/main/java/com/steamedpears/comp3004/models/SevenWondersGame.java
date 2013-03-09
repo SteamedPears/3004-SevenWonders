@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class SevenWondersGame implements Runnable{
+public class SevenWondersGame extends Changeable implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
     public static int TURN_LENGTH = 1000*60*2; // 2 minutes
@@ -75,6 +75,7 @@ public class SevenWondersGame implements Runnable{
             runMilitaryConflict();
             if(age>MAX_AGES){
                 gameOver = true;
+                announceChange(this);
             }
         }
 
@@ -102,7 +103,7 @@ public class SevenWondersGame implements Runnable{
 
     private void takeTurnsInternal(){
         changeHands();
-
+        announceChange(this);
         runningPlayers = new HashMap<Future, Player>();
 
         for(Player player: localPlayers){
@@ -327,4 +328,5 @@ public class SevenWondersGame implements Runnable{
 
         return results;
     }
+
 }
