@@ -13,7 +13,7 @@ import java.util.*;
 public class PlayerViewTest extends JFrame {
     PlayerViewTest() throws Exception {
         // initialization
-        setBounds(0,0,1500,800);
+        setBounds(0,0,960,560);
 
         // build hand
         JsonArray cards = (new JsonParser())
@@ -26,11 +26,17 @@ public class PlayerViewTest extends JFrame {
             hand.add(new Card(cards.get(i).getAsJsonObject()));
         }
 
+        // build resources
+        Map<String, Integer> assets = new HashMap<String, Integer>();
+        int i = 0;
+        for(String assetType : Asset.AssetTypes) {
+            assets.put(assetType,++i);
+        }
+
         // build player
         Player player = mock(Player.class);
         when(player.getHand()).thenReturn(hand);
-        when(player.getMilitaryResults()).thenReturn(Arrays.asList(2,3,-5,1));
-        when(player.getGold()).thenReturn(42);
+        when(player.getAssets()).thenReturn(assets);
 
         // create view
         PlayerView view = new PlayerView(player);
