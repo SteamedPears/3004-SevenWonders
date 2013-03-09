@@ -2,8 +2,10 @@ package com.steamedpears.comp3004.routing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
@@ -227,7 +229,9 @@ class HostRouter extends Router {
     }
 
     private void broadcastTakeTurn(){
-        broadcast(COMMAND_ROUTE_TAKE_TURN);
+        JsonObject obj = new JsonObject();
+        obj.addProperty(COMMAND_ROUTE_TAKE_TURN,true);
+        broadcast(obj.toString());
     }
 
     private void broadcastPlayerCommands(){
@@ -243,35 +247,32 @@ class HostRouter extends Router {
 
     private class Client{
         private int clientNumber;
-        private BufferedReader in;
+        private JsonReader in;
+        private JsonParser parser;
         private PrintWriter out;
         private Socket client;
 
         public Client(Socket client, int clientNumber){
             log.debug("Establishing connection with client:" +clientNumber);
             try {
-                this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                this.in = new JsonReader(new InputStreamReader(client.getInputStream()));
                 this.out = new PrintWriter(client.getOutputStream(), true);
             } catch (IOException e) {
                 log.error("Error setting up client streams", e);
                 System.exit(-1);
             }
 
+            this.parser = new JsonParser();
             this.clientNumber = clientNumber;
 
             JsonObject obj = new JsonObject();
             obj.addProperty(PROP_ROUTE_YOU_ARE, clientNumber);
-
+            log.debug(obj.toString());
             sendMessage(obj.toString());
         }
 
         public void getOkay(){
-            try {
-                while(!in.readLine().equals(COMMAND_ROUTE_OK));
-            } catch (IOException e) {
-                log.error("Error waiting for client okay", e);
-                System.exit(-1);
-            }
+            JsonElement elem = parser.parse(in);
         }
 
         public void sendMessage(String message){

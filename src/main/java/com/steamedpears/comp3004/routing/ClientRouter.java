@@ -1,7 +1,9 @@
 package com.steamedpears.comp3004.routing;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
@@ -21,7 +23,7 @@ class ClientRouter extends Router implements Runnable{
     private static Logger log = Logger.getLogger(ClientRouter.class);
 
     private Socket host;
-    private BufferedReader in;
+    private JsonReader in;
     private PrintWriter out;
     private JsonParser parser;
     private Executor pool = Executors.newFixedThreadPool(1);
@@ -29,7 +31,7 @@ class ClientRouter extends Router implements Runnable{
     public ClientRouter(String ipAddress, int port) {
         try {
             this.host = new Socket(ipAddress, port);
-            this.in = new BufferedReader(new InputStreamReader(host.getInputStream()));
+            this.in = new JsonReader(new InputStreamReader(host.getInputStream()));
             this.out = new PrintWriter(host.getOutputStream());
             this.parser = new JsonParser();
             start();
@@ -60,20 +62,15 @@ class ClientRouter extends Router implements Runnable{
 
     private void waitForTakeTurn(){
         log.debug("Waiting for host to give 'okay' to take turn");
-        try {
-            while(!in.readLine().equals(COMMAND_ROUTE_TAKE_TURN));
-            log.debug("Got 'okay' to take turn; taking turn");
-            getLocalGame().takeTurns();
-        } catch (IOException e) {
-            log.error("Exception while waiting for 'okay' to take turn", e);
-            System.exit(-1);
-        }
+        JsonElement elem = parser.parse(in);
+        log.debug("Got 'okay' to take turn; taking turn");
+        getLocalGame().takeTurns();
     }
 
     private boolean waitForCommands(){
         log.debug("Waiting for host to send back all the player commands");
         JsonObject obj = parser.parse(in).getAsJsonObject();
-        log.debug("Got player commands; applying commands");
+        log.debug("Got player commands; applying commands: "+obj.toString());
         Map<Player, PlayerCommand> commands = jsonToPlayerCommands(obj);
         return getLocalGame().applyCommands(commands);
     }
@@ -82,7 +79,7 @@ class ClientRouter extends Router implements Runnable{
         log.debug("Waiting for initial config from host");
         JsonObject obj = parser.parse(in).getAsJsonObject();
 
-        log.debug("Got initial config from host, building model");
+        log.debug("Got initial config from host, building model: "+obj.toString());
         SevenWondersGame game = getLocalGame();
         game.setCards(obj.getAsJsonArray(PROP_ROUTE_CARDS));
         game.setDeck(obj.getAsJsonArray(PROP_ROUTE_DECK));
