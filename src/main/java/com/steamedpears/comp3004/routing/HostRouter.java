@@ -167,6 +167,7 @@ class HostRouter extends Router {
         for(Client client: clients){
             client.getOkay();
         }
+        log.debug("All clients responded 'ok'");
     }
 
     private void listenForCommands(){
@@ -240,7 +241,7 @@ class HostRouter extends Router {
         }
     }
 
-    private class Client extends Thread{
+    private class Client{
         private int clientNumber;
         private BufferedReader in;
         private PrintWriter out;

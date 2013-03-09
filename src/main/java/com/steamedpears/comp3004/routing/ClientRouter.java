@@ -28,9 +28,10 @@ class ClientRouter extends Router implements Runnable{
 
     public ClientRouter(String ipAddress, int port) {
         try {
-            host = new Socket(ipAddress, port);
-            in = new BufferedReader(new InputStreamReader(host.getInputStream()));
-            out = new PrintWriter(host.getOutputStream());
+            this.host = new Socket(ipAddress, port);
+            this.in = new BufferedReader(new InputStreamReader(host.getInputStream()));
+            this.out = new PrintWriter(host.getOutputStream());
+            this.parser = new JsonParser();
             start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,12 +41,14 @@ class ClientRouter extends Router implements Runnable{
 
     @Override
     public void registerMove(Player player, PlayerCommand command) {
+        log.debug("registering move");
         Map<Player, PlayerCommand> commands = new HashMap<Player, PlayerCommand>();
         commands.put(player, command);
         sendCommands(commands);
     }
 
     private void sendOkay(){
+        log.debug("Telling host I am ready for more");
         out.print(COMMAND_ROUTE_OK);
         out.flush();
     }
@@ -56,8 +59,11 @@ class ClientRouter extends Router implements Runnable{
     }
 
     private void waitForTakeTurn(){
+        log.debug("Waiting for host to give 'okay' to take turn");
         try {
             while(!in.readLine().equals(COMMAND_ROUTE_TAKE_TURN));
+            log.debug("Got 'okay' to take turn; taking turn");
+            getLocalGame().takeTurns();
         } catch (IOException e) {
             log.error("Exception while waiting for 'okay' to take turn", e);
             System.exit(-1);
@@ -65,25 +71,31 @@ class ClientRouter extends Router implements Runnable{
     }
 
     private boolean waitForCommands(){
+        log.debug("Waiting for host to send back all the player commands");
         JsonObject obj = parser.parse(in).getAsJsonObject();
+        log.debug("Got player commands; applying commands");
         Map<Player, PlayerCommand> commands = jsonToPlayerCommands(obj);
         return getLocalGame().applyCommands(commands);
     }
 
     private void waitForInitialConfig(){
+        log.debug("Waiting for initial config from host");
         JsonObject obj = parser.parse(in).getAsJsonObject();
 
+        log.debug("Got initial config from host, building model");
         SevenWondersGame game = getLocalGame();
         game.setCards(obj.getAsJsonArray(PROP_ROUTE_CARDS));
         game.setDeck(obj.getAsJsonArray(PROP_ROUTE_DECK));
         game.setWonders(obj.getAsJsonArray(PROP_ROUTE_WONDERS));
         game.setPlayers(obj.getAsJsonObject(PROP_ROUTE_PLAYERS));
-
+        log.debug("Model built");
     }
 
     private void waitForLocalPlayerId() {
+        log.debug("Getting localPlayerId from host");
         JsonObject obj = parser.parse(in).getAsJsonObject();
         localPlayerId = obj.get(PROP_ROUTE_YOU_ARE).getAsInt();
+        log.debug("Got localPlayerId: "+localPlayerId);
     }
 
     @Override
@@ -103,7 +115,6 @@ class ClientRouter extends Router implements Runnable{
         boolean gameOver = false;
         while(!gameOver){
             waitForTakeTurn();
-            getLocalGame().takeTurns();
             gameOver = waitForCommands();
             sendOkay();
         }
