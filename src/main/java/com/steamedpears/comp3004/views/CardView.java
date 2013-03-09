@@ -11,31 +11,41 @@ import java.awt.event.*;
 public class CardView extends JLabel {
     public static final int DEFAULT_WIDTH = 100;
     private Card card;
-    private SelectionListener selectionListener;
+    private CardSelectionListener selectionListener;
     static Logger logger = Logger.getLogger(SevenWonders.class);
+    private int width;
 
     public CardView(Card card) {
         this(card, DEFAULT_WIDTH);
     }
 
     public CardView(Card card, int width) {
+        this.width = width;
         addMouseListener(new CardMouseListener());
         setCard(card);
-        setCardWidth(width);
+        update();
     }
 
-    public void setCard(Card card) { this.card = card; }
+    public void setCard(Card card) {
+        this.card = card;
+        update();
+    }
+
+    public Card getCard() {
+        return this.card;
+    }
 
     public void setCardWidth(int width) {
+        this.width = width;
         setIcon(getIconOfSize(card, width));
     }
 
-    public void setSelectionListener(SelectionListener selectionListener) {
+    public void setSelectionListener(CardSelectionListener selectionListener) {
         this.selectionListener = selectionListener;
     }
 
-    public abstract class SelectionListener {
-        public abstract void handleSelection(Card card);
+    public void update() {
+        setCardWidth(width);
     }
 
     private static Icon getIconOfSize(Card card, int width) {

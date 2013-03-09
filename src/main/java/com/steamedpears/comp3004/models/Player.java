@@ -198,7 +198,7 @@ public abstract class Player implements Runnable{
         this.playerRight = playerRight;
     }
 
-    protected final void setCurrentCommand(PlayerCommand currentCommand){
+    public final void setCurrentCommand(PlayerCommand currentCommand){
         this.currentCommand = currentCommand;
     }
 

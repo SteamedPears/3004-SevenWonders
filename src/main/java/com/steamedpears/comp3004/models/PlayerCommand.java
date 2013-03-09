@@ -20,4 +20,8 @@ public class PlayerCommand{
     public Map<String, Integer> leftPurchases;
     public Map<String, Integer> rightPurchases;
     public PlayerCommand followup; //for if you can perform multiple actions this turn
+
+    public String toString() {
+        return "PlayerCommand[" + this.action.toString() + " " + this.card + "]";
+    }
 }
