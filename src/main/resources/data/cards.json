@@ -918,6 +918,24 @@
          }
       },
       {
+         "name":"Palace",
+         "players":7,
+         "age":3,
+         "guild":"blue",
+         "cost":{
+            "s":1,
+            "o":1,
+            "w":1,
+            "c":1,
+            "g":1,
+            "p":1,
+            "l":1
+         },
+         "baseAssets":{
+            "victory":8
+         }
+      },
+      {
          "name":"Courthouse",
          "players":3,
          "age":2,
@@ -1120,6 +1138,19 @@
          }
       },
       {
+         "name":"Fortifications",
+         "players":7,
+         "age":3,
+         "guild":"red",
+         "cost":{
+            "o":3,
+            "s":1
+         },
+         "baseAssets":{
+            "army":3
+         }
+      },
+      {
          "name":"Circus",
          "players":4,
          "age":3,
@@ -1175,6 +1206,20 @@
       {
          "name":"Arsenal",
          "players":4,
+         "age":3,
+         "guild":"red",
+         "cost":{
+            "w":2,
+            "o":1,
+            "l":1
+         },
+         "baseAssets":{
+            "army":3
+         }
+      },
+      {
+         "name":"Arsenal",
+         "players":7,
          "age":3,
          "guild":"red",
          "cost":{
@@ -1732,6 +1777,24 @@
       {
          "name":"Arena",
          "players":5,
+         "age":3,
+         "guild":"yellow",
+         "cost":{
+            "s":2,
+            "o":1
+         },
+         "baseAssets":{
+            "victory":1,
+            "coin":3
+         },
+         "multiplierAssets":[
+            "wonderstages",
+            "wonderstages"
+         ]
+      },
+      {
+         "name":"Arena",
+         "players":7,
          "age":3,
          "guild":"yellow",
          "cost":{
@@ -1972,6 +2035,20 @@
          }
       },
       {
+         "name":"Observatory",
+         "players":7,
+         "age":3,
+         "guild":"green",
+         "cost":{
+            "o":2,
+            "g":1,
+            "l":1
+         },
+         "baseAssets":{
+            "gear":1
+         }
+      },
+      {
          "name":"University",
          "players":3,
          "age":3,
@@ -2002,6 +2079,19 @@
       {
          "name":"Academy",
          "players":3,
+         "age":3,
+         "guild":"green",
+         "cost":{
+            "s":3,
+            "g":1
+         },
+         "baseAssets":{
+            "comp":1
+         }
+      },
+      {
+         "name":"Academy",
+         "players":7,
          "age":3,
          "guild":"green",
          "cost":{
