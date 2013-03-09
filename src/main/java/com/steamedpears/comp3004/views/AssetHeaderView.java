@@ -5,13 +5,13 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 
 public class AssetHeaderView extends JPanel {
-    private static String config = "w 70!, aligny top";
+    private static String config = "w 70!";
 
     public AssetHeaderView() {
         setLayout(new MigLayout(
                 "aligny top", // Layout Constraints
-                "0[]0[]0", // Column Constraints
-                "0[]0[]0"  // Row Constraints
+                "0[]", // Column Constraints
+                "0[]"  // Row Constraints
         ));
 
         // TODO: replace these with icons

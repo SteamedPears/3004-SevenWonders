@@ -26,10 +26,17 @@ public class PlayerViewTest extends JFrame {
             hand.add(new Card(cards.get(i).getAsJsonObject()));
         }
 
+        // build resources
+        Map<String, Integer> assets = new HashMap<String, Integer>();
+        int i = 0;
+        for(String assetType : Asset.AssetTypes) {
+            assets.put(assetType,++i);
+        }
+
         // build player
         Player player = mock(Player.class);
         when(player.getHand()).thenReturn(hand);
-        when(player.getAssets()).thenReturn(new HashMap<String, Integer>());
+        when(player.getAssets()).thenReturn(assets);
 
         // create view
         PlayerView view = new PlayerView(player);

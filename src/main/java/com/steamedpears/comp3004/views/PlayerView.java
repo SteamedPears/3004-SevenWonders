@@ -38,7 +38,9 @@ public class PlayerView extends JPanel {
                 @Override
                 public void handleSelection(Card card) {
                     logger.info("Selecting " + card);
-                    selectedCardView.setCard(card);
+                    if(selectedCardView != null) {
+                        selectedCardView.setCard(card);
+                    }
                 }
             });
             add(cv, "aligny top");
