@@ -1,6 +1,5 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.views;
 import com.steamedpears.comp3004.models.*;
-import com.steamedpears.comp3004.views.*;
 
 import com.google.gson.*;
 import org.apache.log4j.*;

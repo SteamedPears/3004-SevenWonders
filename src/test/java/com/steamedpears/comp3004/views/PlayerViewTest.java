@@ -1,8 +1,7 @@
-package com.steamedpears.comp3004;
+package com.steamedpears.comp3004.views;
 
 import com.google.gson.*;
 import com.steamedpears.comp3004.models.*;
-import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.*;
 
 import static org.mockito.Mockito.*;
