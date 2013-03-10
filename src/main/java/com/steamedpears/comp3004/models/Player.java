@@ -503,4 +503,8 @@ public abstract class Player implements Runnable{
         return total;
     }
 
+    public boolean hasFinishedWonder() {
+        return Asset.getAsset(getAssets(),ASSET_WONDER_STAGES) == wonder.getStages().size();
+    }
+
 }
