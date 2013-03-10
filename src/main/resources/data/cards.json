@@ -1661,7 +1661,6 @@
             "coin":1
          },
          "multiplierAssets":[
-            "brown",
             "brown"
          ]
       },
@@ -1680,7 +1679,6 @@
             "coin":1
          },
          "multiplierAssets":[
-            "brown",
             "brown"
          ]
       },
@@ -1698,7 +1696,6 @@
             "coin":1
          },
          "multiplierAssets":[
-            "yellow",
             "yellow"
          ]
       },
@@ -1716,7 +1713,6 @@
             "coin":1
          },
          "multiplierAssets":[
-            "yellow",
             "yellow"
          ]
       },
@@ -1734,7 +1730,6 @@
             "coin":1
          },
          "multiplierAssets":[
-            "gray",
             "gray"
          ]
       },
@@ -1752,7 +1747,6 @@
             "coin":1
          },
          "multiplierAssets":[
-            "gray",
             "gray"
          ]
       },
@@ -1770,7 +1764,6 @@
             "coin":3
          },
          "multiplierAssets":[
-            "wonderstages",
             "wonderstages"
          ]
       },
@@ -1788,7 +1781,6 @@
             "coin":3
          },
          "multiplierAssets":[
-            "wonderstages",
             "wonderstages"
          ]
       },
@@ -1806,7 +1798,6 @@
             "coin":3
          },
          "multiplierAssets":[
-            "wonderstages",
             "wonderstages"
          ]
       },

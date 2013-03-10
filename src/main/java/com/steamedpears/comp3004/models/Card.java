@@ -189,7 +189,7 @@ public class Card {
      * @param player the player being charged
      */
     public void playCard(Player player){
-        //TODO: charges the Player for the cost of the Card
+        player.changeGold(-Asset.getAsset(getCost(),Asset.ASSET_GOLD));
     }
 
     /**
@@ -198,8 +198,31 @@ public class Card {
      * @return the Assets
      */
     public Map<String, Integer> getAssets(Player player){
-        //TODO: compute the assets this card yields if played by this player
-        return new HashMap<String, Integer>();
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        if(!isChoice){
+            int multiplier = 1;
+            if(!multiplierAssets.isEmpty()){
+                multiplier = 0;
+                for(String target: multiplierTargets){
+                    Player targetPlayer;
+                    if(target.equals(PLAYER_LEFT)){
+                        targetPlayer = player.getPlayerLeft();
+                    }else if(target.equals(PLAYER_RIGHT)){
+                        targetPlayer = player.getPlayerRight();
+                    }else{ //self
+                        targetPlayer = player;
+                    }
+                    Map<String, Integer> targetPlayerAssets = targetPlayer.getConcreteAssets();
+                    for(String multiplierAsset: multiplierAssets){
+                        multiplier+=Asset.getAsset(targetPlayerAssets, multiplierAsset);
+                    }
+                }
+            }
+            for(String asset: baseAssets.keySet()){
+                result.put(asset, baseAssets.get(asset)*multiplier);
+            }
+        }
+        return result;
     }
 
     /**
@@ -208,9 +231,13 @@ public class Card {
      * @return the Assets
      */
     public Set<String> getAssetsOptional(Player player){
-        //TODO: compute the list of assets this card yields if it isChoice
-
-        return new HashSet<String>();
+        Set<String> result = new HashSet<String>();
+        if(isChoice){
+            for(String asset: baseAssets.keySet()){
+                result.add(asset);
+            }
+        }
+        return result;
     }
 
     /**
@@ -233,8 +260,23 @@ public class Card {
      * @return whether the Player can afford this Card
      */
     public boolean canAfford(Player player, PlayerCommand command) {
-        //TODO: determine if the given player can play this card with the given command's trades
-
-        return true;
+        Map<String, Integer> costLessBase = new HashMap<String, Integer>();
+        Map<String, Integer> playerAssets = player.getAssets();
+        for(String asset: cost.keySet()){
+            int assetQuantity = cost.get(asset);
+            assetQuantity-=getAsset(playerAssets, asset);
+            assetQuantity-=getAsset(command.leftPurchases, asset);
+            assetQuantity-=getAsset(command.rightPurchases, asset);
+            if(assetQuantity>0){
+                costLessBase.put(asset, assetQuantity);
+            }
+        }
+        if(costLessBase.size()==0){
+            return true;
+        }else{
+            return existsValidChoices(player.getOptionalAssetsComplete(), costLessBase);
+        }
     }
+
+
 }
