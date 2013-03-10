@@ -64,10 +64,14 @@ public final class Asset {
 
     //utility methods
     public static int getAsset(Map<String, Integer> map, String key){
-        if(map.containsKey(key)){
-            return map.get(key);
-        }else{
+        if(map==null){
             return 0;
+        }else{
+            if(map.containsKey(key)){
+                return map.get(key);
+            }else{
+                return 0;
+            }
         }
     }
 

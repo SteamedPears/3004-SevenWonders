@@ -60,7 +60,8 @@ public class SevenWondersGame extends Changeable implements Runnable{
                 player.applyCommand(command);
             } catch (Exception e) {
                 try {
-                    log.debug(player+" made invalid move "+command+", using null move");
+                    log.debug(player+" made invalid move "+command+", using null move - ");
+                    e.printStackTrace();
                     command = PlayerCommand.getNullCommand(player);
                     commands.put(player, command);
                     player.applyCommand(command);

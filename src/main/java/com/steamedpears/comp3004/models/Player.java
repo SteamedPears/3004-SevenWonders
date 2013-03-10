@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,7 +73,7 @@ public abstract class Player implements Runnable{
     }
 
     private void discardCard(Card card, boolean isFinal){
-        log.debug("discarding card: "+isFinal);
+        log.debug("discarding card: " + isFinal);
         if(isFinal){
             game.discard(card);
             hand.remove(card);
@@ -170,11 +171,49 @@ public abstract class Player implements Runnable{
             this.gold+=stagedCommandResult.get(ASSET_GOLD);
         }
         while(command!=null){
+            payForTrades(command);
             resolveCommand(command, true);
-            if(command.followup!=null && command.followup.action!=UNDISCARD){
-                wonder.expendLimitedAsset(ASSET_DOUBLE_PLAY);
-            }
             command = command.followup;
+        }
+    }
+
+    private void payForTrades(PlayerCommand command) {
+        int total = 0;
+
+        Set<String> leftDiscounts = new HashSet<String>();
+        Set<String> rightDiscounts = new HashSet<String>();
+
+        List<Card> cards = new ArrayList<Card>();
+        cards.addAll(playedCards);
+
+        List<Card> stages = wonder.getStages();
+        for(int i=0; i<wonder.getCurrentStage(); ++i){
+            cards.add(stages.get(i));
+        }
+
+        for(Card card: cards){
+            if(card.getDiscountsTargets().contains(Card.PLAYER_LEFT)){
+                leftDiscounts.addAll(card.getDiscountsAssets());
+            }
+            if(card.getDiscountsTargets().contains(Card.PLAYER_RIGHT)){
+                rightDiscounts.addAll(card.getDiscountsAssets());
+            }
+        }
+
+        total+=getCostOfTrade(command.leftPurchases, leftDiscounts);
+        total+=getCostOfTrade(command.rightPurchases, rightDiscounts);
+        gold-=total;
+    }
+
+    private int getCostOfTrade(Map<String,Integer> purchases, Set<String> discounts) {
+        if(purchases==null){
+            return 0;
+        }else{
+            int total = 0;
+            for(String key: purchases.keySet()){
+                total+= purchases.get(key)*(discounts.contains(key) ? 1 : 2);
+            }
+            return total;
         }
     }
 
@@ -220,6 +259,7 @@ public abstract class Player implements Runnable{
     public final boolean isValid(PlayerCommand command){
         log.debug(this+" validating move "+command);
         //initial result: either they're doing one action, or their other action is UNDISCARD
+        log.debug("validating number/types of moves");
         boolean result = command.followup==null
                 || command.followup.action==UNDISCARD;
 
@@ -231,8 +271,10 @@ public abstract class Player implements Runnable{
                     && hand.size()==2
                     && !command.action.equals(UNDISCARD);
         }
+        if(!result) log.debug("validating failed after move type sanity check");
 
         result = result && validateCanMakeTrades(command);
+        if(!result) log.debug("validation failed after trade check");
 
         //if everything is good so far, perform specific validation
         if(command.action.equals(BUILD)){
@@ -246,8 +288,9 @@ public abstract class Player implements Runnable{
         }else if(command.action.equals(PLAY_FREE)){
             result = result && validatePlayFree(command);
         }
+        if(!result) log.debug("validation failed after specific command check");
 
-        return result && (command.followup==null || isValid(command.followup));
+        return result;
     }
 
     private boolean validateHasCard(PlayerCommand command){
@@ -301,14 +344,18 @@ public abstract class Player implements Runnable{
 
     private boolean validateCanMakeTrades(PlayerCommand command){
         log.debug("validating player can make the trades they are trying to make");
-        Map<String, Integer> leftTradeables = getPlayerLeft().getAssetsTradeable();
-        Map<String, Integer> rightTradeables = getPlayerRight().getAssetsTradeable();
-        Map<String, Integer> leftPurchases = command.leftPurchases;
-        Map<String, Integer> rightPurchases = command.rightPurchases;
-        Map<String, Integer> leftPurchasesLessBase = subtractAssets(leftPurchases, leftTradeables);
-        Map<String, Integer> rightPurchasesLessBase = subtractAssets(rightPurchases, rightTradeables);
-        return existsValidChoices(getPlayerLeft().getOptionalAssetsCompleteTradeable(), leftPurchasesLessBase)
-                && existsValidChoices(getPlayerRight().getOptionalAssetsCompleteTradeable(), rightPurchasesLessBase);
+        return validateCanMakeTradesInternal(command.leftPurchases, getPlayerLeft())
+                && validateCanMakeTradesInternal(command.rightPurchases, getPlayerRight());
+    }
+
+    private boolean validateCanMakeTradesInternal(Map<String, Integer> purchases, Player player){
+        if(purchases==null){
+            return true;
+        }else{
+            Map<String, Integer> tradeables = player.getAssetsTradeable();
+            Map<String, Integer> purchasesLessBase = subtractAssets(purchases, tradeables);
+            return existsValidChoices(player.getOptionalAssetsCompleteTradeable(), purchasesLessBase);
+        }
     }
 
     public final Player getPlayerLeft(){
