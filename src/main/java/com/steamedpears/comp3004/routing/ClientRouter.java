@@ -32,7 +32,7 @@ class ClientRouter extends Router implements Runnable{
         try {
             this.host = new Socket(ipAddress, port);
             this.in = new JsonReader(new InputStreamReader(host.getInputStream()));
-            this.out = new PrintWriter(host.getOutputStream());
+            this.out = new PrintWriter(host.getOutputStream(), true);
             this.parser = new JsonParser();
             this.totalHumanPlayers = 0;
             start();
@@ -43,8 +43,8 @@ class ClientRouter extends Router implements Runnable{
     }
 
     @Override
-    public void registerMove(Player player, PlayerCommand command) {
-        log.debug("registering move");
+    public synchronized void registerMove(Player player, PlayerCommand command) {
+        log.debug("Registering command from player: "+player.getPlayerId()+" - "+command);
         Map<Player, PlayerCommand> commands = new HashMap<Player, PlayerCommand>();
         commands.put(player, command);
         sendCommands(commands);
@@ -52,13 +52,18 @@ class ClientRouter extends Router implements Runnable{
 
     private void sendOkay(){
         log.debug("Telling host I am ready for more");
-        out.print(COMMAND_ROUTE_OK);
-        out.flush();
+        JsonObject obj = new JsonObject();
+        obj.addProperty(COMMAND_ROUTE_OK, true);
+        send(obj.toString());
     }
 
     private void sendCommands(Map<Player, PlayerCommand> commands){
-        out.print(playerCommandsToJson(commands).toString());
-        out.flush();
+        send(playerCommandsToJson(commands).toString());
+    }
+
+    private void send(String string){
+        log.debug("Sending JSON: "+string);
+        out.println(string);
     }
 
     private void waitForTakeTurn(){
