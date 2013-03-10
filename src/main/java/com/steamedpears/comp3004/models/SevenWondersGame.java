@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 public class SevenWondersGame extends Changeable implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
-    public static int TURN_LENGTH = 1000*60*2; // 2 minutes
+    public static int TURN_LENGTH = 1000*2; // 2 minutes
     private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;
@@ -137,12 +137,12 @@ public class SevenWondersGame extends Changeable implements Runnable{
                     finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
                     PlayerCommand command = player.getCurrentCommand();
-                    log.debug("Player returned with command " + command);
+                    log.debug("Player returned with command: "+ player.getPlayerId()+ " - " + command);
                     router.registerMove(player, command);
                 }else if(timeUp){
-                    log.debug("Player timed out");
-                    finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
+                    log.debug("Player timed out: "+player.getPlayerId());
+                    finishedPlayers.add(future);
                     future.cancel(true);
                     router.registerMove(player, PlayerCommand.getNullCommand(player));
                 }

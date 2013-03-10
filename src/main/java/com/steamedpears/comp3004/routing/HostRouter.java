@@ -14,6 +14,7 @@ import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -60,7 +61,7 @@ class HostRouter extends Router {
 
     @Override
     public synchronized void registerMove(Player player, PlayerCommand command) {
-        log.debug("registering move");
+        log.debug("Registering command from player: "+player.getPlayerId()+" - "+command);
         registeredMoves.put(player, command);
     }
 
@@ -131,8 +132,10 @@ class HostRouter extends Router {
             }else{
                 player = Player.newAIPlayer(wonder, game);
             }
-            if(i==0 || i>=clients.size()){
+            if(i==0 || i>clients.size()){
                 game.addLocalPlayer(player);
+            }else{
+                game.addPlayer(player);
             }
         }
 
@@ -160,6 +163,9 @@ class HostRouter extends Router {
         while(!Thread.interrupted()){
             try{
                 Client client = new Client(serverSocket.accept(), clients.size()+1);
+                if(Thread.interrupted()){
+                    return;
+                }
                 clients.add(client);
                 announceChange(this);
             }catch(IOException e){
@@ -218,9 +224,13 @@ class HostRouter extends Router {
         log.debug("Starting next turn");
         getLocalGame().takeTurns();
         broadcastTakeTurn();
+        for(Client client: clients){
+            pool.execute(client);
+        }
     }
 
     private void broadcastInitialConfig(){
+        log.debug("broadcasting initial config");
         Gson gson = new Gson();
         JsonObject result = new JsonObject();
         result.add(PROP_ROUTE_CARDS, this.cardJSON);
@@ -234,12 +244,14 @@ class HostRouter extends Router {
     }
 
     private void broadcastTakeTurn(){
+        log.debug("broadcasting 'take turn'");
         JsonObject obj = new JsonObject();
         obj.addProperty(COMMAND_ROUTE_TAKE_TURN,true);
         broadcast(obj.toString());
     }
 
     private void broadcastPlayerCommands(){
+        log.debug("broadcasting players commands");
         broadcast(playerCommandsToJson(registeredMoves).toString());
         registeredMoves = new HashMap<Player, PlayerCommand>();
     }
@@ -250,9 +262,9 @@ class HostRouter extends Router {
         }
     }
 
-    private class Client{
+    private class Client implements Runnable{
         private int clientNumber;
-        private JsonReader in;
+        private BufferedReader in;
         private JsonParser parser;
         private PrintWriter out;
         private Socket client;
@@ -260,7 +272,7 @@ class HostRouter extends Router {
         public Client(Socket client, int clientNumber){
             log.debug("Establishing connection with client:" +clientNumber);
             try {
-                this.in = new JsonReader(new InputStreamReader(client.getInputStream()));
+                this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 this.out = new PrintWriter(client.getOutputStream(), true);
             } catch (IOException e) {
                 log.error("Error setting up client streams", e);
@@ -278,11 +290,30 @@ class HostRouter extends Router {
 
         public void getOkay(){
             JsonElement elem = parser.parse(in);
+            log.debug("Got okay: "+clientNumber);
         }
 
         public void sendMessage(String message){
-            out.print(message);
-            out.flush();
+            log.debug("Sending ("+clientNumber+"): "+message);
+            out.println(message);
+        }
+
+        public void run(){
+            log.debug("Listening for client commands: "+clientNumber);
+            try {
+                String result = in.readLine();
+                log.debug("got: "+result);
+                JsonObject commandsJSON = parser.parse(result).getAsJsonObject();
+                Map<Player, PlayerCommand> commands = jsonToPlayerCommands(commandsJSON);
+                for(Player player: commands.keySet()){
+                    registerMove(player, commands.get(player));
+                }
+                log.debug("Got client commands: "+clientNumber);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                System.exit(-1);
+            }
+
         }
     }
 
