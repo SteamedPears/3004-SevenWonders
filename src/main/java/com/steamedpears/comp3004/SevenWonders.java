@@ -65,7 +65,9 @@ public class SevenWonders {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 try {
-                    if(!isHost && !gameStarted){
+                    if(isHost) {
+                        ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
+                    } else if(!gameStarted){
                         startGame();
                     }
                     updateView();
