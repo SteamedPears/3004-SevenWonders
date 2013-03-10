@@ -37,6 +37,7 @@ public class SevenWonders {
     Router router;
     PlayerView playerView;
     boolean isHost;
+    boolean gameStarted;
 
     public static enum View { PLAYER_VIEW, HIGHLEVEL_VIEW };
     private View currentView;
@@ -49,9 +50,9 @@ public class SevenWonders {
         openNewGameDialog();
     }
 
-    public void createGame(boolean isHost, String ipAddress, int port, int players) {
+    public void createGame(boolean isHosting, String ipAddress, int port, int players) {
         logger.info("Creating game");
-        this.isHost = isHost;
+        this.isHost = isHosting;
         closeNewGameDialog();
         if(isHost){
             router = Router.getHostRouter(port, players);
@@ -64,7 +65,7 @@ public class SevenWonders {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 try {
-                    if(!router.isPlaying()){
+                    if(!isHost && !gameStarted){
                         startGame();
                     }
                     updateView();
@@ -81,6 +82,7 @@ public class SevenWonders {
         closeDialog();
         selectPlayerView();
         if(isHost) router.beginGame();
+        this.gameStarted = true;
     }
 
     private void selectPlayerView() {
