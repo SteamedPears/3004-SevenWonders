@@ -178,6 +178,10 @@ public abstract class Player implements Runnable{
         }
     }
 
+    public void handleNewAge(){
+        wonder.handleNewAge();
+    }
+
     //extend with a GUI or AI
     //when handleTurn terminates, currentCommand should be set with the Player's desired command
     protected abstract void handleTurn();
@@ -259,12 +263,14 @@ public abstract class Player implements Runnable{
 
     private boolean validatePlayFree(PlayerCommand command) {
         return validateHasCard(command)
-                && validateHasNotPlayedCard(command);
+                && validateHasNotPlayedCard(command)
+                && getAsset(getAssets(), ASSET_BUILD_FREE)>0;
     }
 
     private boolean validateUndiscard(PlayerCommand command) {
         return game.getDiscard().contains(game.getCardById(command.card))
-                && validateHasNotPlayedCard(command);
+                && validateHasNotPlayedCard(command)
+                && getAsset(getAssets(), ASSET_DISCARD)>0;
     }
 
     private boolean validateDiscard(PlayerCommand command) {

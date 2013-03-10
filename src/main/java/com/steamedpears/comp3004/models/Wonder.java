@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Wonder {
+
     private class WonderSide{
         //stages are represented by cards for simplicity
         public List<Card> stages;
@@ -59,6 +60,8 @@ public class Wonder {
     private WonderSide sideB;
     private WonderSide currentSide;
     private int currentStage = 0;
+    private boolean builtFreeThisAge;
+    private int undiscards;
 
     //constructor//////////////////////////////////////////////////
     public Wonder(JsonObject obj){
@@ -76,6 +79,8 @@ public class Wonder {
     public void reset(){
         currentStage = 0;
         currentSide = sideA;
+        builtFreeThisAge = false;
+        undiscards = 0;
     }
 
     /**
@@ -92,7 +97,15 @@ public class Wonder {
      * @param assetName name of resource expended
      */
     public void expendLimitedAsset(String assetName){
-        //TODO: make it so the Player can't reuse this ever again, somehow (i.e. if this is Asset.ASSET_BUILD_FREE, disable it)
+        if(assetName.equals(Asset.ASSET_BUILD_FREE)){
+            builtFreeThisAge = true;
+        }else if(assetName.equals(Asset.ASSET_DISCARD)){
+            undiscards++;
+        }
+    }
+
+    public void handleNewAge() {
+        builtFreeThisAge = false;
     }
 
     //setters///////////////////////////////////////////////////////
@@ -200,6 +213,8 @@ public class Wonder {
         }
         Map<String, Integer> privates = new HashMap<String, Integer>();
         privates.put(currentSide.startResource, 1);
+        privates.put(Asset.ASSET_BUILD_FREE, builtFreeThisAge ? 0 : -1);
+        privates.put(Asset.ASSET_DISCARD, -undiscards);
         results.add(privates);
 
         return Asset.sumAssets(results);
