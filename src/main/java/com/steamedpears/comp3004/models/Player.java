@@ -508,7 +508,7 @@ public abstract class Player implements Runnable{
      * @return true only if this player has completed their wonder
      */
     public boolean hasFinishedWonder() {
-        return Asset.getAsset(getAssets(),ASSET_WONDER_STAGES) == wonder.getStages().size();
+        return wonder.getNextStage() == null;
     }
 
     /**
