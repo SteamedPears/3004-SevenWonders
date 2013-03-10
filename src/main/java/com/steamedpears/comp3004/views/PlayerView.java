@@ -1,4 +1,5 @@
 package com.steamedpears.comp3004.views;
+import com.steamedpears.comp3004.models.Asset;
 import com.steamedpears.comp3004.models.Card;
 import com.steamedpears.comp3004.models.Player;
 
@@ -19,12 +20,35 @@ public class PlayerView extends JPanel {
 
     private Player player;
     private CardView selectedCardView;
+    private JLabel messageLabel;
+    private JLabel persistentMessageLabel;
+    private Map<String, String> persistentMessages;
 
     public PlayerView(Player player) {
         logger.info("Created with player[" + player + "]");
         setLayout(new MigLayout());
         this.player = player;
+        persistentMessages = new HashMap<String, String>();
         update();
+    }
+
+    public void setMessage(String message) {
+        if(messageLabel == null) return;
+        messageLabel.setText(message);
+    }
+
+    public void addMessage(String key, String message) {
+        persistentMessages.put(key,message);
+        updatePersistentMessages();
+    }
+
+    private void updatePersistentMessages() {
+        StringBuffer message = new StringBuffer();
+        for(String s : persistentMessages.values()) {
+            message.append(s);
+            message.append("\n");
+        }
+        persistentMessageLabel.setText(message.toString());
     }
 
     public void update() {
@@ -86,20 +110,34 @@ public class PlayerView extends JPanel {
         buttonPanel.add(playButton,"span");
 
         // build wonder button
-        JButton buildButton = new JButton("Build Wonder");
-        buildButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.BUILD;
-                move.card = selectedCardView.getCard().getId();
-                player.setCurrentCommand(move);
-                player.wake();
-            }
-        });
-        buttonPanel.add(buildButton,"span");
+        if(!player.hasFinishedWonder()) {
+            JButton buildButton = new JButton("Build Wonder");
+            buildButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    PlayerCommand move = new PlayerCommand();
+                    move.action = PlayerCardAction.BUILD;
+                    move.card = selectedCardView.getCard().getId();
+                    player.setCurrentCommand(move);
+                    player.wake();
+                }
+            });
+            buttonPanel.add(buildButton,"span");
+        }
 
-        add(buttonPanel,"span");
+        add(buttonPanel,"span 2");
+
+        // messages
+        JPanel messagePanel = new JPanel();
+        messagePanel.setLayout(new MigLayout());
+
+        messageLabel = new JLabel("The game has begun!");
+        messagePanel.add(messageLabel, "span");
+
+        persistentMessageLabel = new JLabel("");
+        messagePanel.add(persistentMessageLabel,"span");
+
+        add(messagePanel,"span");
 
         // assets
         add(new AssetHeaderView(), "newline, gaptop 1, span, h 20!");

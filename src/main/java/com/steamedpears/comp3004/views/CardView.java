@@ -12,7 +12,7 @@ public class CardView extends JLabel {
     public static final int DEFAULT_WIDTH = 100;
     private Card card;
     private CardSelectionListener selectionListener;
-    static Logger logger = Logger.getLogger(SevenWonders.class);
+    static Logger logger = Logger.getLogger(CardView.class);
     private int width;
 
     public CardView(Card card) {
@@ -50,7 +50,7 @@ public class CardView extends JLabel {
 
     private static Icon getIconOfSize(Card card, int width) {
         return new ImageIcon((new ImageIcon(card.getImagePath()))
-                .getImage().getScaledInstance(width, -1, Image.SCALE_FAST));
+                .getImage().getScaledInstance(width, -1, Image.SCALE_SMOOTH));
     }
 
     private class CardMouseListener extends MouseAdapter {
