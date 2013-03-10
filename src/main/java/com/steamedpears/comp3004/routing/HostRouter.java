@@ -161,6 +161,7 @@ class HostRouter extends Router {
         while(!Thread.interrupted()){
             try{
                 while(clients.size()+1==maxPlayers){
+                    log.debug("Game full, waiting for game start or loss of clients");
                     garbageCollectClients();
                     try {
                         Thread.sleep(200);
@@ -169,10 +170,13 @@ class HostRouter extends Router {
                     }
                 }
 
+                log.debug("Waiting for new client");
                 Socket socket = serverSocket.accept();
+                log.debug("Got new client");
                 garbageCollectClients();
 
                 if(Thread.interrupted()){
+                    log.debug("Oh wait, the game has started, killing the client and returning");
                     socket.close();
                     return;
                 }
@@ -181,6 +185,7 @@ class HostRouter extends Router {
 
                 clients.put(client.clientNumber, client);
                 announceChange(this);
+                log.debug("Client added");
             }catch(IOException e){
                 log.error("Error establishing connection to client", e);
                 System.exit(-1);
@@ -189,6 +194,7 @@ class HostRouter extends Router {
     }
 
     private void garbageCollectClients() {
+        log.debug("Garbage collecting clients");
         List<Integer> deadClients = new ArrayList<Integer>();
         for(Client client: clients.values()){
             if(client.isClosed()){
@@ -199,9 +205,11 @@ class HostRouter extends Router {
         for(Integer clientNumber: deadClients){
             clients.remove(clientNumber);
         }
+        log.debug("Clients garbage collected");
     }
 
     private int getNextClientId(){
+        log.debug("Getting client id");
         int id = 1;
         while(clients.containsKey(id)){
             id++;
@@ -305,6 +313,7 @@ class HostRouter extends Router {
 
         public Client(Socket client, int clientNumber){
             log.debug("Establishing connection with client:" +clientNumber);
+            this.client = client;
             try {
                 this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 this.out = new PrintWriter(client.getOutputStream(), true);
@@ -356,7 +365,7 @@ class HostRouter extends Router {
         }
 
         public boolean isClosed() {
-            return client.isClosed();
+            return client.isClosed() || !client.isConnected();
         }
     }
 
