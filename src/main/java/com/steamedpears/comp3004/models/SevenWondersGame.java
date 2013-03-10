@@ -50,6 +50,8 @@ public class SevenWondersGame extends Changeable implements Runnable{
         this.gameOver = false;
     }
 
+    //methods/////////////////////////////////////////////////////////////////////////
+
     public boolean applyCommands(Map<Player, PlayerCommand> commands){
         log.debug("Applying player commands");
         for(Player player: commands.keySet()){
@@ -58,7 +60,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
                 player.applyCommand(command);
             } catch (Exception e) {
                 try {
-                    log.debug("Player made invalid move, using null move");
+                    log.debug(player+" made invalid move "+command+", using null move");
                     command = PlayerCommand.getNullCommand(player);
                     commands.put(player, command);
                     player.applyCommand(command);
@@ -241,6 +243,8 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
     }
 
+    //setters/////////////////////////////////////////////////////////////////////
+
     public void discard(Card card){
         discard.add(card);
     }
@@ -312,6 +316,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
                 addPlayer(Player.newAIPlayer(getWonderById(wonderId), this));
             }
         }
+        finalizePlayers();
     }
 
     public void setWonders(JsonArray wonders) {
@@ -327,6 +332,18 @@ public class SevenWondersGame extends Changeable implements Runnable{
         localPlayers.add(player);
         addPlayer(player);
     }
+
+    public void finalizePlayers() {
+        List<Player> players = getPlayers();
+        Player oldPlayer = players.get(players.size()-1);
+        for(Player newPlayer: players){
+            newPlayer.setPlayerLeft(oldPlayer);
+            oldPlayer.setPlayerRight(newPlayer);
+            oldPlayer = newPlayer;
+        }
+    }
+
+    //getters///////////////////////////////////////////////////////////////////////
 
     public List<Player> getPlayers(){
         return players;

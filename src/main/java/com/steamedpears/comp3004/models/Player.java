@@ -218,6 +218,7 @@ public abstract class Player implements Runnable{
 
     //getters///////////////////////////////////////////////////////////////////
     public final boolean isValid(PlayerCommand command){
+        log.debug(this+" validating move "+command);
         //initial result: either they're doing one action, or their other action is UNDISCARD
         boolean result = command.followup==null
                 || command.followup.action==UNDISCARD;
@@ -230,6 +231,8 @@ public abstract class Player implements Runnable{
                     && hand.size()==2
                     && !command.action.equals(UNDISCARD);
         }
+
+        result = result && validateCanMakeTrades(command);
 
         //if everything is good so far, perform specific validation
         if(command.action.equals(BUILD)){
@@ -244,14 +247,16 @@ public abstract class Player implements Runnable{
             result = result && validatePlayFree(command);
         }
 
-        return result;
+        return result && (command.followup==null || isValid(command.followup));
     }
 
     private boolean validateHasCard(PlayerCommand command){
+        log.debug("validating player has card");
         return hand.contains(game.getCardById(command.card));
     }
 
     private boolean validateHasNotPlayedCard(PlayerCommand command){
+        log.debug("validating player hasn't already player that card");
         Card card = game.getCardById(command.card);
         for(Card playedCard: playedCards){
             if(playedCard.getName().equals(card.getName())){
@@ -262,34 +267,40 @@ public abstract class Player implements Runnable{
     }
 
     private boolean validatePlayFree(PlayerCommand command) {
+        log.debug("validating player can play this card for free");
         return validateHasCard(command)
                 && validateHasNotPlayedCard(command)
                 && getAsset(getAssets(), ASSET_BUILD_FREE)>0;
     }
 
     private boolean validateUndiscard(PlayerCommand command) {
+        log.debug("validating player can undiscard this card");
         return game.getDiscard().contains(game.getCardById(command.card))
                 && validateHasNotPlayedCard(command)
                 && getAsset(getAssets(), ASSET_DISCARD)>0;
     }
 
     private boolean validateDiscard(PlayerCommand command) {
+        log.debug("validating player can discard this card");
         return validateHasCard(command);
     }
 
     private boolean validatePlayCard(PlayerCommand command) {
+        log.debug("validating player can play card");
         return validateHasCard(command)
                 && validateHasNotPlayedCard(command)
                 && game.getCardById(command.card).canAfford(this, command);
     }
 
     private boolean validateBuildWonder(PlayerCommand command) {
+        log.debug("validating player can build out wonder with this card");
         return validateHasCard(command)
                 && wonder.getNextStage()!=null
                 && wonder.getNextStage().canAfford(this, command);
     }
 
     private boolean validateCanMakeTrades(PlayerCommand command){
+        log.debug("validating player can make the trades they are trying to make");
         Map<String, Integer> leftTradeables = getPlayerLeft().getAssetsTradeable();
         Map<String, Integer> rightTradeables = getPlayerRight().getAssetsTradeable();
         Map<String, Integer> leftPurchases = command.leftPurchases;
@@ -379,7 +390,10 @@ public abstract class Player implements Runnable{
 
         collectedAssets.add(getPrivateAssets());
 
-        return sumAssets(collectedAssets);
+        Map<String, Integer> result = sumAssets(collectedAssets);
+        result.put(ASSET_GOLD, gold);
+
+        return result;
     }
 
     /**
@@ -545,4 +559,8 @@ public abstract class Player implements Runnable{
         return total;
     }
 
+    @Override
+    public String toString(){
+        return "Player "+getPlayerId();
+    }
 }
