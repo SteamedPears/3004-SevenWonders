@@ -26,6 +26,7 @@ class ClientRouter extends Router implements Runnable{
     private PrintWriter out;
     private JsonParser parser;
     private Executor pool = Executors.newFixedThreadPool(1);
+    private int totalHumanPlayers;
 
     public ClientRouter(String ipAddress, int port) {
         try {
@@ -33,6 +34,7 @@ class ClientRouter extends Router implements Runnable{
             this.in = new JsonReader(new InputStreamReader(host.getInputStream()));
             this.out = new PrintWriter(host.getOutputStream());
             this.parser = new JsonParser();
+            this.totalHumanPlayers = 0;
             start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,6 +101,12 @@ class ClientRouter extends Router implements Runnable{
         //This method doesn't seem to have much meaning for the ClientRouter
     }
 
+    @Override
+    public int getTotalHumanPlayers() {
+        //TODO: have the host send this information to the clients
+        return totalHumanPlayers;
+    }
+
     private void start(){
         pool.execute(this);
     }
@@ -108,6 +116,7 @@ class ClientRouter extends Router implements Runnable{
         log.debug("Starting Client Router");
         waitForLocalPlayerId();
         waitForInitialConfig();
+        setPlaying(true);
         boolean gameOver = false;
         while(!gameOver){
             waitForTakeTurn();

@@ -64,7 +64,9 @@ public class SevenWonders {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 try {
-                    startGame();
+                    if(!router.isPlaying()){
+                        startGame();
+                    }
                     updateView();
                 } catch(Exception e) {
                     e.printStackTrace();
