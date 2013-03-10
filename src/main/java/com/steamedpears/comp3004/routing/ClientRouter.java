@@ -116,6 +116,7 @@ class ClientRouter extends Router implements Runnable{
         log.debug("Starting Client Router");
         waitForLocalPlayerId();
         waitForInitialConfig();
+        setPlaying(true);
         boolean gameOver = false;
         while(!gameOver){
             waitForTakeTurn();
