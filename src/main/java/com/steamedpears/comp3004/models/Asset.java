@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,10 +64,14 @@ public final class Asset {
 
     //utility methods
     public static int getAsset(Map<String, Integer> map, String key){
-        if(map.containsKey(key)){
-            return map.get(key);
-        }else{
+        if(map==null){
             return 0;
+        }else{
+            if(map.containsKey(key)){
+                return map.get(key);
+            }else{
+                return 0;
+            }
         }
     }
 
@@ -119,6 +124,52 @@ public final class Asset {
         col.add(first);
         col.add(last);
         return sumAssets(col);
+    }
+
+    public static Map<String, Integer> subtractAssets(Map<String, Integer> first, Map<String, Integer> last){
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        for(String key: first.keySet()){
+            int difference = first.get(key) - getAsset(last, key);
+            if(difference>0){
+                result.put(key, difference);
+            }
+        }
+        return result;
+    }
+
+    public static boolean existsValidChoices(List<Set<String>> choices, Map<String, Integer> cost){
+        return recursiveSearchForValidChoices(choices, cost, 0);
+    }
+
+    private static boolean recursiveSearchForValidChoices(List<Set<String>> choices, Map<String, Integer> cost, int index){
+        Set<String> choice = choices.get(index);
+        //loop over every asset in this choice
+        for(String asset: choice){
+            //if this asset would help pay for the cost, try it
+            if(cost.containsKey(asset)){
+                cost.put(asset, cost.get(asset)-1);
+                //see if we've found a solution
+                boolean foundSolution = true;
+                for(int value: cost.values()){
+                    if(value>0){
+                        foundSolution = false;
+                        break;
+                    }
+                }
+                //if that didn't solve it, recurse on the next choice
+                if(!foundSolution && index+1<choices.size()){
+                    foundSolution = recursiveSearchForValidChoices(choices, cost, index+1);
+                }
+                //if we found a solution, return true; otherwise put the asset back and try the next asset in the choice
+                if(foundSolution){
+                    return true;
+                }else{
+                    cost.put(asset, cost.get(asset)+1);
+                }
+            }
+        }
+        //if we've gotten to here, no choice in this subtree works
+        return false;
     }
 
 }

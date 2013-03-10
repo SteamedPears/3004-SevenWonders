@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Wonder {
+
     private class WonderSide{
         //stages are represented by cards for simplicity
         public List<Card> stages;
@@ -59,6 +60,8 @@ public class Wonder {
     private WonderSide sideB;
     private WonderSide currentSide;
     private int currentStage = 0;
+    private boolean builtFreeThisAge;
+    private int undiscards;
 
     //constructor//////////////////////////////////////////////////
     public Wonder(JsonObject obj){
@@ -76,6 +79,8 @@ public class Wonder {
     public void reset(){
         currentStage = 0;
         currentSide = sideA;
+        builtFreeThisAge = false;
+        undiscards = 0;
     }
 
     /**
@@ -83,7 +88,8 @@ public class Wonder {
      * @param player the Player building the Wonder's stage
      */
     public void buildNextStage(Player player){
-        //TODO: build the next stage of the Wonder, and charge the Player for the cost of the stage
+        getNextStage().playCard(player);
+        currentStage++;
     }
 
     /**
@@ -91,7 +97,15 @@ public class Wonder {
      * @param assetName name of resource expended
      */
     public void expendLimitedAsset(String assetName){
-        //TODO: make it so the Player can't reuse this ever again, somehow (i.e. if this is Asset.ASSET_BUILD_FREE, disable it)
+        if(assetName.equals(Asset.ASSET_BUILD_FREE)){
+            builtFreeThisAge = true;
+        }else if(assetName.equals(Asset.ASSET_DISCARD)){
+            undiscards++;
+        }
+    }
+
+    public void handleNewAge() {
+        builtFreeThisAge = false;
     }
 
     //setters///////////////////////////////////////////////////////
@@ -189,24 +203,38 @@ public class Wonder {
 
     /**
      * Gets the Assets this Wonder currently yields the given Player, without making ny optional choices
-     * @param p the Player that owns the Wonder
+     * @param player the Player that owns the Wonder
      * @return the Assets this Wonder definitely yields
      */
-    public Map<String, Integer> getAssets(Player p){
-        //TODO: get the assets this wonder definitely has
+    public Map<String, Integer> getAssets(Player player){
+        List<Map<String, Integer>> results = new ArrayList<Map<String, Integer>>();
+        for(int i=0; i<currentStage; ++i){
+            results.add(currentSide.stages.get(i).getAssets(player));
+        }
+        Map<String, Integer> privates = new HashMap<String, Integer>();
+        privates.put(currentSide.startResource, 1);
+        privates.put(Asset.ASSET_BUILD_FREE, builtFreeThisAge ? 0 : -1);
+        privates.put(Asset.ASSET_DISCARD, -undiscards);
+        results.add(privates);
 
-        return new HashMap<String, Integer>();
+        return Asset.sumAssets(results);
     }
 
     /**
      * Gets a List of the choices of Assets this Wonder currently yields for the given Player
-     * @param p the Player that owns the Wonder
+     * @param player the Player that owns the Wonder
      * @return a List of choices of Assets this Wonder currently yields
      */
-    public List<Set<String>> getOptionalAssetsComplete(Player p){
-        //TODO: get a list of all the asset choices this wonder can make
+    public List<Set<String>> getOptionalAssetsComplete(Player player){
+        List<Set<String>> results = new ArrayList<Set<String>>();
+        for(int i=0; i<currentStage; ++i){
+            Set<String> result = currentSide.stages.get(i).getAssetsOptional(player);
+            if(!result.isEmpty()){
+                results.add(result);
+            }
+        }
 
-        return new ArrayList<Set<String>>();
+        return results;
     }
 
     /**
