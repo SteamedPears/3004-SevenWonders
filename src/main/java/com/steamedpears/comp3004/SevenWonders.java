@@ -10,7 +10,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.io.File;
-import java.net.URL;
 
 public class SevenWonders {
     public static final String PATH_RESOURCE = File.separator;

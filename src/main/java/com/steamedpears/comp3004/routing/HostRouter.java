@@ -2,11 +2,11 @@ package com.steamedpears.comp3004.routing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.stream.JsonReader;
 import com.steamedpears.comp3004.SevenWonders;
-import com.steamedpears.comp3004.models.Card;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
@@ -14,7 +14,6 @@ import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -34,7 +33,6 @@ class HostRouter extends Router {
     private List<Client> clients;
     private JsonArray cardJSON;
     private JsonArray wonderJSON;
-    private Map<String, Wonder> wonders;
     private Map<Player, PlayerCommand> registeredMoves;
     private ExecutorService pool;
     private Future lobbyThread;
@@ -47,7 +45,7 @@ class HostRouter extends Router {
         try {
             this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error establishing host socket", e);
             System.exit(-1);
         }
         this.clients = new ArrayList<Client>();
@@ -56,6 +54,8 @@ class HostRouter extends Router {
 
         registeredMoves = new HashMap<Player, PlayerCommand>();
         pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+2);
+
+        start();
     }
 
     @Override
@@ -106,13 +106,13 @@ class HostRouter extends Router {
 
 
         getLocalGame().setCards(this.cardJSON);
-        this.wonders = Wonder.parseWonders(this.wonderJSON);
+        getLocalGame().setWonders(this.wonderJSON);
     }
 
     private void constructPlayers(){
         log.debug("Constructing players");
         List<Wonder> wonderList = new ArrayList<Wonder>();
-        wonderList.addAll(wonders.values());
+        wonderList.addAll(getLocalGame().getWonders().values());
 
         Collections.shuffle(wonderList);
 
@@ -154,12 +154,21 @@ class HostRouter extends Router {
         log.debug("Waiting for clients to connect");
         while(!Thread.interrupted()){
             try{
-                clients.add(new Client(serverSocket.accept()));
+                Client client = new Client(serverSocket.accept(), clients.size()+1);
+                clients.add(client);
             }catch(IOException e){
-                e.printStackTrace();
+                log.error("Error establishing connection to client", e);
                 System.exit(-1);
             }
         }
+    }
+
+    private void waitForOkays(){
+        log.debug("Waiting for clients to respond 'ok'");
+        for(Client client: clients){
+            client.getOkay();
+        }
+        log.debug("All clients responded 'ok'");
     }
 
     private void listenForCommands(){
@@ -173,7 +182,7 @@ class HostRouter extends Router {
 
                 broadcastPlayerCommands();
 
-                //TODO: wait for clients to actually respond before doing this
+                waitForOkays();
                 try {
                     log.debug("Waiting for game to finish up");
                     while(!game.isDone()){
@@ -193,7 +202,7 @@ class HostRouter extends Router {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("Error for moves to be registered", e);
                 System.exit(-1);
             }
         }
@@ -211,26 +220,17 @@ class HostRouter extends Router {
         result.add(PROP_ROUTE_CARDS, this.cardJSON);
         result.add(PROP_ROUTE_WONDERS, this.wonderJSON);
 
-        JsonObject players = new JsonObject();
-        for(Player player: getLocalGame().getPlayers()){
-            players.addProperty("" + player.getPlayerId(), player.getWonder().getId());
-        }
-        result.add(PROP_ROUTE_PLAYERS, players);
+        result.add(PROP_ROUTE_PLAYERS, getLocalGame().getPlayersAsJSON());
 
-        JsonArray deck = new JsonArray();
-        for(List<Card> ageDeck: getLocalGame().getDeck()){
-            JsonArray ageDeckJSON = new JsonArray();
-            for(Card card: ageDeck){
-                ageDeckJSON.add(new JsonPrimitive(card.getId()));
-            }
-        }
-        result.add(PROP_ROUTE_DECK, deck);
+        result.add(PROP_ROUTE_DECK, getLocalGame().getDeckAsJSON());
 
         broadcast(result.toString());
     }
 
     private void broadcastTakeTurn(){
-        broadcast(COMMAND_ROUTE_TAKE_TURN);
+        JsonObject obj = new JsonObject();
+        obj.addProperty(COMMAND_ROUTE_TAKE_TURN,true);
+        broadcast(obj.toString());
     }
 
     private void broadcastPlayerCommands(){
@@ -244,24 +244,34 @@ class HostRouter extends Router {
         }
     }
 
-    private class Client extends Thread{
-        private BufferedReader in;
+    private class Client{
+        private int clientNumber;
+        private JsonReader in;
+        private JsonParser parser;
         private PrintWriter out;
         private Socket client;
 
-        public Client(Socket client){
+        public Client(Socket client, int clientNumber){
+            log.debug("Establishing connection with client:" +clientNumber);
             try {
-                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                out = new PrintWriter(client.getOutputStream(), true);
+                this.in = new JsonReader(new InputStreamReader(client.getInputStream()));
+                this.out = new PrintWriter(client.getOutputStream(), true);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Error setting up client streams", e);
                 System.exit(-1);
             }
+
+            this.parser = new JsonParser();
+            this.clientNumber = clientNumber;
+
+            JsonObject obj = new JsonObject();
+            obj.addProperty(PROP_ROUTE_YOU_ARE, clientNumber);
+            log.debug(obj.toString());
+            sendMessage(obj.toString());
         }
 
-        @Override
-        public void run(){
-            //TODO: ...?
+        public void getOkay(){
+            JsonElement elem = parser.parse(in);
         }
 
         public void sendMessage(String message){
