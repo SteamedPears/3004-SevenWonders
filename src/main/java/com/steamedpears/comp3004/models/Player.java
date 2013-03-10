@@ -206,6 +206,10 @@ public abstract class Player implements Runnable{
         this.hand = hand;
     }
 
+    public void changeGold(int amount) {
+        gold+=amount;
+    }
+
     //getters///////////////////////////////////////////////////////////////////
     public final boolean isValid(PlayerCommand command){
         //initial result: either they're doing one action, or their other action is UNDISCARD
@@ -438,6 +442,25 @@ public abstract class Player implements Runnable{
         collectedAssets.addAll(wonder.getOptionalAssetsComplete(this));
 
         return collectedAssets;
+    }
+
+    /**
+     * Gets all the assets a player has that a multiplier might be interested in (avoids infinite loop)
+     * @return multiplier assets
+     */
+    public Map<String, Integer> getConcreteAssets() {
+        Map<String, Integer> result = new HashMap<String, Integer>();
+
+        for(Card card: playedCards){
+            String color = card.getColor();
+            result.put(color, getAsset(result, color)+1);
+        }
+
+        result.put(ASSET_WONDER_STAGES, wonder.getCurrentStage());
+
+        result.put(ASSET_MILITARY_DEFEAT, getMilitaryDefeats());
+
+        return result;
     }
 
     /**
