@@ -119,9 +119,11 @@ public abstract class Player implements Runnable{
 
     private void playFree(Card card, boolean isFinal){
         log.debug("playing free: "+isFinal);
+        int oldGold = gold;
         playCard(card, isFinal);
         if(isFinal){
             wonder.expendLimitedAsset(ASSET_BUILD_FREE);
+            gold = oldGold;
         }
     }
 
@@ -279,6 +281,17 @@ public abstract class Player implements Runnable{
         return validateHasCard(command)
                 && wonder.getNextStage()!=null
                 && wonder.getNextStage().canAfford(this, command);
+    }
+
+    private boolean validateCanMakeTrades(PlayerCommand command){
+        Map<String, Integer> leftTradeables = getPlayerLeft().getAssetsTradeable();
+        Map<String, Integer> rightTradeables = getPlayerRight().getAssetsTradeable();
+        Map<String, Integer> leftPurchases = command.leftPurchases;
+        Map<String, Integer> rightPurchases = command.rightPurchases;
+        Map<String, Integer> leftPurchasesLessBase = subtractAssets(leftPurchases, leftTradeables);
+        Map<String, Integer> rightPurchasesLessBase = subtractAssets(rightPurchases, rightTradeables);
+        return existsValidChoices(getPlayerLeft().getOptionalAssetsCompleteTradeable(), leftPurchasesLessBase)
+                && existsValidChoices(getPlayerRight().getOptionalAssetsCompleteTradeable(), rightPurchasesLessBase);
     }
 
     public final Player getPlayerLeft(){

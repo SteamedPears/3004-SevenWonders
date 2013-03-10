@@ -199,7 +199,6 @@ public class Card {
      */
     public Map<String, Integer> getAssets(Player player){
         Map<String, Integer> result = new HashMap<String, Integer>();
-        result.put(color, 1);
         if(!isChoice){
             int multiplier = 1;
             if(!multiplierAssets.isEmpty()){
@@ -275,42 +274,9 @@ public class Card {
         if(costLessBase.size()==0){
             return true;
         }else{
-            return hasValidCombination(player.getOptionalAssetsComplete(), costLessBase);
+            return existsValidChoices(player.getOptionalAssetsComplete(), costLessBase);
         }
     }
 
-    private boolean hasValidCombination(List<Set<String>> choices, Map<String, Integer> cost){
-        return recursiveSearchForValidCombination(choices, cost, 0);
-    }
 
-    private boolean recursiveSearchForValidCombination(List<Set<String>> choices, Map<String, Integer> cost, int index){
-        Set<String> choice = choices.get(index);
-        //loop over every asset in this choice
-        for(String asset: choice){
-            //if this asset would help pay for the cost, try it
-            if(cost.containsKey(asset)){
-                cost.put(asset, cost.get(asset)-1);
-                //see if we've found a solution
-                boolean foundSolution = true;
-                for(int value: cost.values()){
-                    if(value>0){
-                        foundSolution = false;
-                        break;
-                    }
-                }
-                //if that didn't solve it, recurse on the next choice
-                if(!foundSolution && index+1<choices.size()){
-                    foundSolution = recursiveSearchForValidCombination(choices, cost, index+1);
-                }
-                //if we found a solution, return true; otherwise put the asset back and try the next asset in the choice
-                if(foundSolution){
-                    return true;
-                }else{
-                    cost.put(asset, cost.get(asset)+1);
-                }
-            }
-        }
-        //if we've gotten to here, no choice in this subtree works
-        return false;
-    }
 }

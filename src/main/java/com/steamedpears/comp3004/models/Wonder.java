@@ -83,7 +83,8 @@ public class Wonder {
      * @param player the Player building the Wonder's stage
      */
     public void buildNextStage(Player player){
-        //TODO: build the next stage of the Wonder, and charge the Player for the cost of the stage
+        getNextStage().playCard(player);
+        currentStage++;
     }
 
     /**
@@ -189,24 +190,36 @@ public class Wonder {
 
     /**
      * Gets the Assets this Wonder currently yields the given Player, without making ny optional choices
-     * @param p the Player that owns the Wonder
+     * @param player the Player that owns the Wonder
      * @return the Assets this Wonder definitely yields
      */
-    public Map<String, Integer> getAssets(Player p){
-        //TODO: get the assets this wonder definitely has
+    public Map<String, Integer> getAssets(Player player){
+        List<Map<String, Integer>> results = new ArrayList<Map<String, Integer>>();
+        for(int i=0; i<currentStage; ++i){
+            results.add(currentSide.stages.get(i).getAssets(player));
+        }
+        Map<String, Integer> privates = new HashMap<String, Integer>();
+        privates.put(currentSide.startResource, 1);
+        results.add(privates);
 
-        return new HashMap<String, Integer>();
+        return Asset.sumAssets(results);
     }
 
     /**
      * Gets a List of the choices of Assets this Wonder currently yields for the given Player
-     * @param p the Player that owns the Wonder
+     * @param player the Player that owns the Wonder
      * @return a List of choices of Assets this Wonder currently yields
      */
-    public List<Set<String>> getOptionalAssetsComplete(Player p){
-        //TODO: get a list of all the asset choices this wonder can make
+    public List<Set<String>> getOptionalAssetsComplete(Player player){
+        List<Set<String>> results = new ArrayList<Set<String>>();
+        for(int i=0; i<currentStage; ++i){
+            Set<String> result = currentSide.stages.get(i).getAssetsOptional(player);
+            if(!result.isEmpty()){
+                results.add(result);
+            }
+        }
 
-        return new ArrayList<Set<String>>();
+        return results;
     }
 
     /**
