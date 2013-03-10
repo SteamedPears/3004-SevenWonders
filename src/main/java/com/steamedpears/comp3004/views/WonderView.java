@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class WonderView extends JLabel {
-    public static final int DEFAULT_WIDTH = 100;
+    public static final int DEFAULT_WIDTH = 960;
     private Wonder wonder;
     private WonderSelectionListener selectionListener;
     static Logger logger = Logger.getLogger(WonderView.class);
@@ -50,7 +50,7 @@ public class WonderView extends JLabel {
 
     private static Icon getIconOfSize(Wonder wonder, int width) {
         return new ImageIcon((new ImageIcon(wonder.getImagePath()))
-                .getImage().getScaledInstance(width, -1, Image.SCALE_FAST));
+                .getImage().getScaledInstance(width, -1, Image.SCALE_SMOOTH));
     }
 
     private class WonderMouseListener extends MouseAdapter {

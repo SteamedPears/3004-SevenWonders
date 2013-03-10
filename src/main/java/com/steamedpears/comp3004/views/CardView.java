@@ -50,7 +50,7 @@ public class CardView extends JLabel {
 
     private static Icon getIconOfSize(Card card, int width) {
         return new ImageIcon((new ImageIcon(card.getImagePath()))
-                .getImage().getScaledInstance(width, -1, Image.SCALE_FAST));
+                .getImage().getScaledInstance(width, -1, Image.SCALE_SMOOTH));
     }
 
     private class CardMouseListener extends MouseAdapter {
