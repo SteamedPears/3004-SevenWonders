@@ -171,10 +171,16 @@ public class SevenWondersGame extends Changeable implements Runnable{
         log.debug("Changing hands");
         if(shouldDeal()){
             deal();
-            age++;
-
+            nextAge();
         }else{
             rotateHands();
+        }
+    }
+
+    private void nextAge() {
+        age++;
+        for(Player player: players){
+            player.handleNewAge();
         }
     }
 
