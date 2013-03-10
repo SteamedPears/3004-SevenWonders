@@ -605,7 +605,10 @@ public abstract class Player implements Runnable{
 
         return total;
     }
-
+    /**
+      * Check if the player has completed their wonder.
+      * @return true only if this player has completed their wonder
+      */
     public boolean hasFinishedWonder() {
         return wonder.getNextStage() == null;
     }
