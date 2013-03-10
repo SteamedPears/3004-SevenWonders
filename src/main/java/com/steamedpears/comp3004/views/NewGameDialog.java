@@ -31,11 +31,13 @@ public class NewGameDialog extends JDialog {
     private void selectHost() {
         isHost = true;
         hideAddressField();
+        showPlayerSelect();
     }
 
     private void selectClient() {
         isHost = false;
         showAddressField();
+        hidePlayerSelect();
     }
 
     private void hideAddressField() {
@@ -46,6 +48,16 @@ public class NewGameDialog extends JDialog {
     private void showAddressField() {
         addressField.setVisible(true);
         addressLabel.setVisible(true);
+    }
+
+    private void hidePlayerSelect() {
+        playersLabel.setVisible(false);
+        playersComboBox.setVisible(false);
+    }
+
+    private void showPlayerSelect() {
+        playersLabel.setVisible(true);
+        playersComboBox.setVisible(true);
     }
 
     public boolean isHostSelected() { return isHost; }
