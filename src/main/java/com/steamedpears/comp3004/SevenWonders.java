@@ -36,6 +36,7 @@ public class SevenWonders {
     JDialog dialog;
     Router router;
     PlayerView playerView;
+    boolean isHost;
 
     public static enum View { PLAYER_VIEW, HIGHLEVEL_VIEW };
     private View currentView;
@@ -50,6 +51,7 @@ public class SevenWonders {
 
     public void createGame(boolean isHost, String ipAddress, int port, int players) {
         logger.info("Creating game");
+        this.isHost = isHost;
         closeNewGameDialog();
         if(isHost){
             router = Router.getHostRouter(port, players);
@@ -62,6 +64,7 @@ public class SevenWonders {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 try {
+                    startGame();
                     updateView();
                 } catch(Exception e) {
                     e.printStackTrace();
@@ -75,7 +78,7 @@ public class SevenWonders {
     public void startGame() {
         closeDialog();
         selectPlayerView();
-        router.beginGame();
+        if(isHost) router.beginGame();
     }
 
     private void selectPlayerView() {
@@ -83,6 +86,7 @@ public class SevenWonders {
     }
 
     private void updateView() throws Exception {
+        if(currentView == null) return;
         switch(currentView) {
             case PLAYER_VIEW:
                 playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
