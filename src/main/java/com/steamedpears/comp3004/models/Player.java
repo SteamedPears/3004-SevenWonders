@@ -503,8 +503,19 @@ public abstract class Player implements Runnable{
         return total;
     }
 
+    /**
+     * Check if the player has completed their wonder.
+     * @return true only if this player has completed their wonder
+     */
     public boolean hasFinishedWonder() {
         return Asset.getAsset(getAssets(),ASSET_WONDER_STAGES) == wonder.getStages().size();
     }
 
+    /**
+     * Gets the player's played cards.
+     * @return the player's played cards.
+     */
+    public List<Card> getPlayedCards() {
+        return playedCards;
+    }
 }
