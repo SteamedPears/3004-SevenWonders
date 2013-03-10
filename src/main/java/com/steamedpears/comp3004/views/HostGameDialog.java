@@ -10,8 +10,6 @@ import java.awt.event.*;
 
 public class HostGameDialog extends GameDialog {
     static Logger logger = Logger.getLogger(HostGameDialog.class);
-    private static final int WIDTH = 480;
-    private static final int HEIGHT = 120;
 
     private JLabel playersJoinedLabel;
 

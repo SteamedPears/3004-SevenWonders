@@ -6,6 +6,9 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 
 public class GameDialog extends JDialog {
+    private static final int WIDTH = 480;
+    private static final int HEIGHT = 120;
+
     protected SevenWonders controller;
 
     public GameDialog(JFrame f, String title, SevenWonders controller) {

@@ -13,8 +13,6 @@ import java.beans.PropertyChangeListener;
 public class NewGameDialog extends GameDialog {
 
     // Configuration
-    private final int width = 480;
-    private final int height = 120;
     private boolean isHost = true;
     private String ipAddress = "127.0.0.1";
     private Integer port = Router.HOST_PORT;

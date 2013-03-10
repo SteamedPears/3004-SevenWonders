@@ -8,8 +8,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class JoinGameDialog extends GameDialog {
-    private static final int WIDTH = 480;
-    private static final int HEIGHT = 120;
 
     private JLabel playersJoinedLabel;
 
