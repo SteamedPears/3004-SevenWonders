@@ -137,12 +137,12 @@ public class SevenWondersGame extends Changeable implements Runnable{
                     finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
                     PlayerCommand command = player.getCurrentCommand();
-                    log.debug("Player returned with command " + command);
+                    log.debug("Player returned with command: "+ player.getPlayerId()+ " - " + command);
                     router.registerMove(player, command);
                 }else if(timeUp){
-                    log.debug("Player timed out");
-                    finishedPlayers.add(future);
                     Player player = runningPlayers.get(future);
+                    log.debug("Player timed out: "+player.getPlayerId());
+                    finishedPlayers.add(future);
                     future.cancel(true);
                     router.registerMove(player, PlayerCommand.getNullCommand(player));
                 }
