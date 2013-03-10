@@ -2,10 +2,8 @@ package com.steamedpears.comp3004.routing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
@@ -31,7 +29,7 @@ import java.util.concurrent.Future;
 
 class HostRouter extends Router {
     private ServerSocket serverSocket;
-    private List<Client> clients;
+    private Map<Integer, Client> clients;
     private JsonArray cardJSON;
     private JsonArray wonderJSON;
     private Map<Player, PlayerCommand> registeredMoves;
@@ -49,7 +47,7 @@ class HostRouter extends Router {
             log.error("Error establishing host socket", e);
             System.exit(-1);
         }
-        this.clients = new ArrayList<Client>();
+        this.clients = new HashMap<Integer, Client>();
         this.maxPlayers = maxPlayers;
         localPlayerId = 0;
 
@@ -162,11 +160,26 @@ class HostRouter extends Router {
         log.debug("Waiting for clients to connect");
         while(!Thread.interrupted()){
             try{
-                Client client = new Client(serverSocket.accept(), clients.size()+1);
+                while(clients.size()+1==maxPlayers){
+                    garbageCollectClients();
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        return;
+                    }
+                }
+
+                Socket socket = serverSocket.accept();
+                garbageCollectClients();
+
                 if(Thread.interrupted()){
+                    socket.close();
                     return;
                 }
-                clients.add(client);
+
+                Client client = new Client(socket, getNextClientId());
+
+                clients.put(client.clientNumber, client);
                 announceChange(this);
             }catch(IOException e){
                 log.error("Error establishing connection to client", e);
@@ -175,9 +188,30 @@ class HostRouter extends Router {
         }
     }
 
+    private void garbageCollectClients() {
+        List<Integer> deadClients = new ArrayList<Integer>();
+        for(Client client: clients.values()){
+            if(client.isClosed()){
+                deadClients.add(client.clientNumber);
+            }
+        }
+
+        for(Integer clientNumber: deadClients){
+            clients.remove(clientNumber);
+        }
+    }
+
+    private int getNextClientId(){
+        int id = 1;
+        while(clients.containsKey(id)){
+            id++;
+        }
+        return id;
+    }
+
     private void waitForOkays(){
         log.debug("Waiting for clients to respond 'ok'");
-        for(Client client: clients){
+        for(Client client: clients.values()){
             client.getOkay();
         }
         log.debug("All clients responded 'ok'");
@@ -224,7 +258,7 @@ class HostRouter extends Router {
         log.debug("Starting next turn");
         getLocalGame().takeTurns();
         broadcastTakeTurn();
-        for(Client client: clients){
+        for(Client client: clients.values()){
             pool.execute(client);
         }
     }
@@ -257,7 +291,7 @@ class HostRouter extends Router {
     }
 
     private void broadcast(String message){
-        for(Client client: clients){
+        for(Client client: clients.values()){
             client.sendMessage(message);
         }
     }
@@ -319,6 +353,10 @@ class HostRouter extends Router {
                 System.exit(-1);
             }
 
+        }
+
+        public boolean isClosed() {
+            return client.isClosed();
         }
     }
 
