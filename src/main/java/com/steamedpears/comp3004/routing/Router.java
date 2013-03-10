@@ -56,6 +56,8 @@ public abstract class Router extends Changeable implements ChangeListener {
 
     public abstract void beginGame();
 
+    public abstract int getTotalHumanPlayers();
+
     protected void setPlaying(boolean playing){
         this.playing = playing;
     }
