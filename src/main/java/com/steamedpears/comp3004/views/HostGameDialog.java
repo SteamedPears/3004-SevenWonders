@@ -8,25 +8,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class HostGameDialog extends JDialog {
+public class HostGameDialog extends GameDialog {
     static Logger logger = Logger.getLogger(HostGameDialog.class);
-    private final SevenWonders controller;
     private static final int WIDTH = 480;
     private static final int HEIGHT = 120;
 
     private JLabel playersJoinedLabel;
 
-    public HostGameDialog(Frame f, final SevenWonders controller) {
-        super(f, "Host Game", true);
+    public HostGameDialog(JFrame f, final SevenWonders controller) {
+        super(f, "Host Game", controller);
 
         // initialize
-        this.controller = controller;
-        setLayout(new MigLayout("wrap 4"));
-        int x = f.getX() + (f.getWidth() / 2) - (WIDTH / 2);
-        int y = f.getY() + (f.getHeight() / 2) - (HEIGHT / 2);
-        setBounds(x, y, WIDTH, HEIGHT);
         addWindowListener(new DialogClosingListener());
-        setResizable(false);
 
         // Players joined label
         add(new JLabel("Players joined:"));
