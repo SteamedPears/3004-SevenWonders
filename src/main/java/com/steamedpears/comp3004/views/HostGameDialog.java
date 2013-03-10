@@ -2,12 +2,14 @@ package com.steamedpears.comp3004.views;
 import com.steamedpears.comp3004.SevenWonders;
 
 import net.miginfocom.swing.MigLayout;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class HostGameDialog extends JDialog {
+    static Logger logger = Logger.getLogger(HostGameDialog.class);
     private final SevenWonders controller;
     private static final int WIDTH = 480;
     private static final int HEIGHT = 120;
@@ -27,7 +29,7 @@ public class HostGameDialog extends JDialog {
         // Players joined label
         add(new JLabel("Players joined:"));
         // TODO: make this label respond to player joins
-        playersJoinedLabel = new JLabel("1");
+        playersJoinedLabel = new JLabel("0");
         add(playersJoinedLabel);
 
         // Start game button
@@ -39,6 +41,11 @@ public class HostGameDialog extends JDialog {
             }
         });
         add(startGameButton);
+    }
+
+    public void setPlayersJoined(int playersJoined) {
+        logger.info("Setting players joined to " + playersJoined);
+        playersJoinedLabel.setText(""+playersJoined);
     }
 
     private class DialogClosingListener extends WindowAdapter {
