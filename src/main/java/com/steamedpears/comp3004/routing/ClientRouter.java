@@ -32,7 +32,7 @@ class ClientRouter extends Router implements Runnable{
         try {
             this.host = new Socket(ipAddress, port);
             this.in = new JsonReader(new InputStreamReader(host.getInputStream()));
-            this.out = new PrintWriter(host.getOutputStream());
+            this.out = new PrintWriter(host.getOutputStream(), true);
             this.parser = new JsonParser();
             this.totalHumanPlayers = 0;
             start();

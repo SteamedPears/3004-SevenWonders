@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 public class SevenWondersGame extends Changeable implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
-    public static int TURN_LENGTH = 1000*2; // 2 minutes
+    public static int TURN_LENGTH = 1000*60*2; // 2 minutes
     private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;

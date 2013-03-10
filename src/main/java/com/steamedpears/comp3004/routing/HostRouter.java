@@ -289,7 +289,12 @@ class HostRouter extends Router {
         }
 
         public void getOkay(){
-            JsonElement elem = parser.parse(in);
+            try {
+                in.readLine();
+            } catch (IOException e) {
+                log.error("Error waiting for okay from client", e);
+                System.exit(-1);
+            }
             log.debug("Got okay: "+clientNumber);
         }
 
@@ -310,7 +315,7 @@ class HostRouter extends Router {
                 }
                 log.debug("Got client commands: "+clientNumber);
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                log.error("error waiting for commands from client", e);
                 System.exit(-1);
             }
 
