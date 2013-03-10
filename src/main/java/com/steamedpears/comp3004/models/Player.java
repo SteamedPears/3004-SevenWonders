@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +72,7 @@ public abstract class Player implements Runnable{
     }
 
     private void discardCard(Card card, boolean isFinal){
-        log.debug("discarding card: " + isFinal);
+        log.debug("discarding card: "+isFinal);
         if(isFinal){
             game.discard(card);
             hand.remove(card);
@@ -120,11 +119,9 @@ public abstract class Player implements Runnable{
 
     private void playFree(Card card, boolean isFinal){
         log.debug("playing free: "+isFinal);
-        int oldGold = gold;
         playCard(card, isFinal);
         if(isFinal){
             wonder.expendLimitedAsset(ASSET_BUILD_FREE);
-            gold = oldGold;
         }
     }
 
@@ -171,54 +168,12 @@ public abstract class Player implements Runnable{
             this.gold+=stagedCommandResult.get(ASSET_GOLD);
         }
         while(command!=null){
-            payForTrades(command);
             resolveCommand(command, true);
+            if(command.followup!=null && command.followup.action!=UNDISCARD){
+                wonder.expendLimitedAsset(ASSET_DOUBLE_PLAY);
+            }
             command = command.followup;
         }
-    }
-
-    private void payForTrades(PlayerCommand command) {
-        int total = 0;
-
-        Set<String> leftDiscounts = new HashSet<String>();
-        Set<String> rightDiscounts = new HashSet<String>();
-
-        List<Card> cards = new ArrayList<Card>();
-        cards.addAll(playedCards);
-
-        List<Card> stages = wonder.getStages();
-        for(int i=0; i<wonder.getCurrentStage(); ++i){
-            cards.add(stages.get(i));
-        }
-
-        for(Card card: cards){
-            if(card.getDiscountsTargets().contains(Card.PLAYER_LEFT)){
-                leftDiscounts.addAll(card.getDiscountsAssets());
-            }
-            if(card.getDiscountsTargets().contains(Card.PLAYER_RIGHT)){
-                rightDiscounts.addAll(card.getDiscountsAssets());
-            }
-        }
-
-        total+=getCostOfTrade(command.leftPurchases, leftDiscounts);
-        total+=getCostOfTrade(command.rightPurchases, rightDiscounts);
-        gold-=total;
-    }
-
-    private int getCostOfTrade(Map<String,Integer> purchases, Set<String> discounts) {
-        if(purchases==null){
-            return 0;
-        }else{
-            int total = 0;
-            for(String key: purchases.keySet()){
-                total+= purchases.get(key)*(discounts.contains(key) ? 1 : 2);
-            }
-            return total;
-        }
-    }
-
-    public void handleNewAge(){
-        wonder.handleNewAge();
     }
 
     //extend with a GUI or AI
@@ -251,15 +206,9 @@ public abstract class Player implements Runnable{
         this.hand = hand;
     }
 
-    public void changeGold(int amount) {
-        gold+=amount;
-    }
-
     //getters///////////////////////////////////////////////////////////////////
     public final boolean isValid(PlayerCommand command){
-        log.debug(this+" validating move "+command);
         //initial result: either they're doing one action, or their other action is UNDISCARD
-        log.debug("validating number/types of moves");
         boolean result = command.followup==null
                 || command.followup.action==UNDISCARD;
 
@@ -271,10 +220,6 @@ public abstract class Player implements Runnable{
                     && hand.size()==2
                     && !command.action.equals(UNDISCARD);
         }
-        if(!result) log.debug("validating failed after move type sanity check");
-
-        result = result && validateCanMakeTrades(command);
-        if(!result) log.debug("validation failed after trade check");
 
         //if everything is good so far, perform specific validation
         if(command.action.equals(BUILD)){
@@ -288,18 +233,15 @@ public abstract class Player implements Runnable{
         }else if(command.action.equals(PLAY_FREE)){
             result = result && validatePlayFree(command);
         }
-        if(!result) log.debug("validation failed after specific command check");
 
         return result;
     }
 
     private boolean validateHasCard(PlayerCommand command){
-        log.debug("validating player has card");
         return hand.contains(game.getCardById(command.card));
     }
 
     private boolean validateHasNotPlayedCard(PlayerCommand command){
-        log.debug("validating player hasn't already player that card");
         Card card = game.getCardById(command.card);
         for(Card playedCard: playedCards){
             if(playedCard.getName().equals(card.getName())){
@@ -310,52 +252,29 @@ public abstract class Player implements Runnable{
     }
 
     private boolean validatePlayFree(PlayerCommand command) {
-        log.debug("validating player can play this card for free");
         return validateHasCard(command)
-                && validateHasNotPlayedCard(command)
-                && getAsset(getAssets(), ASSET_BUILD_FREE)>0;
+                && validateHasNotPlayedCard(command);
     }
 
     private boolean validateUndiscard(PlayerCommand command) {
-        log.debug("validating player can undiscard this card");
         return game.getDiscard().contains(game.getCardById(command.card))
-                && validateHasNotPlayedCard(command)
-                && getAsset(getAssets(), ASSET_DISCARD)>0;
+                && validateHasNotPlayedCard(command);
     }
 
     private boolean validateDiscard(PlayerCommand command) {
-        log.debug("validating player can discard this card");
         return validateHasCard(command);
     }
 
     private boolean validatePlayCard(PlayerCommand command) {
-        log.debug("validating player can play card");
         return validateHasCard(command)
                 && validateHasNotPlayedCard(command)
                 && game.getCardById(command.card).canAfford(this, command);
     }
 
     private boolean validateBuildWonder(PlayerCommand command) {
-        log.debug("validating player can build out wonder with this card");
         return validateHasCard(command)
                 && wonder.getNextStage()!=null
                 && wonder.getNextStage().canAfford(this, command);
-    }
-
-    private boolean validateCanMakeTrades(PlayerCommand command){
-        log.debug("validating player can make the trades they are trying to make");
-        return validateCanMakeTradesInternal(command.leftPurchases, getPlayerLeft())
-                && validateCanMakeTradesInternal(command.rightPurchases, getPlayerRight());
-    }
-
-    private boolean validateCanMakeTradesInternal(Map<String, Integer> purchases, Player player){
-        if(purchases==null){
-            return true;
-        }else{
-            Map<String, Integer> tradeables = player.getAssetsTradeable();
-            Map<String, Integer> purchasesLessBase = subtractAssets(purchases, tradeables);
-            return existsValidChoices(player.getOptionalAssetsCompleteTradeable(), purchasesLessBase);
-        }
     }
 
     public final Player getPlayerLeft(){
@@ -437,10 +356,7 @@ public abstract class Player implements Runnable{
 
         collectedAssets.add(getPrivateAssets());
 
-        Map<String, Integer> result = sumAssets(collectedAssets);
-        result.put(ASSET_GOLD, gold);
-
-        return result;
+        return sumAssets(collectedAssets);
     }
 
     /**
@@ -525,25 +441,6 @@ public abstract class Player implements Runnable{
     }
 
     /**
-     * Gets all the assets a player has that a multiplier might be interested in (avoids infinite loop)
-     * @return multiplier assets
-     */
-    public Map<String, Integer> getConcreteAssets() {
-        Map<String, Integer> result = new HashMap<String, Integer>();
-
-        for(Card card: playedCards){
-            String color = card.getColor();
-            result.put(color, getAsset(result, color)+1);
-        }
-
-        result.put(ASSET_WONDER_STAGES, wonder.getCurrentStage());
-
-        result.put(ASSET_MILITARY_DEFEAT, getMilitaryDefeats());
-
-        return result;
-    }
-
-    /**
      * get the total value of all military wins
      * @return value of all military wins
      */
@@ -606,6 +503,22 @@ public abstract class Player implements Runnable{
         return total;
     }
 
+    /**
+     * Check if the player has completed their wonder.
+     * @return true only if this player has completed their wonder
+     */
+    public boolean hasFinishedWonder() {
+        return wonder.getNextStage() == null;
+    }
+
+    /**
+     * Gets the player's played cards.
+     * @return the player's played cards.
+     */
+    public List<Card> getPlayedCards() {
+        return playedCards;
+    }
+    
     @Override
     public String toString(){
         return "Player "+getPlayerId();
