@@ -89,6 +89,11 @@ class HostRouter extends Router {
         startNextTurn();
     }
 
+    @Override
+    public int getTotalHumanPlayers() {
+        return clients.size();
+    }
+
     private void loadModelConfigs(){
         log.debug("Loading model config");
 
@@ -156,6 +161,7 @@ class HostRouter extends Router {
             try{
                 Client client = new Client(serverSocket.accept(), clients.size()+1);
                 clients.add(client);
+                announceChange(this);
             }catch(IOException e){
                 log.error("Error establishing connection to client", e);
                 System.exit(-1);

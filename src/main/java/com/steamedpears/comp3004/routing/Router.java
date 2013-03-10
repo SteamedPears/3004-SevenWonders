@@ -8,6 +8,8 @@ import com.steamedpears.comp3004.models.Changeable;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
+import org.apache.log4j.Logger;
+import org.apache.log4j.helpers.LogLog;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,11 +21,13 @@ import java.util.Set;
 public abstract class Router extends Changeable implements ChangeListener {
 
     public static Router getHostRouter(int port, int totalPlayers){
+        log.debug("Creating Host Router");
         totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS);
         return new HostRouter(port, totalPlayers);
     }
 
     public static Router getClientRouter(String ipAddress, int port){
+        log.debug("Creating Client Router");
         return new ClientRouter(ipAddress, port);
     }
 
@@ -38,6 +42,8 @@ public abstract class Router extends Changeable implements ChangeListener {
     public static String COMMAND_ROUTE_TAKE_TURN = "takeUrTurn";
     public static String COMMAND_ROUTE_OK = "k";
     public static String COMMAND_ROUTE_CONNECT = "ohai";
+
+    private static Logger log = Logger.getLogger(Router.class);
 
 
     //localGame#applyCommands should be called when every player has decided on a command
@@ -55,6 +61,8 @@ public abstract class Router extends Changeable implements ChangeListener {
     public abstract void registerMove(Player player, PlayerCommand command);
 
     public abstract void beginGame();
+
+    public abstract int getTotalHumanPlayers();
 
     protected void setPlaying(boolean playing){
         this.playing = playing;
