@@ -10,12 +10,9 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class NewGameDialog extends JDialog {
-    private SevenWonders controller;
+public class NewGameDialog extends GameDialog {
 
     // Configuration
-    private final int width = 480;
-    private final int height = 120;
     private boolean isHost = true;
     private String ipAddress = "127.0.0.1";
     private Integer port = Router.HOST_PORT;
@@ -31,11 +28,13 @@ public class NewGameDialog extends JDialog {
     private void selectHost() {
         isHost = true;
         hideAddressField();
+        showPlayerSelect();
     }
 
     private void selectClient() {
         isHost = false;
         showAddressField();
+        hidePlayerSelect();
     }
 
     private void hideAddressField() {
@@ -48,20 +47,27 @@ public class NewGameDialog extends JDialog {
         addressLabel.setVisible(true);
     }
 
+    private void hidePlayerSelect() {
+        playersLabel.setVisible(false);
+        playersComboBox.setVisible(false);
+    }
+
+    private void showPlayerSelect() {
+        playersLabel.setVisible(true);
+        playersComboBox.setVisible(true);
+    }
+
     public boolean isHostSelected() { return isHost; }
     public String getIpAddress() { return ipAddress; }
     public int getPort() { return port; }
     public int getPlayers() { return players; }
 
-    public NewGameDialog(ViewFrame f, SevenWonders controller) {
-        super(f,"New Game",true);
+    public NewGameDialog(JFrame f, SevenWonders controller) {
+        super(f,"New Game",controller);
 
         // initialization
         this.controller = controller;
-        setLayout(new MigLayout("wrap 4"));
-        setBounds((f.getWidth() / 2) - (width / 2), (f.getHeight() / 2) - (height / 2), width, height);
         addWindowListener(new DialogClosingListener());
-        setResizable(false);
 
         // host/client buttons
         ButtonGroup hostClientButtonGroup = new ButtonGroup();

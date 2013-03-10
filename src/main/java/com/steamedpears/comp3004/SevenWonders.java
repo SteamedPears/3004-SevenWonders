@@ -66,7 +66,8 @@ public class SevenWonders {
             public void stateChanged(ChangeEvent changeEvent) {
                 try {
                     if(isHost) {
-                        ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
+                        if(router != null && dialog != null)
+                            ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
                     } else if(!gameStarted){
                         startGame();
                     }
