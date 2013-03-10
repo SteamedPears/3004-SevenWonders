@@ -12,7 +12,7 @@ public class CardView extends JLabel {
     public static final int DEFAULT_WIDTH = 100;
     private Card card;
     private CardSelectionListener selectionListener;
-    static Logger logger = Logger.getLogger(SevenWonders.class);
+    static Logger logger = Logger.getLogger(CardView.class);
     private int width;
 
     public CardView(Card card) {
