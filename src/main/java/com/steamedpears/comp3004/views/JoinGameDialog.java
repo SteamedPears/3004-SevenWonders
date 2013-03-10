@@ -20,7 +20,9 @@ public class JoinGameDialog extends JDialog {
         // initialize
         this.controller = controller;
         setLayout(new MigLayout("wrap 4"));
-        setBounds((f.getWidth() / 2) - (WIDTH / 2), (f.getHeight() / 2) - (HEIGHT / 2), WIDTH, HEIGHT);
+        int x = f.getX() + (f.getWidth() / 2) - (WIDTH / 2);
+        int y = f.getY() + (f.getHeight() / 2) - (HEIGHT / 2);
+        setBounds(x, y, WIDTH, HEIGHT);
         addWindowListener(new DialogClosingListener());
         setResizable(false);
 
