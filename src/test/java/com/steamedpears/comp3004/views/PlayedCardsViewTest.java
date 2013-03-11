@@ -13,7 +13,7 @@ import java.util.*;
 public class PlayedCardsViewTest extends JFrame {
     public PlayedCardsViewTest() throws Exception {
         // initialization
-        setBounds(0,0,960,600);
+        setBounds(0,0,960,560);
 
         // build played cards
         JsonArray cards = (new JsonParser())

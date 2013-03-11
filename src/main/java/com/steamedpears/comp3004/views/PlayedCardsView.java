@@ -44,7 +44,7 @@ public class PlayedCardsView extends JPanel {
         }
 
         WonderView wonderView = new WonderView(player.getWonder());
-        wonderView.setWonderWidth(650);
+        wonderView.setWonderWidth(540);
         add(wonderView,"cell 0 4, span");
     }
 }
