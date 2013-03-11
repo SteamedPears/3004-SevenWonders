@@ -19,6 +19,7 @@ public class SevenWonders {
     public static final String PATH_IMG_WONDERS = PATH_IMG + "wonders"+File.separator;
     public static final String PATH_CARDS = PATH_DATA + "cards.json";
     public static final String PATH_WONDERS = PATH_DATA + "wonderlist.json";
+    public static final String IMAGE_TYPE_SUFFIX = ".jpg";
 
     public static final int MAX_PLAYERS = 7;
     public static final int MIN_PLAYERS = 3;
