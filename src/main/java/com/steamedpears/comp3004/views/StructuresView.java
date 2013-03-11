@@ -27,20 +27,20 @@ public class StructuresView extends JPanel {
         selectedCardView = null;
 
         List<Card> playedCards = player.getPlayedCards();
-        if(playedCards.size() == 0) return;
+        if(playedCards.size() > 0) {
+            selectedCardView = new CardView(playedCards.get(0),CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
+            add(selectedCardView,"span " + SELECTED_MULTIPLIER + " " + SELECTED_MULTIPLIER);
 
-        selectedCardView = new CardView(playedCards.get(0),CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
-        add(selectedCardView,"span " + SELECTED_MULTIPLIER + " " + SELECTED_MULTIPLIER);
-
-        for(Card c : playedCards) {
-            CardView cv = new CardView(c);
-            cv.setSelectionListener(new CardSelectionListener() {
-                @Override
-                public void handleSelection(Card card) {
-                    selectedCardView.setCard(card);
-                }
-            });
-            add(cv);
+            for(Card c : playedCards) {
+                CardView cv = new CardView(c);
+                cv.setSelectionListener(new CardSelectionListener() {
+                    @Override
+                    public void handleSelection(Card card) {
+                        selectedCardView.setCard(card);
+                    }
+                });
+                add(cv);
+            }
         }
 
         WonderView wonderView = new WonderView(player.getWonder());
