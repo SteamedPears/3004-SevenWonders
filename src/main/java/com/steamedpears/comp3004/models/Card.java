@@ -61,19 +61,19 @@ public class Card {
     private int minPlayers;
     private int age;
     //The base amount of assets this card yields
-    private Map<String, Integer> baseAssets;
+    private AssetMap baseAssets;
     //If multiplierAssets is not null, multiply the values in baseAssets
     //by the number of occurences of these assets in multiplierTargets (a combination of self, left, and right)
-    private Set<String> multiplierAssets;
-    private Set<String> multiplierTargets;
+    private AssetSet multiplierAssets;
+    private AssetSet multiplierTargets;
     //The building the card is free to play for
     private String freeFor;
     //the cost of playing this card
-    private Map<String, Integer> cost;
+    private AssetMap cost;
     //the resources this card makes discounted
-    private Set<String> discountsAssets;
+    private AssetSet discountsAssets;
     //the players to which this card's discountsAssets applies to
-    private Set<String> discountsTargets;
+    private AssetSet discountsTargets;
     //if true, the player may choose only *one* of the keys of baseAssets
     private boolean isChoice;
     private String id;
@@ -82,18 +82,18 @@ public class Card {
     public Card(JsonObject obj){
         this.name = obj.has(PROP_CARD_NAME) ? obj.getAsJsonPrimitive(PROP_CARD_NAME).getAsString() : "";
         this.color = obj.has(PROP_CARD_COLOR) ? obj.getAsJsonPrimitive(PROP_CARD_COLOR).getAsString() : "";
-        this.cost = convertJSONToAssetMap(obj, PROP_CARD_COST);
+        this.cost = new AssetMap(obj, PROP_CARD_COST);
         this.minPlayers = obj.has(PROP_CARD_MIN_PLAYERS) ? obj.getAsJsonPrimitive(PROP_CARD_MIN_PLAYERS).getAsInt() : 0;
         this.age = obj.has(PROP_CARD_AGE) ? obj.getAsJsonPrimitive(PROP_CARD_AGE).getAsInt() : 0;
         this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
         this.image = SevenWonders.PATH_IMG_CARDS+getId()+SevenWonders.IMAGE_TYPE_SUFFIX;
 
         //figure out what this card actually does
-        this.baseAssets = convertJSONToAssetMap(obj, PROP_CARD_BASE_ASSETS);
-        this.multiplierAssets = convertJSArrayToSet(obj,PROP_CARD_MULTIPLIER_ASSETS);
-        this.multiplierTargets = convertJSArrayToSet(obj,PROP_CARD_MULTIPLIER_TARGETS);
-        this.discountsAssets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_ASSETS);
-        this.discountsTargets = convertJSArrayToSet(obj,PROP_CARD_DISCOUNTS_TARGETS);
+        this.baseAssets = new AssetMap(obj, PROP_CARD_BASE_ASSETS);
+        this.multiplierAssets = new AssetSet(obj,PROP_CARD_MULTIPLIER_ASSETS);
+        this.multiplierTargets = new AssetSet(obj,PROP_CARD_MULTIPLIER_TARGETS);
+        this.discountsAssets = new AssetSet(obj,PROP_CARD_DISCOUNTS_ASSETS);
+        this.discountsTargets = new AssetSet(obj,PROP_CARD_DISCOUNTS_TARGETS);
         this.isChoice = obj.has(PROP_CARD_CHOICE) && obj.getAsJsonPrimitive(PROP_CARD_CHOICE).getAsBoolean();
         this.freeFor = obj.has(PROP_CARD_FREE_FOR) ? obj.getAsJsonPrimitive(PROP_CARD_FREE_FOR).getAsString() : "";
     }
@@ -164,7 +164,7 @@ public class Card {
      * Gets the Asset cost of playing this card
      * @return the Asset cost of playing this card
      */
-    public Map<String, Integer> getCost(){
+    public AssetMap getCost(){
         return cost;
     }
 
@@ -172,7 +172,7 @@ public class Card {
      * Gets the Assets that this Card will make cheaper to buy from neighbours
      * @return the Assets that this Card will make cheaper to buy from neighbours
      */
-    public Set<String> getDiscountsAssets(){
+    public AssetSet getDiscountsAssets(){
         return discountsAssets;
     }
 
@@ -180,7 +180,7 @@ public class Card {
      * Gets the neighbours for which #getDiscountsAssets applies to
      * @return the neighbours for which #getDiscountsAssets applies to
      */
-    public Set<String> getDiscountsTargets(){
+    public AssetSet getDiscountsTargets(){
         return discountsTargets;
     }
 
@@ -189,7 +189,7 @@ public class Card {
      * @param player the player being charged
      */
     public void playCard(Player player){
-        player.changeGold(-Asset.getAsset(getCost(),Asset.ASSET_GOLD));
+        player.changeGold(getCost().get(ASSET_GOLD));
     }
 
     /**
@@ -197,8 +197,8 @@ public class Card {
      * @param player the player that would play this card
      * @return the Assets
      */
-    public Map<String, Integer> getAssets(Player player){
-        Map<String, Integer> result = new HashMap<String, Integer>();
+    public AssetMap getAssets(Player player){
+        AssetMap result = new AssetMap();
         if(!isChoice){
             int multiplier = 1;
             if(!multiplierAssets.isEmpty()){
@@ -214,7 +214,7 @@ public class Card {
                     }
                     Map<String, Integer> targetPlayerAssets = targetPlayer.getConcreteAssets();
                     for(String multiplierAsset: multiplierAssets){
-                        multiplier+=Asset.getAsset(targetPlayerAssets, multiplierAsset);
+                        multiplier+=targetPlayerAssets.get(multiplierAsset);
                     }
                 }
             }
@@ -230,8 +230,8 @@ public class Card {
      * @param player the player that would play this card
      * @return the Assets
      */
-    public Set<String> getAssetsOptional(Player player){
-        Set<String> result = new HashSet<String>();
+    public AssetSet getAssetsOptional(Player player){
+        AssetSet result = new AssetSet();
         if(isChoice){
             for(String asset: baseAssets.keySet()){
                 result.add(asset);
@@ -260,21 +260,18 @@ public class Card {
      * @return whether the Player can afford this Card
      */
     public boolean canAfford(Player player, PlayerCommand command) {
-        Map<String, Integer> costLessBase = new HashMap<String, Integer>();
-        Map<String, Integer> playerAssets = player.getAssets();
-        for(String asset: cost.keySet()){
-            int assetQuantity = cost.get(asset);
-            assetQuantity-=getAsset(playerAssets, asset);
-            assetQuantity-=getAsset(command.leftPurchases, asset);
-            assetQuantity-=getAsset(command.rightPurchases, asset);
-            if(assetQuantity>0){
-                costLessBase.put(asset, assetQuantity);
-            }
-        }
-        if(costLessBase.size()==0){
+        AssetMap costLessBase = new AssetMap();
+        AssetMap playerAssets = player.getAssets();
+
+        costLessBase.add(cost);
+        costLessBase.subtract(playerAssets);
+        costLessBase.subtract(command.leftPurchases);
+        costLessBase.subtract(command.rightPurchases);
+
+        if(!costLessBase.isEmpty()){
             return true;
         }else{
-            return existsValidChoices(player.getOptionalAssetsComplete(), costLessBase);
+            return costLessBase.existsValidChoices(player.getOptionalAssetsComplete());
         }
     }
 

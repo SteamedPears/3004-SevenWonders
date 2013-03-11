@@ -102,7 +102,7 @@ public class AssetMap extends HashMap<String, Integer> {
      * Adds the values of the given assetMap to this one
      * @param assetMap The map to add
      */
-    private void add(AssetMap assetMap) {
+    public void add(AssetMap assetMap) {
         for(String key: assetMap.keySet()){
             add(key, assetMap.get(key));
         }
@@ -113,7 +113,7 @@ public class AssetMap extends HashMap<String, Integer> {
      * @param key The key to add the value at
      * @param value The amount to add to the assetMap
      */
-    private void add(String key, Integer value) {
+    public void add(String key, Integer value) {
         if(containsKey(key)){
             put(key, get(key) + value);
         }else{
@@ -125,7 +125,7 @@ public class AssetMap extends HashMap<String, Integer> {
      * Adds one of the specified type to the assetMap
      * @param key The key to add the value at
      */
-    private void add(String key){
+    public void add(String key){
         add(key, 1);
     }
 
@@ -133,7 +133,7 @@ public class AssetMap extends HashMap<String, Integer> {
      * Subtracts the values of the given assetMap from this one
      * @param assetMap The assetMap to subtract
      */
-    private void subtract(AssetMap assetMap){
+    public void subtract(AssetMap assetMap){
         for(String key: assetMap.keySet()){
             subtract(key, assetMap.get(key));
         }
@@ -144,7 +144,7 @@ public class AssetMap extends HashMap<String, Integer> {
      * @param key The key to subtract the value at
      * @param value The value to subtract
      */
-    private void subtract(String key, Integer value) {
+    public void subtract(String key, Integer value) {
         put(key, get(key)-value);
     }
 

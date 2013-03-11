@@ -62,7 +62,7 @@ public abstract class Player implements Runnable{
     private List<Integer> militaryResults;
     private int gold;
     private int id;
-    private Map<String, Integer> stagedCommandResult;
+    private AssetMap stagedCommandResult;
 
     //constructor///////////////////////////////////////////////////////////
     public Player(Wonder wonder, SevenWondersGame game, int id){
@@ -85,10 +85,7 @@ public abstract class Player implements Runnable{
             game.discard(card);
             hand.remove(card);
         }else{
-            Map<String, Integer> result = new HashMap<String, Integer>();
-            result.put(ASSET_GOLD, 3);
-
-            stagedCommandResult = sumAssets(stagedCommandResult, result);
+            stagedCommandResult.add(ASSET_GOLD, 3);
         }
 
     }
@@ -100,7 +97,7 @@ public abstract class Player implements Runnable{
             wonder.buildNextStage(this);
             hand.remove(card);
         }else{
-            stagedCommandResult = sumAssets(stagedCommandResult, stage.getAssets(this));
+            stagedCommandResult.add(stage.getAssets(this));
         }
     }
 
@@ -111,7 +108,7 @@ public abstract class Player implements Runnable{
             playedCards.add(card);
             hand.remove(card);
         }else{
-            stagedCommandResult = sumAssets(stagedCommandResult, card.getAssets(this));
+            stagedCommandResult.add(card.getAssets(this));
         }
     }
 
@@ -121,12 +118,12 @@ public abstract class Player implements Runnable{
             playedCards.add(card);
             game.undiscard(card);
         }else{
-            stagedCommandResult = sumAssets(stagedCommandResult, card.getAssets(this));
+            stagedCommandResult.add(card.getAssets(this));
         }
     }
 
     private void playFree(Card card, boolean isFinal){
-        log.debug("playing free: "+isFinal);
+        log.debug("playing free: " + isFinal);
         int oldGold = gold;
         playCard(card, isFinal);
         if(isFinal){
@@ -149,7 +146,7 @@ public abstract class Player implements Runnable{
             }
             temp = temp.followup;
         }
-        stagedCommandResult = new HashMap<String, Integer>();
+        stagedCommandResult = new AssetMap();
         applyCommandInternal(command);
     }
 
@@ -366,14 +363,14 @@ public abstract class Player implements Runnable{
         log.debug("validating player can play this card for free");
         return validateHasCard(command)
                 && validateHasNotPlayedCard(command)
-                && getAsset(getAssets(), ASSET_BUILD_FREE)>0;
+                && getAssets().containsKey(ASSET_BUILD_FREE);
     }
 
     private boolean validateUndiscard(PlayerCommand command) {
         log.debug("validating player can undiscard this card");
         return game.getDiscard().contains(game.getCardById(command.card))
                 && validateHasNotPlayedCard(command)
-                && getAsset(getAssets(), ASSET_DISCARD)>0;
+                && getAssets().containsKey(ASSET_DISCARD);
     }
 
     private boolean validateDiscard(PlayerCommand command) {
@@ -401,13 +398,13 @@ public abstract class Player implements Runnable{
                 && validateCanMakeTradesInternal(command.rightPurchases, getPlayerRight());
     }
 
-    private boolean validateCanMakeTradesInternal(Map<String, Integer> purchases, Player player){
+    private boolean validateCanMakeTradesInternal(AssetMap purchases, Player player){
         if(purchases==null){
             return true;
         }else{
-            Map<String, Integer> tradeables = player.getAssetsTradeable();
-            Map<String, Integer> purchasesLessBase = subtractAssets(purchases, tradeables);
-            return existsValidChoices(player.getOptionalAssetsCompleteTradeable(), purchasesLessBase);
+            AssetMap tradeables = player.getAssetsTradeable();
+            AssetMap purchasesLessBase = AssetMap.difference(purchases, tradeables);
+            return purchasesLessBase.existsValidChoices(player.getOptionalAssetsCompleteTradeable());
         }
     }
 
@@ -499,8 +496,8 @@ public abstract class Player implements Runnable{
      * gets all the assets that aren't captured in the cards or wonder of the player
      * @return the map
      */
-    public final Map<String, Integer> getPrivateAssets(){
-        Map<String, Integer> privateAssets = new HashMap<String, Integer>();
+    public final AssetMap getPrivateAssets(){
+        AssetMap privateAssets = new AssetMap();
         privateAssets.put(ASSET_GOLD, getGold());
         privateAssets.put(ASSET_MILITARY_DEFEAT, getMilitaryDefeats());
         privateAssets.put(ASSET_MILITARY_VICTORY, getMilitaryWins());
@@ -512,18 +509,17 @@ public abstract class Player implements Runnable{
      * gets all the Assets the player definitely has before any decisions
      * @return the map
      */
-    public Map<String, Integer> getAssets(){
-        List<Map<String, Integer>> collectedAssets = new ArrayList<Map<String, Integer>>();
+    public AssetMap getAssets(){
+        AssetMap result = new AssetMap();
 
         for(Card card: playedCards){
-            collectedAssets.add(card.getAssets(this));
+            result.add(card.getAssets(this));
         }
 
-        collectedAssets.add(wonder.getAssets(this));
+        result.add(wonder.getAssets(this));
 
-        collectedAssets.add(getPrivateAssets());
+        result.add(getPrivateAssets());
 
-        Map<String, Integer> result = sumAssets(collectedAssets);
         result.put(ASSET_GOLD, gold);
 
         return result;
@@ -533,11 +529,11 @@ public abstract class Player implements Runnable{
      * get all the asset choices the player can make
      * @return the list of choices
      */
-    public final List<Set<String>> getOptionalAssetsComplete(){
-        List<Set<String>> collectedAssets = new ArrayList<Set<String>>();
+    public final List<AssetSet> getOptionalAssetsComplete(){
+        List<AssetSet> collectedAssets = new ArrayList<AssetSet>();
 
         for(Card card: playedCards){
-            Set<String> options = card.getAssetsOptional(this);
+            AssetSet options = card.getAssetsOptional(this);
             if(options!=null && !options.isEmpty()){
                 collectedAssets.add(options);
             }
@@ -553,18 +549,14 @@ public abstract class Player implements Runnable{
      * e.g. wood/stone and stone/clay -> wood:1, stone:2, clay:1
      * @return the map
      */
-    public final Map<String, Integer> getOptionalAssetsSummary(){
-        List<Set<String>> options = getOptionalAssetsComplete();
+    public final AssetMap getOptionalAssetsSummary(){
+        List<AssetSet> options = getOptionalAssetsComplete();
 
-        Map<String, Integer> result = new HashMap<String, Integer>();
+        AssetMap result = new AssetMap();
 
-        for(Set<String> option: options){
+        for(AssetSet option: options){
             for(String key: option){
-                if(result.containsKey(key)){
-                    result.put(key, result.get(key)+1);
-                }else{
-                    result.put(key, 1);
-                }
+                result.add(key);
             }
         }
 
@@ -575,8 +567,8 @@ public abstract class Player implements Runnable{
      * get a map of all the assets a player can definitely trade before making any decisions
      * @return the map
      */
-    public final Map<String, Integer> getAssetsTradeable(){
-        List<Map<String, Integer>> collectedAssets = new ArrayList<Map<String, Integer>>();
+    public final AssetMap getAssetsTradeable(){
+        AssetMap collectedAssets = new AssetMap();
 
         for(Card card: playedCards){
             if(card.getColor().equals(COLOR_BROWN) || card.getColor().equals(COLOR_GREY)){
@@ -586,19 +578,19 @@ public abstract class Player implements Runnable{
 
         collectedAssets.add(wonder.getTradeableAssets());
 
-        return sumAssets(collectedAssets);
+        return collectedAssets;
     }
 
     /**
      * get a list of all the tradeable asset choices a player can make
      * @return the list
      */
-    public final List<Set<String>> getOptionalAssetsCompleteTradeable(){
-        List<Set<String>> collectedAssets = new ArrayList<Set<String>>();
+    public final List<AssetSet> getOptionalAssetsCompleteTradeable(){
+        List<AssetSet> collectedAssets = new ArrayList<AssetSet>();
 
         for(Card card: playedCards){
             if(card.getColor().equals(COLOR_BROWN) || card.getColor().equals(COLOR_GREY)){
-                Set<String> options = card.getAssetsOptional(this);
+                AssetSet options = card.getAssetsOptional(this);
                 if(options!=null && !options.isEmpty()){
                     collectedAssets.add(options);
                 }
@@ -614,12 +606,11 @@ public abstract class Player implements Runnable{
      * Gets all the assets a player has that a multiplier might be interested in (avoids infinite loop)
      * @return multiplier assets
      */
-    public Map<String, Integer> getConcreteAssets() {
-        Map<String, Integer> result = new HashMap<String, Integer>();
+    public AssetMap getConcreteAssets() {
+        AssetMap result = new AssetMap();
 
         for(Card card: playedCards){
-            String color = card.getColor();
-            result.put(color, getAsset(result, color)+1);
+            result.add(card.getColor());
         }
 
         result.put(ASSET_WONDER_STAGES, wonder.getCurrentStage());
@@ -664,26 +655,26 @@ public abstract class Player implements Runnable{
      */
     public int getFinalVictoryPoints() {
         int total = 0;
-        Map<String, Integer> assets = getAssets();
-        List<Set<String>> optionalAssets = getOptionalAssetsComplete();
+        AssetMap assets = getAssets();
+        List<AssetSet> optionalAssets = getOptionalAssetsComplete();
 
         total+=getGold()/3;
-        total+=getAsset(assets, ASSET_MILITARY_VICTORY)-getAsset(assets, ASSET_MILITARY_DEFEAT);
-        total+=getAsset(assets, ASSET_VICTORY_POINTS);
+        total+=assets.get(ASSET_MILITARY_VICTORY)-assets.get(ASSET_MILITARY_DEFEAT);
+        total+=assets.get(ASSET_VICTORY_POINTS);
         total+=getMaximumPotentialSciencePoints(assets, optionalAssets);
 
         return total;
     }
 
-    private int getMaximumPotentialSciencePoints(Map<String,Integer> assets, List<Set<String>> optionalAssets) {
+    private int getMaximumPotentialSciencePoints(AssetMap assets, List<AssetSet> optionalAssets) {
         int total;
 
-        int science1 = getAsset(assets, ASSET_SCIENCE_1);
-        int science2 = getAsset(assets, ASSET_SCIENCE_2);
-        int science3 = getAsset(assets, ASSET_SCIENCE_3);
+        int science1 = assets.get(ASSET_SCIENCE_1);
+        int science2 = assets.get(ASSET_SCIENCE_2);
+        int science3 = assets.get(ASSET_SCIENCE_3);
 
         int numScienceChoices = 0;
-        for(Set<String> choices: optionalAssets){
+        for(AssetSet choices: optionalAssets){
             if(choices.contains(ASSET_SCIENCE_1)){
                 numScienceChoices++;
             }
