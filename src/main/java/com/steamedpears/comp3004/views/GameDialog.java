@@ -22,5 +22,9 @@ public class GameDialog extends JDialog {
         this.controller = controller;
     }
 
+    /**
+     * Get the controller associated with this dialog.
+     * @return The controller associated with this dialog.
+     */
     public SevenWonders getController() { return controller; }
 }

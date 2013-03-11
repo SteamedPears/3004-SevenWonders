@@ -32,11 +32,20 @@ public class PlayerView extends JPanel {
         update();
     }
 
+    /**
+     * Set the ephemeral message on this view.
+     * @param message The ephemeral message to be displayed.
+     */
     public void setMessage(String message) {
         if(messageLabel == null) return;
         messageLabel.setText(message);
     }
 
+    /**
+     * Add a persistent message to this view.
+     * @param key The key to which to assign this message (for easy removal).
+     * @param message The persistent message to be displayed.
+     */
     public void addMessage(String key, String message) {
         persistentMessages.put(key,message);
         updatePersistentMessages();
@@ -51,6 +60,9 @@ public class PlayerView extends JPanel {
         persistentMessageLabel.setText(message.toString());
     }
 
+    /**
+     * Update the view.
+     */
     public void update() {
         removeAll();
 

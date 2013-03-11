@@ -26,24 +26,43 @@ public class CardView extends JLabel {
         update();
     }
 
+    /**
+     * Set the card associated with this view, and update.
+     * @param card The card to be associated with this view.
+     */
     public void setCard(Card card) {
         this.card = card;
         update();
     }
 
+    /**
+     * Get the card associated with this view.
+     * @return The card associated with this view.
+     */
     public Card getCard() {
         return this.card;
     }
 
+    /**
+     * Set the width of the displayed card.
+     * @param width The desired width.
+     */
     public void setCardWidth(int width) {
         this.width = width;
         setIcon(getIconOfSize(card, width));
     }
 
+    /**
+     * Set the selection listener to be associated with selecting a card in this view.
+     * @param selectionListener The selection listener to be associated with selecting a card.
+     */
     public void setSelectionListener(CardSelectionListener selectionListener) {
         this.selectionListener = selectionListener;
     }
 
+    /**
+     * Update the view.
+     */
     public void update() {
         setCardWidth(width);
     }

@@ -104,6 +104,9 @@ public class Wonder {
         }
     }
 
+    /**
+     * Resets the special ability associated with this wonder that may let a player build something for free.
+     */
     public void handleNewAge() {
         builtFreeThisAge = false;
     }

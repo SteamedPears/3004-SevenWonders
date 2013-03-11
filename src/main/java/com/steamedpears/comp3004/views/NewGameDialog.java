@@ -3,8 +3,6 @@ package com.steamedpears.comp3004.views;
 import com.steamedpears.comp3004.*;
 import com.steamedpears.comp3004.routing.*;
 
-import net.miginfocom.swing.MigLayout;
-
 import javax.swing.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -57,10 +55,29 @@ public class NewGameDialog extends GameDialog {
         playersComboBox.setVisible(true);
     }
 
+    /**
+     * Checks if the host button is selected.
+     * @return True only if the host button is selected.
+     */
     public boolean isHostSelected() { return isHost; }
+
+    /**
+     * Get the IP address to which to connect.
+     * @return The IP address to which to connect.
+     */
     public String getIpAddress() { return ipAddress; }
+
+    /**
+     * Get the TCP port on which to connect.
+     * @return The TCP port on which to connect.
+     */
     public int getPort() { return port; }
-    public int getPlayers() { return players; }
+
+    /**
+     * Get the chosen number of players.
+     * @return The chosen number of players.
+     */
+    public int getChosenNumberOfPlayers() { return players; }
 
     public NewGameDialog(JFrame f, SevenWonders controller) {
         super(f,"New Game",controller);
@@ -151,7 +168,7 @@ public class NewGameDialog extends GameDialog {
     private class StartGameListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            controller.createGame(isHostSelected(), getIpAddress(), getPort(), getPlayers());
+            controller.createGame(isHostSelected(), getIpAddress(), getPort(), getChosenNumberOfPlayers());
         }
     }
 

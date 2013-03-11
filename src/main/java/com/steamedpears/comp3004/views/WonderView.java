@@ -26,26 +26,45 @@ public class WonderView extends JLabel {
         update();
     }
 
+    /**
+     * Set the wonder associated with this view, and update.
+     * @param wonder The wonder to be associated with this view.
+     */
     public void setWonder(Wonder wonder) {
         this.wonder = wonder;
         update();
     }
 
+    /**
+     * Get the wonder associated with this view.
+     * @return The wonder associated with this view.
+     */
     public Wonder getWonder() {
         return this.wonder;
     }
 
-    public void setCardWidth(int width) {
+    /**
+     * Set the width of the wonder image being displayed.
+     * @param width The desired width (in pixels) of the wonder image.
+     */
+    public void setWonderWidth(int width) {
         this.width = width;
         setIcon(getIconOfSize(wonder, width));
     }
 
+    /**
+     * Set the selection listener to respond to the selection of a wonder.
+     * @param selectionListener The selection listener to respond to the selection of a wonder.
+     */
     public void setSelectionListener(WonderSelectionListener selectionListener) {
         this.selectionListener = selectionListener;
     }
 
+    /**
+     * Update the view.
+     */
     public void update() {
-        setCardWidth(width);
+        setWonderWidth(width);
     }
 
     private static Icon getIconOfSize(Wonder wonder, int width) {

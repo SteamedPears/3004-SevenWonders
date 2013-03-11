@@ -139,6 +139,9 @@ class HostRouter extends Router {
         game.finalizePlayers();
     }
 
+    /**
+     * Starts the thread associated with this HostRouter.
+     */
     public void start(){
         log.debug("Starting Host Router");
         lobbyThread = pool.submit(new Runnable() {
@@ -147,8 +150,6 @@ class HostRouter extends Router {
             }
         });
     }
-
-
 
     private void waitForClients(){
         log.debug("Waiting for clients to connect");
