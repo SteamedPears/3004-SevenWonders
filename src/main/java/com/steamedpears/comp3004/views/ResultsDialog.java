@@ -17,13 +17,21 @@ public class ResultsDialog extends GameDialog {
         add(new JLabel("Score"));
         Map<Player,Integer> results = (controller.getGame()).tabulateResults();
         for(Player player : results.keySet()) {
-            add(new JLabel("" + player.getPlayerId()));
+            String title = "" + player.getPlayerId();
+            Player thisPlayer = controller.getLocalPlayer();
+            if(player.equals(thisPlayer)) {
+                title = "You";
+            } else if(player.equals(thisPlayer.getPlayerLeft())) {
+                title = "Left";
+            } else if(player.equals(thisPlayer.getPlayerRight())) {
+                title = "Right";
+            }
+            add(new JLabel(title));
             add(new JLabel("" + results.get(player)));
         }
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                super.windowClosed(windowEvent);
                 controller.openNewGameDialog();
             }
         });

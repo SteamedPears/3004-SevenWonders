@@ -125,7 +125,7 @@ public class SevenWonders {
 
     private void updateView() {
         view.hideTabs();
-        Player thisPlayer = getGame().getPlayerById(router.getLocalPlayerId());
+        Player thisPlayer = getLocalPlayer();
         playerView = new PlayerView(thisPlayer);
         view.addTab(playerView, "Hand");
         highLevelView = new HighLevelView(this);
@@ -149,6 +149,10 @@ public class SevenWonders {
      */
     public SevenWondersGame getGame() {
         return router.getLocalGame();
+    }
+
+    public Player getLocalPlayer() {
+        return getGame().getPlayerById(router.getLocalPlayerId());
     }
 
     /**
