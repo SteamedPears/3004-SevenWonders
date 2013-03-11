@@ -10,12 +10,12 @@ import java.io.*;
 public class WonderViewTest extends JFrame {
     public WonderViewTest() throws Exception {
         setBounds(0, 0, 1000, 1000);
-        JsonArray cards = (new JsonParser())
+        JsonArray wonders = (new JsonParser())
                 .parse(new FileReader("src/main/resources/data/wonderlist.json"))
                 .getAsJsonObject()
                 .get("wonders")
                 .getAsJsonArray();
-        Wonder testWonder = new Wonder(cards.get(0).getAsJsonObject());
+        Wonder testWonder = new Wonder(wonders.get(0).getAsJsonObject());
         WonderView view = new WonderView(testWonder);
         add(view);
         setVisible(true);
