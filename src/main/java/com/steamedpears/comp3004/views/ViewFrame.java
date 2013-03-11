@@ -34,6 +34,19 @@ public class ViewFrame extends JFrame {
         }
     }
 
+    public void hideTabs() {
+        pane.setVisible(false);
+    }
+
+    public void showTabs() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                pane.setVisible(true);
+            }
+        });
+    }
+
     /**
      * Removes all tabs.
      */
