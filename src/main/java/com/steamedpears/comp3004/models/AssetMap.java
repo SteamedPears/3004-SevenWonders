@@ -1,13 +1,11 @@
 package com.steamedpears.comp3004.models;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +68,7 @@ public class AssetMap extends HashMap<String, Integer> {
     }
 
     public AssetMap(JsonObject obj, String key){
-        this(obj.getAsJsonObject(key));
+        this(obj.has(key) ? obj.getAsJsonObject(key) : new JsonObject());
     }
 
     @Override
@@ -163,11 +161,11 @@ public class AssetMap extends HashMap<String, Integer> {
      * @param choices list of sets of assets which can be used to pay the cost
      * @return true if choices can be used to pay cost
      */
-    public boolean existsValidChoices(List<Set<String>> choices){
+    public boolean existsValidChoices(List<AssetSet> choices){
         return recursiveSearchForValidChoices(choices, 0);
     }
 
-    private boolean recursiveSearchForValidChoices(List<Set<String>> choices, int index){
+    private boolean recursiveSearchForValidChoices(List<AssetSet> choices, int index){
         Set<String> choice = choices.get(index);
         //loop over every asset in this choice
         boolean everRecursed = false;
