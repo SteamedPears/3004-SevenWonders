@@ -10,8 +10,8 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
-public class PlayedCardsViewTest extends JFrame {
-    public PlayedCardsViewTest() throws Exception {
+public class StructuresViewTest extends JFrame {
+    public StructuresViewTest() throws Exception {
         // initialization
         setBounds(0,0,960,560);
 
@@ -39,7 +39,7 @@ public class PlayedCardsViewTest extends JFrame {
         when(player.getWonder()).thenReturn(new Wonder(wonders.get(0).getAsJsonObject()));
 
         // add played cards view
-        add(new PlayedCardsView(player));
+        add(new StructuresView(player));
 
         // display
         setVisible(true);
@@ -47,6 +47,6 @@ public class PlayedCardsViewTest extends JFrame {
 
     public static void main(String[] args) throws Exception {
         BasicConfigurator.configure();
-        new PlayedCardsViewTest();
+        new StructuresViewTest();
     }
 }
