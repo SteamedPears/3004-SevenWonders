@@ -1,7 +1,5 @@
 package com.steamedpears.comp3004.models;
 
-import java.util.Map;
-
 public class PlayerCommand{
     public enum PlayerCardAction{
         DISCARD, BUILD, PLAY, UNDISCARD, PLAY_FREE
@@ -23,8 +21,8 @@ public class PlayerCommand{
 
     public PlayerCardAction action;
     public String card;
-    public Map<String, Integer> leftPurchases;
-    public Map<String, Integer> rightPurchases;
+    public AssetMap leftPurchases = new AssetMap();
+    public AssetMap rightPurchases = new AssetMap();
     public PlayerCommand followup; //for if you can perform multiple actions this turn
 
     @Override
