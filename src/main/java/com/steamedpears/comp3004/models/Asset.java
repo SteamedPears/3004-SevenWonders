@@ -199,9 +199,11 @@ public final class Asset {
                                                           int index){
         Set<String> choice = choices.get(index);
         //loop over every asset in this choice
+        boolean everRecursed = false;
         for(String asset: choice){
             //if this asset would help pay for the cost, try it
             if(cost.containsKey(asset)){
+                everRecursed = true;
                 cost.put(asset, cost.get(asset)-1);
                 //see if we've found a solution
                 boolean foundSolution = true;
@@ -216,12 +218,15 @@ public final class Asset {
                     foundSolution = recursiveSearchForValidChoices(choices, cost, index+1);
                 }
                 //if we found a solution, return true; otherwise put the asset back and try the next asset in the choice
+                cost.put(asset, cost.get(asset)+1);
                 if(foundSolution){
                     return true;
-                }else{
-                    cost.put(asset, cost.get(asset)+1);
                 }
             }
+        }
+        //this asset is totally useless, go around it!
+        if(!everRecursed && index+1<choices.size()){
+            return recursiveSearchForValidChoices(choices, cost, index+1);
         }
         //if we've gotten to here, no choice in this subtree works
         return false;
