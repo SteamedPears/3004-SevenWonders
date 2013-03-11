@@ -125,12 +125,21 @@ public class SevenWonders {
 
     private void updateView() {
         view.hideTabs();
-        playerView = new PlayerView(getGame().getPlayerById(router.getLocalPlayerId()));
+        Player thisPlayer = getGame().getPlayerById(router.getLocalPlayerId());
+        playerView = new PlayerView(thisPlayer);
         view.addTab(playerView, "Hand");
         highLevelView = new HighLevelView(this);
         view.addTab(highLevelView,"Table");
         for(Player player : getGame().getPlayers()) {
-            view.addTab(new StructuresView(player),"Player " + (player.getPlayerId()));
+            String title = "Player " + player.getPlayerId();
+            if(player.equals(thisPlayer)) {
+                title = "You";
+            } else if(player.equals(thisPlayer.getPlayerLeft())) {
+                title = "Left";
+            } else if(player.equals(thisPlayer.getPlayerRight())) {
+                title = "Right";
+            }
+            view.addTab(new StructuresView(player),title);
         }
         view.showTabs();
     }
