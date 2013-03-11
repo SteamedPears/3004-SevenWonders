@@ -61,7 +61,7 @@ public abstract class Player implements Runnable{
     private List<Integer> militaryResults;
     private int gold;
     private int id;
-    private AssetMap stagedCommandResult;
+    private int stagedCommandResult;
 
     //constructor///////////////////////////////////////////////////////////
     public Player(Wonder wonder, SevenWondersGame game, int id){
@@ -84,7 +84,7 @@ public abstract class Player implements Runnable{
             game.discard(card);
             hand.remove(card);
         }else{
-            stagedCommandResult.add(ASSET_GOLD, 3);
+            stagedCommandResult+=3;
         }
 
     }
@@ -96,7 +96,7 @@ public abstract class Player implements Runnable{
             wonder.buildNextStage(this);
             hand.remove(card);
         }else{
-            stagedCommandResult.add(stage.getAssets(this));
+            stagedCommandResult+=stage.getAssets(this).get(ASSET_GOLD);
         }
     }
 
@@ -107,7 +107,7 @@ public abstract class Player implements Runnable{
             playedCards.add(card);
             hand.remove(card);
         }else{
-            stagedCommandResult.add(card.getAssets(this));
+            stagedCommandResult+=card.getAssets(this).get(ASSET_GOLD);
         }
     }
 
@@ -117,7 +117,7 @@ public abstract class Player implements Runnable{
             playedCards.add(card);
             game.undiscard(card);
         }else{
-            stagedCommandResult.add(card.getAssets(this));
+            stagedCommandResult+=card.getAssets(this).get(ASSET_GOLD);
         }
     }
 
@@ -145,7 +145,7 @@ public abstract class Player implements Runnable{
             }
             temp = temp.followup;
         }
-        stagedCommandResult = new AssetMap();
+        stagedCommandResult = 0;
         applyCommandInternal(command);
     }
 
@@ -179,9 +179,7 @@ public abstract class Player implements Runnable{
      */
     public final void finalizeCommand(PlayerCommand command){
         log.debug("finalizing command");
-        if(stagedCommandResult.containsKey(ASSET_GOLD)){
-            this.gold+=stagedCommandResult.get(ASSET_GOLD);
-        }
+        this.gold += stagedCommandResult;
         while(command!=null){
             payForTrades(command);
             resolveCommand(command, true);

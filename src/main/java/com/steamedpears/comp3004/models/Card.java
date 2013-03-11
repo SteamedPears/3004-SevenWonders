@@ -186,7 +186,7 @@ public class Card {
      * @param player the player being charged
      */
     public void playCard(Player player){
-        player.changeGold(getCost().get(ASSET_GOLD));
+        player.changeGold(-getCost().get(ASSET_GOLD));
     }
 
     /**
