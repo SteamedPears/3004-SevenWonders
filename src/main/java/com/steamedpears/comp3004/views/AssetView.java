@@ -1,20 +1,105 @@
 package com.steamedpears.comp3004.views;
 
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Asset;
 import com.steamedpears.comp3004.models.Player;
 import net.miginfocom.swing.MigLayout;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AssetView extends JPanel {
+    public static final String IMAGE_TYPE_SUFFIX = ".png";
+    public static final String PATH_ICON = SevenWonders.PATH_IMG + "icons" + File.separator;
+    public static final String WOOD_ICON = PATH_ICON + "res_wood" + IMAGE_TYPE_SUFFIX;
+    public static final String STONE_ICON = PATH_ICON + "res_stone" + IMAGE_TYPE_SUFFIX;
+    public static final String CLAY_ICON = PATH_ICON + "res_clay" + IMAGE_TYPE_SUFFIX;
+    public static final String ORE_ICON = PATH_ICON + "res_ore" + IMAGE_TYPE_SUFFIX;
+    public static final String LOOM_ICON = PATH_ICON + "res_loom" + IMAGE_TYPE_SUFFIX;
+    public static final String PAPYRUS_ICON = PATH_ICON + "res_papyrus" + IMAGE_TYPE_SUFFIX;
+    public static final String GLASS_ICON = PATH_ICON + "res_glass" + IMAGE_TYPE_SUFFIX;
+    public static final String SCIENCE1_ICON = PATH_ICON + "science_cune" + IMAGE_TYPE_SUFFIX;
+    public static final String SCIENCE2_ICON = PATH_ICON + "science_comp" + IMAGE_TYPE_SUFFIX;
+    public static final String SCIENCE3_ICON = PATH_ICON + "science_gear" + IMAGE_TYPE_SUFFIX;
+    public static final String GOLD_ICON = PATH_ICON + "gold1" + IMAGE_TYPE_SUFFIX;
+    public static final String VICTORY_ICON = PATH_ICON + "victory" + IMAGE_TYPE_SUFFIX;
+    public static final String SHIELD_ICON = PATH_ICON + "shield" + IMAGE_TYPE_SUFFIX;
+    public static final String STAGE_ICON = PATH_ICON + "wonder" + IMAGE_TYPE_SUFFIX;
+
+    static Logger log = Logger.getLogger(ViewFrame.class);
+
+    public static String MIG_CONFIG = "w 60!";
+
     public AssetView(Player player) {
+        this(Arrays.asList(player));
+    }
+
+    public AssetView(List<Player> players) {
         setLayout(new MigLayout(
-                "aligny top", // Layout Constraints
+                "aligny top,wrap 15", // Layout Constraints
                 "0[]0[]0", // Column Constraints
-                "0[]0[]0"  // Row Constraints
+                "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
-        for(String asset : Asset.AssetTypes) {
-            add(new JLabel("" + Asset.getAsset(player.getAssets(),asset)),"w 70!");
+
+        if(players.size() > 1) add(new JLabel("Player"), MIG_CONFIG);
+        else add(new JLabel());
+        add(newJLabel(WOOD_ICON), MIG_CONFIG);
+        add(newJLabel(STONE_ICON), MIG_CONFIG);
+        add(newJLabel(CLAY_ICON), MIG_CONFIG);
+        add(newJLabel(ORE_ICON), MIG_CONFIG);
+        add(newJLabel(LOOM_ICON), MIG_CONFIG);
+        add(newJLabel(PAPYRUS_ICON), MIG_CONFIG);
+        add(newJLabel(GLASS_ICON), MIG_CONFIG);
+        add(newJLabel(SCIENCE1_ICON), MIG_CONFIG);
+        add(newJLabel(SCIENCE2_ICON), MIG_CONFIG);
+        add(newJLabel(SCIENCE3_ICON), MIG_CONFIG);
+        add(newJLabel(GOLD_ICON), MIG_CONFIG);
+        add(newJLabel(VICTORY_ICON), MIG_CONFIG);
+        add(newJLabel(SHIELD_ICON), MIG_CONFIG);
+        add(newJLabel(STAGE_ICON), MIG_CONFIG);
+
+        for(Player player : players) {
+            if(players.size() > 1) add(new JLabel("" + player.getPlayerId()));
+            else add(new JLabel());
+            for(String asset : Asset.AssetTypes) {
+                add(newTextJLabel("" + Asset.getAsset(player.getAssets(),asset)),MIG_CONFIG);
+            }
         }
+    }
+
+    private URL getImagePath(String image){
+        URL result = AssetView.class.getResource(image);
+        if(result==null){
+            log.warn("Missing file " + image);
+            try {
+                result = new URL("file://");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    private ImageIcon newImageIcon(String image) {
+        return new ImageIcon(getImagePath(image));
+    }
+
+    private JLabel newJLabel(String image) {
+        JLabel label = new JLabel(newImageIcon(image),JLabel.CENTER);
+        label.setPreferredSize(new Dimension(70,10));
+        return label;
+    }
+
+    private JLabel newTextJLabel(String text) {
+        JLabel label = new JLabel(text,JLabel.CENTER);
+        label.setPreferredSize(new Dimension(70,10));
+        return label;
     }
 }

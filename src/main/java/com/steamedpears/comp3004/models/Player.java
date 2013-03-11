@@ -478,7 +478,7 @@ public abstract class Player implements Runnable{
      * gets this player's wonder
      * @return this player's wonder
      */
-    public final Wonder getWonder(){
+    public Wonder getWonder(){
         return wonder;
     }
 

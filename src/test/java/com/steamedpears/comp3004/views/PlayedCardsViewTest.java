@@ -13,7 +13,7 @@ import java.util.*;
 public class PlayedCardsViewTest extends JFrame {
     public PlayedCardsViewTest() throws Exception {
         // initialization
-        setBounds(0,0,960,560);
+        setBounds(0,0,960,600);
 
         // build played cards
         JsonArray cards = (new JsonParser())
@@ -26,9 +26,17 @@ public class PlayedCardsViewTest extends JFrame {
             playedCards.add(new Card(cards.get(i).getAsJsonObject()));
         }
 
+        // build wonders
+        JsonArray wonders = (new JsonParser())
+                .parse(new FileReader("src/main/resources/data/wonderlist.json"))
+                .getAsJsonObject()
+                .get("wonders")
+                .getAsJsonArray();
+
         // mock player
         Player player = mock(Player.class);
         when(player.getPlayedCards()).thenReturn(playedCards);
+        when(player.getWonder()).thenReturn(new Wonder(wonders.get(0).getAsJsonObject()));
 
         // add played cards view
         add(new PlayedCardsView(player));
