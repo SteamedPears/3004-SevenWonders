@@ -86,7 +86,7 @@ public class Card {
         this.minPlayers = obj.has(PROP_CARD_MIN_PLAYERS) ? obj.getAsJsonPrimitive(PROP_CARD_MIN_PLAYERS).getAsInt() : 0;
         this.age = obj.has(PROP_CARD_AGE) ? obj.getAsJsonPrimitive(PROP_CARD_AGE).getAsInt() : 0;
         this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
-        this.image = SevenWonders.PATH_IMG_CARDS+getId()+".png";
+        this.image = SevenWonders.PATH_IMG_CARDS+getId()+SevenWonders.IMAGE_TYPE_SUFFIX;
 
         //figure out what this card actually does
         this.baseAssets = convertJSONToAssetMap(obj, PROP_CARD_BASE_ASSETS);
