@@ -124,7 +124,6 @@ public class SevenWonders {
     }
 
     private void updateView() {
-        view.hideTabs();
         Player thisPlayer = getLocalPlayer();
         playerView = new PlayerView(thisPlayer);
         view.addTab(playerView, "Hand");
@@ -141,7 +140,6 @@ public class SevenWonders {
             }
             view.addTab(new StructuresView(player),title);
         }
-        view.showTabs();
     }
 
     /**
