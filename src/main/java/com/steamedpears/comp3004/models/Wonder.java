@@ -26,7 +26,7 @@ public class Wonder {
             this.stages = Card.parseDeck(obj.getAsJsonArray(PROP_WONDER_STAGES));
             this.image = SevenWonders.PATH_IMG_WONDERS+
                     obj.getAsJsonPrimitive(PROP_WONDER_IMAGE).getAsString()
-                    +".png";
+                    +SevenWonders.IMAGE_TYPE_SUFFIX;
             this.startResource = obj.getAsJsonPrimitive(PROP_WONDER_START_RESOURCE).getAsString();
         }
     }
