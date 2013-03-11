@@ -14,7 +14,7 @@ public class AssetView extends JPanel {
                 "0[]0[]0"  // Row Constraints
         ));
         for(String asset : Asset.AssetTypes) {
-            add(new JLabel("" + Asset.getAsset(player.getAssets(),asset)),"w 70!");
+            add(new JLabel("" + Asset.getAsset(player.getAssets(),asset)),AssetHeaderView.MIG_CONFIG);
         }
     }
 }

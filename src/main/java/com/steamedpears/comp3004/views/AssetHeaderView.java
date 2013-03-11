@@ -1,11 +1,35 @@
 package com.steamedpears.comp3004.views;
 
+import com.steamedpears.comp3004.SevenWonders;
 import net.miginfocom.swing.MigLayout;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class AssetHeaderView extends JPanel {
-    private static String config = "w 70!";
+    public static final String IMAGE_TYPE_SUFFIX = ".png";
+    public static final String PATH_ICON = SevenWonders.PATH_IMG + "icons" + File.separator;
+    public static final String WOOD_ICON = PATH_ICON + "res_wood" + IMAGE_TYPE_SUFFIX;
+    public static final String STONE_ICON = PATH_ICON + "res_stone" + IMAGE_TYPE_SUFFIX;
+    public static final String CLAY_ICON = PATH_ICON + "res_clay" + IMAGE_TYPE_SUFFIX;
+    public static final String ORE_ICON = PATH_ICON + "res_ore" + IMAGE_TYPE_SUFFIX;
+    public static final String LOOM_ICON = PATH_ICON + "res_loom" + IMAGE_TYPE_SUFFIX;
+    public static final String PAPYRUS_ICON = PATH_ICON + "res_papyrus" + IMAGE_TYPE_SUFFIX;
+    public static final String GLASS_ICON = PATH_ICON + "res_glass" + IMAGE_TYPE_SUFFIX;
+    public static final String SCIENCE1_ICON = PATH_ICON + "science_cune" + IMAGE_TYPE_SUFFIX;
+    public static final String SCIENCE2_ICON = PATH_ICON + "science_comp" + IMAGE_TYPE_SUFFIX;
+    public static final String SCIENCE3_ICON = PATH_ICON + "science_gear" + IMAGE_TYPE_SUFFIX;
+    public static final String GOLD_ICON = PATH_ICON + "gold1" + IMAGE_TYPE_SUFFIX;
+    public static final String VICTORY_ICON = PATH_ICON + "victory" + IMAGE_TYPE_SUFFIX;
+    public static final String SHIELD_ICON = PATH_ICON + "shield" + IMAGE_TYPE_SUFFIX;
+    public static final String STAGE_ICON = PATH_ICON + "wonder" + IMAGE_TYPE_SUFFIX;
+
+    static Logger log = Logger.getLogger(ViewFrame.class);
+
+    public static String MIG_CONFIG = "w 60!";
 
     public AssetHeaderView() {
         setLayout(new MigLayout(
@@ -14,20 +38,40 @@ public class AssetHeaderView extends JPanel {
                 "0[]"  // Row Constraints
         ));
 
-        // TODO: replace these with icons
-        add(new JLabel("Wood"),config);
-        add(new JLabel("Stone"),config);
-        add(new JLabel("Clay"),config);
-        add(new JLabel("Ore"),config);
-        add(new JLabel("Loom"),config);
-        add(new JLabel("Papyrus"));
-        add(new JLabel("Glass"),config);
-        add(new JLabel("Tab (Science)"),config);
-        add(new JLabel("Comp. (Science)"),config);
-        add(new JLabel("Gear (Science)"),config);
-        add(new JLabel("Gold"),config);
-        add(new JLabel("Victory"),config);
-        add(new JLabel("Shields"),config);
-        add(new JLabel("Stages"),config);
+        add(newJLabel(WOOD_ICON), MIG_CONFIG);
+        add(newJLabel(STONE_ICON), MIG_CONFIG);
+        add(newJLabel(CLAY_ICON), MIG_CONFIG);
+        add(newJLabel(ORE_ICON), MIG_CONFIG);
+        add(newJLabel(LOOM_ICON), MIG_CONFIG);
+        add(newJLabel(PAPYRUS_ICON), MIG_CONFIG);
+        add(newJLabel(GLASS_ICON), MIG_CONFIG);
+        add(newJLabel(SCIENCE1_ICON), MIG_CONFIG);
+        add(newJLabel(SCIENCE2_ICON), MIG_CONFIG);
+        add(newJLabel(SCIENCE3_ICON), MIG_CONFIG);
+        add(newJLabel(GOLD_ICON), MIG_CONFIG);
+        add(newJLabel(VICTORY_ICON), MIG_CONFIG);
+        add(newJLabel(SHIELD_ICON), MIG_CONFIG);
+        add(newJLabel(STAGE_ICON), MIG_CONFIG);
+    }
+
+    private URL getImagePath(String image){
+        URL result = AssetHeaderView.class.getResource(image);
+        if(result==null){
+            log.warn("Missing file " + image);
+            try {
+                result = new URL("file://");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    private ImageIcon newImageIcon(String image) {
+        return new ImageIcon(getImagePath(image));
+    }
+
+    private JLabel newJLabel(String image) {
+        return new JLabel(newImageIcon(image));
     }
 }
