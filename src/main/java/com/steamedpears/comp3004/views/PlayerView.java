@@ -152,8 +152,7 @@ public class PlayerView extends JPanel {
         add(messagePanel,"span");
 
         // assets
-        add(new AssetHeaderView(), "newline, gaptop 1, span, h 70!");
-        add(new AssetView(this.player),"gapleft 25, gaptop 1, span, h 20!");
+        add(new AssetView(this.player),"gapleft 25, gaptop 1, span");
 
         // TODO: add some way to switch to viewing another player
         // TODO: add some way to switch to high level view
