@@ -1,7 +1,6 @@
 package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.models.Player;
-import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.util.HashMap;

@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class WonderView extends JLabel {
-    public static final int DEFAULT_WIDTH = 960;
+    public static final int DEFAULT_WIDTH = 920;
     private Wonder wonder;
     private WonderSelectionListener selectionListener;
     static Logger logger = Logger.getLogger(WonderView.class);

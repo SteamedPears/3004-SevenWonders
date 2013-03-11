@@ -1,9 +1,6 @@
 package com.steamedpears.comp3004.views;
-import com.steamedpears.comp3004.models.Asset;
-import com.steamedpears.comp3004.models.Card;
-import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.*;
 
-import com.steamedpears.comp3004.models.PlayerCommand;
 import static com.steamedpears.comp3004.models.PlayerCommand.*;
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.*;
@@ -12,6 +9,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.Timer;
 
 public class PlayerView extends JPanel {
     private static final int SELECTED_MULTIPLIER = 4;
@@ -20,9 +18,15 @@ public class PlayerView extends JPanel {
 
     private Player player;
     private CardView selectedCardView;
+    private Map<String, String> persistentMessages;
+    private int timer = 0;
+    private Timer scheduledUpdateTimer;
+
     private JLabel messageLabel;
     private JLabel persistentMessageLabel;
-    private Map<String, String> persistentMessages;
+    private JButton discardButton;
+    private JButton playButton;
+    private JButton buildButton;
 
     public PlayerView(Player player) {
         logger.info("Created with player[" + player + "]");
@@ -30,6 +34,13 @@ public class PlayerView extends JPanel {
         this.player = player;
         persistentMessages = new HashMap<String, String>();
         update();
+        scheduledUpdateTimer = new Timer();
+        scheduledUpdateTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateTimer();
+            }
+        },new Date(),1000);
     }
 
     /**
@@ -93,10 +104,11 @@ public class PlayerView extends JPanel {
         buttonPanel.setLayout(new MigLayout());
 
         // discard button
-        JButton discardButton = new JButton("Discard");
+        discardButton = new JButton("Discard");
         discardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                doneMove();
                 PlayerCommand move = new PlayerCommand();
                 move.action = PlayerCardAction.DISCARD;
                 move.card = selectedCardView.getCard().getId();
@@ -107,10 +119,11 @@ public class PlayerView extends JPanel {
         buttonPanel.add(discardButton,"span");
 
         // play button
-        JButton playButton = new JButton("Play");
+        playButton = new JButton("Play");
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                doneMove();
                 PlayerCommand move = new PlayerCommand();
                 move.action = PlayerCardAction.PLAY;
                 move.card = selectedCardView.getCard().getId();
@@ -118,24 +131,27 @@ public class PlayerView extends JPanel {
                 player.wake();
             }
         });
-        // TODO: disable if can't actually build
+        // TODO: disable if can't actually play
         buttonPanel.add(playButton,"span");
 
         // build wonder button
-        if(!player.hasFinishedWonder()) {
-            JButton buildButton = new JButton("Build Wonder");
-            buildButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    PlayerCommand move = new PlayerCommand();
-                    move.action = PlayerCardAction.BUILD;
-                    move.card = selectedCardView.getCard().getId();
-                    player.setCurrentCommand(move);
-                    player.wake();
-                }
-            });
-            buttonPanel.add(buildButton,"span");
+        buildButton = new JButton("Build Wonder");
+        buildButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                doneMove();
+                PlayerCommand move = new PlayerCommand();
+                move.action = PlayerCardAction.BUILD;
+                move.card = selectedCardView.getCard().getId();
+                player.setCurrentCommand(move);
+                player.wake();
+            }
+        });
+        if(player.hasFinishedWonder()) {
+            buildButton.setEnabled(false);
         }
+        // TODO: disable if can't actually build
+        buttonPanel.add(buildButton,"span");
 
         add(buttonPanel,"span 2");
 
@@ -152,10 +168,38 @@ public class PlayerView extends JPanel {
         add(messagePanel,"span");
 
         // assets
-        add(new AssetHeaderView(), "newline, gaptop 1, span, h 20!");
-        add(new AssetView(this.player),"gaptop 1, span, h 20!");
+        add(new AssetView(this.player),"gapleft 25, gaptop 1, span");
 
         // TODO: add some way to switch to viewing another player
         // TODO: add some way to switch to high level view
+
+        newMove();
+    }
+
+    public void newMove() {
+        buildButton.setEnabled(true);
+        playButton.setEnabled(true);
+        discardButton.setEnabled(true);
+        timer = SevenWondersGame.TURN_LENGTH / 1000;
+        updateTimer();
+    }
+
+    public void doneMove() {
+        buildButton.setEnabled(false);
+        playButton.setEnabled(false);
+        discardButton.setEnabled(false);
+        timer = 0;
+        updateTimer();
+    }
+
+    private void updateTimer() {
+        if(timer <= 0) {
+            setMessage("Move chosen.");
+        } else {
+            int minutes = timer / 60;
+            int seconds = timer % 60;
+            setMessage(minutes + ":" + seconds + " left to choose a move.");
+            --timer;
+        }
     }
 }
