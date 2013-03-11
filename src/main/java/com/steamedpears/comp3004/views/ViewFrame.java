@@ -35,8 +35,13 @@ public class ViewFrame extends JFrame {
             }
             pane.addTab(title, view);
         }
-        validate();
-        repaint();
+    }
+
+    /**
+     * Removes all tabs.
+     */
+    public void clearTabs() {
+        pane.removeAll();
     }
 
     private boolean hasTab(String title) {

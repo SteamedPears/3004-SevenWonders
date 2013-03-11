@@ -183,7 +183,6 @@ class HostRouter extends Router {
                 log.debug("Client added");
             }catch(IOException e){
                 log.error("Error establishing connection to client", e);
-                System.exit(-1);
             }
         }
     }
@@ -362,7 +361,26 @@ class HostRouter extends Router {
         public boolean isClosed() {
             return client.isClosed() || !client.isConnected();
         }
+
+        public void cleanup() throws IOException {
+            client.close();
+        }
     }
 
-
+    @Override
+    public void cleanup() {
+        for(Client c : clients.values()) {
+            try {
+                c.cleanup();
+            } catch (IOException e) {
+                log.warn("IOException while closing client socket");
+            }
+        }
+        try{
+            serverSocket.close();
+            serverSocket = null;
+        } catch (IOException e) {
+            log.warn("IOException while closing server socket");
+        }
+    }
 }
