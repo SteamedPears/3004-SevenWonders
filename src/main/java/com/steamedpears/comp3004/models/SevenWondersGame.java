@@ -52,6 +52,11 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
     //methods/////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Apply the player commands to the corresponding players.
+     * @param commands the map of player to player commands
+     * @return true only if the game is over
+     */
     public boolean applyCommands(Map<Player, PlayerCommand> commands){
         log.debug("Applying player commands");
         for(Player player: commands.keySet()){
@@ -101,10 +106,10 @@ public class SevenWondersGame extends Changeable implements Runnable{
             int newPlayerMilitary = Asset.getAsset(assets.get(curPlayer), Asset.ASSET_MILITARY_POWER);
             if(oldPlayerMilitary>newPlayerMilitary){
                 oldPlayer.registerMilitaryVictory(age);
-                curPlayer.registerMilitaryDefeat(age);
+                curPlayer.registerMilitaryDefeat();
             }else if(newPlayerMilitary>oldPlayerMilitary){
                 curPlayer.registerMilitaryVictory(age);
-                oldPlayer.registerMilitaryDefeat(age);
+                oldPlayer.registerMilitaryDefeat();
             }
         }
     }
@@ -157,15 +162,25 @@ public class SevenWondersGame extends Changeable implements Runnable{
         }
     }
 
-    public boolean isDone(){
+    /**
+     * Checks if all players have taken their turn and registered their command.
+     * @return true only if all players have taken their turn and registered their command.
+     */
+    public boolean isTurnDone(){
         return runningPlayers==null || runningPlayers.size()==0;
     }
 
+    /**
+     * Signals to the players to take their turns.
+     */
     public void takeTurns(){
         log.debug("Taking turns");
         pool.submit(this);
     }
 
+    /**
+     * Begins the Game thread.
+     */
     public void run(){
         takeTurnsInternal();
     }
@@ -246,14 +261,26 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
     //setters/////////////////////////////////////////////////////////////////////
 
+    /**
+     * Places the given card in the discard pile.
+     * @param card The card to discard.
+     */
     public void discard(Card card){
         discard.add(card);
     }
 
+    /**
+     * Removes the given card from the discard pile.
+     * @param card The card to undiscard.
+     */
     public void undiscard(Card card){
         discard.remove(card);
     }
 
+    /**
+     * Sets the cards to be used in this game.
+     * @param arr The JSON representation of the cards in the game.
+     */
     public void setCards(JsonArray arr){
         List<Card> cards = Card.parseDeck(arr);
         this.cards = new HashMap<String, Card>();
@@ -262,6 +289,11 @@ public class SevenWondersGame extends Changeable implements Runnable{
         }
     }
 
+    /**
+     * Build the deck for the given number of players and shuffle it.
+     * @param numPlayers the number of players in the game.
+     * @return The list of player hands, which are themselves lists of Cards.
+     */
     public List<List<Card>> generateRandomDeck(int numPlayers){
         List<List<Card>> result = new ArrayList<List<Card>>();
         for(int curAge=0; curAge<MAX_AGES; ++curAge){
@@ -290,10 +322,18 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return result;
     }
 
+    /**
+     * Set the deck for this game.
+     * @param deck the list of hands, which are themselves lists of Cards, which is to be the deck.
+     */
     public void setDeck(List<List<Card>> deck){
         this.deck = deck;
     }
 
+    /**
+     * Set the deck for this game.
+     * @param deckJSON the list of hands in JSON representation.  A hand is a list of Cards.
+     */
     public void setDeck(JsonArray deckJSON){
         List<List<Card>> deck = new ArrayList<List<Card>>();
         for(JsonElement ageDeckJSON: deckJSON){
@@ -306,6 +346,10 @@ public class SevenWondersGame extends Changeable implements Runnable{
         setDeck(deck);
     }
 
+    /**
+     * Set the players for the game.
+     * @param playersJSON the JSON representation of the players.
+     */
     public void setPlayers(JsonObject playersJSON){
         for(Map.Entry<String, JsonElement> entry: playersJSON.entrySet()){
             int playerId = Integer.parseInt(entry.getKey());
@@ -320,20 +364,34 @@ public class SevenWondersGame extends Changeable implements Runnable{
         finalizePlayers();
     }
 
+    /**
+     * Set the wonders for the game.
+     * @param wonders the JSON representation of the wonders.
+     */
     public void setWonders(JsonArray wonders) {
         this.wonders = Wonder.parseWonders(wonders);
     }
 
-
+    /**
+     * Add a given player to the game.
+     * @param player The player to add to the game.
+     */
     public void addPlayer(Player player){
         players.add(player);
     }
 
+    /**
+     * Add a local player to the game.
+     * @param player The local player to add to the game.
+     */
     public void addLocalPlayer(Player player){
         localPlayers.add(player);
         addPlayer(player);
     }
 
+    /**
+     * Once all players have been added to the game, assign to each a left and right neighbour.
+     */
     public void finalizePlayers() {
         List<Player> players = getPlayers();
         Player oldPlayer = players.get(players.size()-1);
@@ -346,22 +404,42 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
     //getters///////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get the players.
+     * @return The players in this game.
+     */
     public List<Player> getPlayers(){
         return players;
     }
 
+    /**
+     * Get the discard pile.
+     * @return The set of cards in the discard pile.
+     */
     public Set<Card> getDiscard(){
         return discard;
     }
 
+    /**
+     * Get the age of the game.
+     * @return The age of the game.
+     */
     public int getAge(){
         return age;
     }
 
+    /**
+     * Get the deck of cards for the game.
+     * @return The deck of cards (list of hands) for the game.
+     */
     public List<List<Card>> getDeck(){
         return deck;
     }
 
+    /**
+     * Serialize the deck as a JSON object.
+     * @return The JSON object representation of the deck.
+     */
     public JsonArray getDeckAsJSON(){
         JsonArray deckJSON = new JsonArray();
         for(List<Card> ageDeck: getDeck()){
@@ -374,6 +452,10 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return deckJSON;
     }
 
+    /**
+     * Serialize the players as JSON objects.
+     * @return The JSON object representation of the players.
+     */
     public JsonObject getPlayersAsJSON(){
         JsonObject players = new JsonObject();
         for(Player player: getPlayers()){
@@ -382,6 +464,11 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return players;
     }
 
+    /**
+     * Get the player with the given ID.
+     * @param id The ID of the desired player.
+     * @return The player with the given ID.
+     */
     public Player getPlayerById(int id){
         for(Player player: players){
             if(player.getPlayerId()==id){
@@ -391,10 +478,20 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return null;
     }
 
+    /**
+     * Get the card with the given ID.
+     * @param id The ID of the desired card.
+     * @return The card with the given ID.
+     */
     public Card getCardById(String id){
         return cards.get(id);
     }
 
+    /**
+     * Get the wonder with the given ID.
+     * @param id The ID of the desired wonder.
+     * @return The wonder with the given ID.
+     */
     public Wonder getWonderById(String id){
         String trueID = id;
         String side = null;
@@ -410,10 +507,18 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return wonder;
     }
 
+    /**
+     * Checks if the game is over.
+     * @return True only if the game is over.
+     */
     public boolean isGameOver(){
         return gameOver;
     }
 
+    /**
+     * Calculate the final victory points for each player.
+     * @return The map from each player to their accumulated victory points.
+     */
     public Map<Player, Integer> tabulateResults() {
         Map<Player, Integer> results = new HashMap<Player, Integer>();
 
@@ -424,6 +529,10 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return results;
     }
 
+    /**
+     * Get the wonders for this game.
+     * @return A map from wonder name to wonder object.
+     */
     public Map<String, Wonder> getWonders() {
         return wonders;
     }

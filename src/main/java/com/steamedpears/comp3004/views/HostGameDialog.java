@@ -36,6 +36,10 @@ public class HostGameDialog extends GameDialog {
         add(startGameButton);
     }
 
+    /**
+     * Update the count of players who have joined the game.
+     * @param playersJoined The count of players who have joined the game.
+     */
     public void setPlayersJoined(int playersJoined) {
         logger.info("Setting players joined to " + playersJoined);
         playersJoinedLabel.setText(""+playersJoined);

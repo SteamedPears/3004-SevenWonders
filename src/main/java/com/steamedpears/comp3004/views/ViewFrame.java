@@ -20,6 +20,10 @@ public class ViewFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Set the view to be displayed in this frame.
+     * @param view The view to be displayed in this frame.
+     */
     public void setView(JPanel view) {
         logger.info("Setting view to " + view);
         getContentPane().removeAll();

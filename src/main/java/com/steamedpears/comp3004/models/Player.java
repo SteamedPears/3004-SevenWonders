@@ -24,6 +24,13 @@ public abstract class Player implements Runnable{
         return currentId++;
     }
 
+    /**
+     * Given the count of each science, calculate the total victory points.
+     * @param science1 the count of cuneiform tablet science cards
+     * @param science2 the count of compass and right angle science cards
+     * @param science3 the count of gear science cards
+     * @return the total victory points from sciences
+     */
     public static int getTotalSciencePoints(int science1, int science2, int science3) {
         int total = Math.min(Math.min(science1, science2), science3)*7;
 
@@ -128,6 +135,11 @@ public abstract class Player implements Runnable{
         }
     }
 
+    /**
+     * Applies the given command to the player
+     * @param command the PlayerCommand object to apply to this player
+     * @throws Exception if the command is invalid
+     */
     public final void applyCommand(PlayerCommand command) throws Exception {
         log.debug("applying command");
         PlayerCommand temp = command;
@@ -165,6 +177,10 @@ public abstract class Player implements Runnable{
         }
     }
 
+    /**
+     * Finalizes a given command
+     * @param command the command to finalize
+     */
     public final void finalizeCommand(PlayerCommand command){
         log.debug("finalizing command");
         if(stagedCommandResult.containsKey(ASSET_GOLD)){
@@ -217,45 +233,82 @@ public abstract class Player implements Runnable{
         }
     }
 
+    /**
+     * handles a new age
+     */
     public void handleNewAge(){
         wonder.handleNewAge();
     }
 
-    //extend with a GUI or AI
-    //when handleTurn terminates, currentCommand should be set with the Player's desired command
+    /**
+     * when this method terminates, currentCommand should be set to the player's desired command
+     */
     protected abstract void handleTurn();
 
+    /**
+     * begins the player thread
+     */
     public final void run(){
         thread = Thread.currentThread();
         handleTurn();
     }
 
+    /**
+     * wakes a waiting player thread
+     */
     public void wake() {
         thread.interrupt();
     }
 
     //setters///////////////////////////////////////////////////////////////////
+
+    /**
+     * sets the player on the left of this player to the given player
+     * @param playerLeft the player to this player's left
+     */
     public final void setPlayerLeft(Player playerLeft){
         this.playerLeft = playerLeft;
     }
 
+    /**
+     * sets the player on the right of this player to the given player
+     * @param playerRight the player to this player's right
+     */
     public final void setPlayerRight(Player playerRight){
         this.playerRight = playerRight;
     }
 
+    /**
+     * sets the player's current command to the given command
+     * @param currentCommand the command to set to this player's current command
+     */
     public final void setCurrentCommand(PlayerCommand currentCommand){
         this.currentCommand = currentCommand;
     }
 
+    /**
+     * sets the player's hand to the given list of cards
+     * @param hand the list of cards to set to this player's hand
+     */
     public final void setHand(List<Card> hand){
         this.hand = hand;
     }
 
+    /**
+     * adds the given amount to the player's current amount of gold
+     * @param amount the amount of gold to add to this player's current amount of gold
+     */
     public void changeGold(int amount) {
         gold+=amount;
     }
 
     //getters///////////////////////////////////////////////////////////////////
+
+    /**
+     * validates the given command on this player
+     * @param command the command to validate
+     * @return true only if the command is valid on this player
+     */
     public final boolean isValid(PlayerCommand command){
         log.debug(this+" validating move "+command);
         //initial result: either they're doing one action, or their other action is UNDISCARD
@@ -358,29 +411,50 @@ public abstract class Player implements Runnable{
         }
     }
 
+    /**
+     * gets the player to this player's left
+     * @return the player to this player's left
+     */
     public final Player getPlayerLeft(){
         return playerLeft;
     }
 
+    /**
+     * gets the player to this player's right
+     * @return the player to this player's right
+     */
     public final Player getPlayerRight(){
         return playerRight;
     }
 
-    // probably not going to break anything if this isn't final
+    /**
+     * gets the cards in this player's hand
+     * @return the list of cards in this player's hand
+     */
     public List<Card> getHand(){
         return hand;
     }
 
-    // probably fine to mock this out
+    /**
+     * gets the current amount of gold held by this player
+     * @return the current amount of gold held by this player
+     */
     public int getGold(){
         return gold;
     }
 
-    // probably fine to mock this out
+    /**
+     * gets this player's military results
+     * @return this player's military results
+     */
     public List<Integer> getMilitaryResults(){
         return militaryResults;
     }
 
+    /**
+     * gets the sum of this player's military defeats
+     * @return the sum of this player's military defeats
+     */
     public final int getMilitaryDefeats(){
         int result = 0;
         for(int value: getMilitaryResults()){
@@ -392,14 +466,26 @@ public abstract class Player implements Runnable{
         return result;
     }
 
+    /**
+     * gets this player's current command
+     * @return this player's current command
+     */
     public final PlayerCommand getCurrentCommand(){
         return currentCommand;
     }
 
+    /**
+     * gets this player's wonder
+     * @return this player's wonder
+     */
     public final Wonder getWonder(){
         return wonder;
     }
 
+    /**
+     * gets this player's id
+     * @return this player's id
+     */
     public final int getPlayerId(){
         return id;
     }
@@ -557,14 +643,25 @@ public abstract class Player implements Runnable{
         return wins;
     }
 
+    /**
+     * adds a military victory in the given age
+     * @param age the age in which the military victory occured
+     */
     public void registerMilitaryVictory(int age) {
         militaryResults.add(age*2-1);
     }
 
-    public void registerMilitaryDefeat(int age){
+    /**
+     * adds a military defeat
+     */
+    public void registerMilitaryDefeat(){
         militaryResults.add(-1);
     }
 
+    /**
+     * gets the final total victory points for this player
+     * @return the final total victory points for this player
+     */
     public int getFinalVictoryPoints() {
         int total = 0;
         Map<String, Integer> assets = getAssets();
@@ -605,6 +702,7 @@ public abstract class Player implements Runnable{
 
         return total;
     }
+
     /**
       * Check if the player has completed their wonder.
       * @return true only if this player has completed their wonder
