@@ -7,13 +7,13 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.util.List;
 
-public class PlayedCardsView extends JPanel {
+public class StructuresView extends JPanel {
     private static final int SELECTED_MULTIPLIER = 3;
 
     private Player player;
     private CardView selectedCardView;
 
-    public PlayedCardsView(Player player) {
+    public StructuresView(Player player) {
         this.player = player;
         setLayout(new MigLayout("wrap 9"));
         update();

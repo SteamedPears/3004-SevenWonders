@@ -68,16 +68,27 @@ class ClientRouter extends Router implements Runnable{
 
     private void waitForTakeTurn(){
         log.debug("Waiting for host to give 'okay' to take turn");
+        try {
         JsonElement elem = parser.parse(in);
+        } catch(IllegalArgumentException e) {
+            log.error("Illegal argument while parsing command");
+            cleanup();
+        }
         log.debug("Got 'okay' to take turn; taking turn");
         getLocalGame().takeTurns();
     }
 
     private boolean waitForCommands(){
         log.debug("Waiting for host to send back all the player commands");
-        JsonObject obj = parser.parse(in).getAsJsonObject();
-        log.debug("Got player commands; applying commands: "+obj.toString());
-        Map<Player, PlayerCommand> commands = jsonToPlayerCommands(obj);
+        Map<Player, PlayerCommand> commands = new HashMap<Player, PlayerCommand>();
+        try {
+            JsonObject obj = parser.parse(in).getAsJsonObject();
+            log.debug("Got player commands; applying commands: "+obj.toString());
+            commands = jsonToPlayerCommands(obj);
+        } catch(IllegalArgumentException e) {
+            log.error("Illegal argument while parsing command");
+            cleanup();
+        }
         return getLocalGame().applyCommands(commands);
     }
 
@@ -134,7 +145,10 @@ class ClientRouter extends Router implements Runnable{
     @Override
     public void cleanup() {
         try {
-            host.close();
+            if(host != null) {
+                host.close();
+            }
+            host = null;
         } catch (IOException e) {
             log.warn("IOException while closing socket");
         }
