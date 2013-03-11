@@ -130,4 +130,13 @@ class ClientRouter extends Router implements Runnable{
         }
         log.debug("Game over; client router stopping");
     }
+
+    @Override
+    public void cleanup() {
+        try {
+            host.close();
+        } catch (IOException e) {
+            log.warn("IOException while closing socket");
+        }
+    }
 }
