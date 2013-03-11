@@ -233,7 +233,7 @@ class HostRouter extends Router {
                 waitForOkays();
                 try {
                     log.debug("Waiting for game to finish up");
-                    while(!game.isDone()){
+                    while(!game.isTurnDone()){
                         Thread.sleep(100);
                     }
                 } catch (InterruptedException e) {

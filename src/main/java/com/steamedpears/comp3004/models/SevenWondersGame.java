@@ -52,6 +52,11 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
     //methods/////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Apply the player commands to the corresponding players.
+     * @param commands the map of player to player commands
+     * @return true only if the game is over
+     */
     public boolean applyCommands(Map<Player, PlayerCommand> commands){
         log.debug("Applying player commands");
         for(Player player: commands.keySet()){
@@ -101,10 +106,10 @@ public class SevenWondersGame extends Changeable implements Runnable{
             int newPlayerMilitary = Asset.getAsset(assets.get(curPlayer), Asset.ASSET_MILITARY_POWER);
             if(oldPlayerMilitary>newPlayerMilitary){
                 oldPlayer.registerMilitaryVictory(age);
-                curPlayer.registerMilitaryDefeat(age);
+                curPlayer.registerMilitaryDefeat();
             }else if(newPlayerMilitary>oldPlayerMilitary){
                 curPlayer.registerMilitaryVictory(age);
-                oldPlayer.registerMilitaryDefeat(age);
+                oldPlayer.registerMilitaryDefeat();
             }
         }
     }
@@ -157,15 +162,25 @@ public class SevenWondersGame extends Changeable implements Runnable{
         }
     }
 
-    public boolean isDone(){
+    /**
+     * Checks if all players have taken their turn and registered their command.
+     * @return true only if all players have taken their turn and registered their command.
+     */
+    public boolean isTurnDone(){
         return runningPlayers==null || runningPlayers.size()==0;
     }
 
+    /**
+     * Signals to the players to take their turns.
+     */
     public void takeTurns(){
         log.debug("Taking turns");
         pool.submit(this);
     }
 
+    /**
+     * Begins the Game thread.
+     */
     public void run(){
         takeTurnsInternal();
     }
@@ -246,14 +261,26 @@ public class SevenWondersGame extends Changeable implements Runnable{
 
     //setters/////////////////////////////////////////////////////////////////////
 
+    /**
+     * Places the given card in the discard pile.
+     * @param card The card to discard.
+     */
     public void discard(Card card){
         discard.add(card);
     }
 
+    /**
+     * Removes the given card from the discard pile.
+     * @param card The card to undiscard.
+     */
     public void undiscard(Card card){
         discard.remove(card);
     }
 
+    /**
+     * Sets the cards to be used in this game.
+     * @param arr The JSON representation of the cards in the game.
+     */
     public void setCards(JsonArray arr){
         List<Card> cards = Card.parseDeck(arr);
         this.cards = new HashMap<String, Card>();
@@ -262,6 +289,11 @@ public class SevenWondersGame extends Changeable implements Runnable{
         }
     }
 
+    /**
+     * Build the deck for the given number of players and shuffle it.
+     * @param numPlayers the number of players in the game.
+     * @return The list of player hands, which are themselves lists of Cards.
+     */
     public List<List<Card>> generateRandomDeck(int numPlayers){
         List<List<Card>> result = new ArrayList<List<Card>>();
         for(int curAge=0; curAge<MAX_AGES; ++curAge){
@@ -290,10 +322,18 @@ public class SevenWondersGame extends Changeable implements Runnable{
         return result;
     }
 
+    /**
+     * Set the deck for this game.
+     * @param deck the list of hands, which are themselves lists of Cards, which is to be the deck.
+     */
     public void setDeck(List<List<Card>> deck){
         this.deck = deck;
     }
 
+    /**
+     * Set the deck for this game.
+     * @param deckJSON the list of hands in JSON representation.  A hand is a list of Cards.
+     */
     public void setDeck(JsonArray deckJSON){
         List<List<Card>> deck = new ArrayList<List<Card>>();
         for(JsonElement ageDeckJSON: deckJSON){
@@ -306,6 +346,10 @@ public class SevenWondersGame extends Changeable implements Runnable{
         setDeck(deck);
     }
 
+    /**
+     * 
+     * @param playersJSON
+     */
     public void setPlayers(JsonObject playersJSON){
         for(Map.Entry<String, JsonElement> entry: playersJSON.entrySet()){
             int playerId = Integer.parseInt(entry.getKey());
