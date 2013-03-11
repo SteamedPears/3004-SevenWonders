@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Wonder {
 
@@ -209,18 +208,17 @@ public class Wonder {
      * @param player the Player that owns the Wonder
      * @return the Assets this Wonder definitely yields
      */
-    public Map<String, Integer> getAssets(Player player){
-        List<Map<String, Integer>> results = new ArrayList<Map<String, Integer>>();
+    public AssetMap getAssets(Player player){
+        AssetMap results = new AssetMap();
         for(int i=0; i<currentStage; ++i){
             results.add(currentSide.stages.get(i).getAssets(player));
         }
-        Map<String, Integer> privates = new HashMap<String, Integer>();
-        privates.put(currentSide.startResource, 1);
-        privates.put(Asset.ASSET_BUILD_FREE, builtFreeThisAge ? 0 : -1);
-        privates.put(Asset.ASSET_DISCARD, -undiscards);
-        results.add(privates);
 
-        return Asset.sumAssets(results);
+        results.add(currentSide.startResource);
+        results.subtract(Asset.ASSET_BUILD_FREE, builtFreeThisAge ? 0 : 1);
+        results.subtract(Asset.ASSET_DISCARD, undiscards);
+
+        return results;
     }
 
     /**
@@ -228,10 +226,10 @@ public class Wonder {
      * @param player the Player that owns the Wonder
      * @return a List of choices of Assets this Wonder currently yields
      */
-    public List<Set<String>> getOptionalAssetsComplete(Player player){
-        List<Set<String>> results = new ArrayList<Set<String>>();
+    public List<AssetSet> getOptionalAssetsComplete(Player player){
+        List<AssetSet> results = new ArrayList<AssetSet>();
         for(int i=0; i<currentStage; ++i){
-            Set<String> result = currentSide.stages.get(i).getAssetsOptional(player);
+            AssetSet result = currentSide.stages.get(i).getAssetsOptional(player);
             if(!result.isEmpty()){
                 results.add(result);
             }
@@ -244,9 +242,9 @@ public class Wonder {
      * Gets all the tradeable Assets this Wonder yields (just the start resource)
      * @return the tradeable Assets this Wonder yields
      */
-    public Map<String, Integer> getTradeableAssets(){
-        Map<String, Integer> result = new HashMap<String, Integer>();
-        result.put(currentSide.startResource, 1);
+    public AssetMap getTradeableAssets(){
+        AssetMap result = new AssetMap();
+        result.add(currentSide.startResource);
 
         return result;
     }

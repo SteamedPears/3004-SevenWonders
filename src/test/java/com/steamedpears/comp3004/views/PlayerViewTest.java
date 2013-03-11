@@ -27,7 +27,7 @@ public class PlayerViewTest extends JFrame {
         }
 
         // build resources
-        Map<String, Integer> assets = new HashMap<String, Integer>();
+        AssetMap assets = new AssetMap();
         int i = 0;
         for(String assetType : Asset.AssetTypes) {
             assets.put(assetType,++i);

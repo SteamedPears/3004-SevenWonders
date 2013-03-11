@@ -2,6 +2,7 @@ package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Asset;
+import com.steamedpears.comp3004.models.AssetMap;
 import com.steamedpears.comp3004.models.Player;
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
@@ -11,7 +12,6 @@ import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,8 +68,9 @@ public class AssetView extends JPanel {
         for(Player player : players) {
             if(players.size() > 1) add(new JLabel("" + player.getPlayerId()));
             else add(new JLabel());
+            AssetMap playerAssets = player.getAssets();
             for(String asset : Asset.AssetTypes) {
-                add(newTextJLabel("" + Asset.getAsset(player.getAssets(),asset)),MIG_CONFIG);
+                add(newTextJLabel("" + playerAssets.get(asset)),MIG_CONFIG);
             }
         }
     }

@@ -1,11 +1,9 @@
 package com.steamedpears.comp3004.views;
 import com.steamedpears.comp3004.SevenWonders;
 
-import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class HostGameDialog extends GameDialog {
