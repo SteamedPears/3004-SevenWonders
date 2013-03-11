@@ -141,6 +141,11 @@ public abstract class Router extends Changeable implements ChangeListener {
         return result;
     }
 
+    /**
+     * Cleans up router after game is finished.
+     */
+    public abstract void cleanup();
+
     @Override
     public void stateChanged(ChangeEvent event){
         announceChange(event.getSource());

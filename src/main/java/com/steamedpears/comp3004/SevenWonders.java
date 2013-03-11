@@ -1,6 +1,7 @@
 package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.BasicConfigurator;
@@ -73,6 +74,7 @@ public class SevenWonders {
             router = Router.getClientRouter(ipAddress, port);
             dialog = new JoinGameDialog(view,this);
         }
+        final SevenWonders controller = this;
         router.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
@@ -83,7 +85,20 @@ public class SevenWonders {
                     } else if(!gameStarted){
                         startGame();
                     }
-                    updateView();
+                    if(getGame().isGameOver()) {
+                        view.clearTabs();
+                        playerView = null;
+                        highLevelView = null;
+                        dialog = new ResultsDialog(view,controller);
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.setVisible(true);
+                            }
+                        });
+                    } else if(router != null && router.isPlaying()) {
+                        updateView();
+                    }
                 } catch(Exception e) {
                     e.printStackTrace();
                     System.exit(-1);
@@ -104,13 +119,20 @@ public class SevenWonders {
     }
 
     private void updateView() {
-        playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
+        playerView = new PlayerView(getGame().getPlayerById(router.getLocalPlayerId()));
         view.addTab(playerView, "Hand");
         highLevelView = new HighLevelView(this);
         view.addTab(highLevelView,"Table");
-        for(Player player : (router.getLocalGame()).getPlayers()) {
+        for(Player player : getGame().getPlayers()) {
             view.addTab(new PlayedCardsView(player),"Player " + (player.getPlayerId()));
         }
+    }
+
+    /**
+     * Gets the game associated with this View.
+     */
+    public SevenWondersGame getGame() {
+        return router.getLocalGame();
     }
 
     /**
@@ -128,6 +150,10 @@ public class SevenWonders {
      */
     public void openNewGameDialog() {
         closeDialog();
+        if(router != null) {
+            router.cleanup();
+        }
+        router = null;
         newGameDialog = new NewGameDialog(view,this);
         newGameDialog.setVisible(true);
     }
