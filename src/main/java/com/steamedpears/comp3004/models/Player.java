@@ -398,7 +398,7 @@ public abstract class Player implements Runnable{
     }
 
     private boolean validateCanMakeTradesInternal(AssetMap purchases, Player player){
-        if(purchases==null){
+        if(purchases.isEmpty()){
             return true;
         }else{
             AssetMap tradeables = player.getAssetsTradeable();

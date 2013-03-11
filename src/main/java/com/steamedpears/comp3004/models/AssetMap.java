@@ -93,11 +93,6 @@ public class AssetMap extends HashMap<String, Integer> {
         return super.put(key, value);
     }
 
-    @Override
-    public boolean containsKey(Object key){
-        return get(key) != 0;
-    }
-
     /**
      * Adds the values of the given assetMap to this one
      * @param assetMap The map to add
@@ -166,6 +161,9 @@ public class AssetMap extends HashMap<String, Integer> {
     }
 
     private boolean recursiveSearchForValidChoices(List<AssetSet> choices, int index){
+        if(choices.isEmpty()){
+            return isEmpty();
+        }
         Set<String> choice = choices.get(index);
         //loop over every asset in this choice
         boolean everRecursed = false;
@@ -175,13 +173,8 @@ public class AssetMap extends HashMap<String, Integer> {
                 everRecursed = true;
                 subtract(asset);
                 //see if we've found a solution
-                boolean foundSolution = true;
-                for(int value: values()){
-                    if(value>0){
-                        foundSolution = false;
-                        break;
-                    }
-                }
+                boolean foundSolution = isEmpty();
+
                 //if that didn't solve it, recurse on the next choice
                 if(!foundSolution && index+1<choices.size()){
                     foundSolution = recursiveSearchForValidChoices(choices, index+1);
