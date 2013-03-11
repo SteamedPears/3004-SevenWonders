@@ -105,7 +105,12 @@ public class SevenWonders {
                 }
             }
         });
-        dialog.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                dialog.setVisible(true);
+            }
+        });
     }
 
     /**
@@ -119,6 +124,7 @@ public class SevenWonders {
     }
 
     private void updateView() {
+        view.hideTabs();
         playerView = new PlayerView(getGame().getPlayerById(router.getLocalPlayerId()));
         view.addTab(playerView, "Hand");
         highLevelView = new HighLevelView(this);
@@ -126,6 +132,7 @@ public class SevenWonders {
         for(Player player : getGame().getPlayers()) {
             view.addTab(new StructuresView(player),"Player " + (player.getPlayerId()));
         }
+        view.showTabs();
     }
 
     /**
