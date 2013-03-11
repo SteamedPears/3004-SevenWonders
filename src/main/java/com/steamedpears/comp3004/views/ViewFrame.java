@@ -3,6 +3,8 @@ package com.steamedpears.comp3004.views;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewFrame extends JFrame {
     public static final int WIDTH = 960;
@@ -28,9 +30,10 @@ public class ViewFrame extends JFrame {
     public void addTab(JPanel view, String title) {
         synchronized (pane) {
             if(hasTab(title)) {
-                removeTab(title);
+                pane.setComponentAt(pane.indexOfTab(title),view);
+            } else {
+                pane.addTab(title, view);
             }
-            pane.addTab(title, view);
         }
     }
 
