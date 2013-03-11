@@ -526,7 +526,7 @@ public abstract class Player implements Runnable{
      * get all the asset choices the player can make
      * @return the list of choices
      */
-    public final List<AssetSet> getOptionalAssetsComplete(){
+    public List<AssetSet> getOptionalAssetsComplete(){
         List<AssetSet> collectedAssets = new ArrayList<AssetSet>();
 
         for(Card card: playedCards){
@@ -546,7 +546,7 @@ public abstract class Player implements Runnable{
      * e.g. wood/stone and stone/clay -> wood:1, stone:2, clay:1
      * @return the map
      */
-    public final AssetMap getOptionalAssetsSummary(){
+    public AssetMap getOptionalAssetsSummary(){
         List<AssetSet> options = getOptionalAssetsComplete();
 
         AssetMap result = new AssetMap();
@@ -564,7 +564,7 @@ public abstract class Player implements Runnable{
      * get a map of all the assets a player can definitely trade before making any decisions
      * @return the map
      */
-    public final AssetMap getAssetsTradeable(){
+    public AssetMap getAssetsTradeable(){
         AssetMap collectedAssets = new AssetMap();
 
         for(Card card: playedCards){
@@ -582,7 +582,7 @@ public abstract class Player implements Runnable{
      * get a list of all the tradeable asset choices a player can make
      * @return the list
      */
-    public final List<AssetSet> getOptionalAssetsCompleteTradeable(){
+    public List<AssetSet> getOptionalAssetsCompleteTradeable(){
         List<AssetSet> collectedAssets = new ArrayList<AssetSet>();
 
         for(Card card: playedCards){
