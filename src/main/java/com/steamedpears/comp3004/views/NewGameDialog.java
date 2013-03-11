@@ -140,7 +140,7 @@ public class NewGameDialog extends GameDialog {
         add(playersLabel);
         playersComboBox = new JComboBox();
         for(int i = SevenWonders.MIN_PLAYERS; i <= SevenWonders.MAX_PLAYERS; ++i) {
-            playersComboBox.addItem(new Integer(i));
+            playersComboBox.addItem(i);
         }
         playersComboBox.addPropertyChangeListener(new PropertyChangeListener() {
             @Override

@@ -9,7 +9,6 @@ import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.LogLog;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

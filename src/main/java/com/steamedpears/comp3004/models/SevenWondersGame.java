@@ -96,14 +96,14 @@ public class SevenWondersGame extends Changeable implements Runnable{
     }
 
     private void runMilitaryConflict() {
-        Map<Player, Map<String, Integer>> assets = new HashMap<Player, Map<String, Integer>>();
+        Map<Player, AssetMap> assets = new HashMap<Player, AssetMap>();
         for(Player p: players){
             assets.put(p, p.getAssets());
         }
         Player oldPlayer = players.get(players.size()-1);
         for(Player curPlayer: players){
-            int oldPlayerMilitary = Asset.getAsset(assets.get(oldPlayer), Asset.ASSET_MILITARY_POWER);
-            int newPlayerMilitary = Asset.getAsset(assets.get(curPlayer), Asset.ASSET_MILITARY_POWER);
+            int oldPlayerMilitary = assets.get(oldPlayer).get(Asset.ASSET_MILITARY_POWER);
+            int newPlayerMilitary = assets.get(curPlayer).get(Asset.ASSET_MILITARY_POWER);
             if(oldPlayerMilitary>newPlayerMilitary){
                 oldPlayer.registerMilitaryVictory(age);
                 curPlayer.registerMilitaryDefeat();
