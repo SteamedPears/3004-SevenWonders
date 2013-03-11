@@ -19,6 +19,9 @@ public class PlayedCardsView extends JPanel {
         update();
     }
 
+    /**
+     * Update the view.
+     */
     public void update() {
         removeAll();
         selectedCardView = null;

@@ -51,6 +51,14 @@ public class SevenWonders {
         openNewGameDialog();
     }
 
+    /**
+     * Create a game with the given parameters.
+     * @param isHosting True if this computer will host the game.
+     * @param ipAddress If this computer is NOT hosting the game, the IP of the host.
+     * @param port The TCP port on which to accept connections (if this computer is hosting the game),
+     *             or to which to connect (if this computer is NOT hosting the game).
+     * @param players The desired number of players, if this computer is hosting the game.
+     */
     public void createGame(boolean isHosting, String ipAddress, int port, int players) {
         logger.info("Creating game");
         this.isHost = isHosting;
@@ -82,6 +90,9 @@ public class SevenWonders {
         dialog.setVisible(true);
     }
 
+    /**
+     * Start the game, thus closing any open dialogs, opening the PlayerView.
+     */
     public void startGame() {
         closeDialog();
         selectPlayerView();
@@ -108,6 +119,9 @@ public class SevenWonders {
         }
     }
 
+    /**
+     * Close any open dialogs.
+     */
     public void closeDialog() {
         if(dialog == null) return;
         dialog.setVisible(false);
@@ -115,12 +129,18 @@ public class SevenWonders {
         dialog = null;
     }
 
+    /**
+     * Open the new game dialog.
+     */
     public void openNewGameDialog() {
         closeDialog();
         newGameDialog = new NewGameDialog(view,this);
         newGameDialog.setVisible(true);
     }
 
+    /**
+     * Close the new game dialog.
+     */
     public void closeNewGameDialog() {
         if(newGameDialog == null) return;
         newGameDialog.setVisible(false);
@@ -128,6 +148,9 @@ public class SevenWonders {
         newGameDialog = null;
     }
 
+    /**
+     * Close all windows and exit the game.
+     */
     public void exit() {
         System.exit(0);
     }
