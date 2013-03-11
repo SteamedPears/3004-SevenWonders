@@ -1,5 +1,6 @@
 package com.steamedpears.comp3004;
 
+import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.BasicConfigurator;
@@ -32,23 +33,25 @@ public class SevenWonders {
         new SevenWonders();
     }
 
-    ViewFrame view;
-    NewGameDialog newGameDialog;
-    JDialog dialog;
-    Router router;
-    PlayerView playerView;
-    boolean isHost;
-    boolean gameStarted;
+    private Router router;
+    private boolean isHost;
+    private boolean gameStarted;
 
-    public static enum View { PLAYER_VIEW, HIGHLEVEL_VIEW };
-    private View currentView;
-
-    // TODO: build this
-    HighLevelView highLevelView;
+    private ViewFrame view;
+    private NewGameDialog newGameDialog;
+    private JDialog dialog;
+    private PlayerView playerView;
+    private HighLevelView highLevelView;
 
     public SevenWonders() {
         view = new ViewFrame();
-        openNewGameDialog();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisible(true);
+                openNewGameDialog();
+            }
+        });
     }
 
     /**
@@ -95,27 +98,18 @@ public class SevenWonders {
      */
     public void startGame() {
         closeDialog();
-        selectPlayerView();
         if(isHost) router.beginGame();
         this.gameStarted = true;
+        updateView();
     }
 
-    private void selectPlayerView() {
-        currentView = View.PLAYER_VIEW;
-    }
-
-    private void updateView() throws Exception {
-        if(currentView == null) return;
-        switch(currentView) {
-            case PLAYER_VIEW:
-                playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
-                view.setView(playerView);
-                break;
-            case HIGHLEVEL_VIEW:
-                // do stuff
-                break;
-            default:
-                throw new Exception("Unknown view selected");
+    private void updateView() {
+        playerView = new PlayerView((router.getLocalGame()).getPlayerById(router.getLocalPlayerId()));
+        view.addTab(playerView, "Hand");
+        highLevelView = new HighLevelView(this);
+        view.addTab(highLevelView,"Table");
+        for(Player player : (router.getLocalGame()).getPlayers()) {
+            view.addTab(new PlayedCardsView(player),"Player " + (player.getPlayerId()));
         }
     }
 

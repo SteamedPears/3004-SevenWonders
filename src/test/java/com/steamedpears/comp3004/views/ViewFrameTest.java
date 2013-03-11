@@ -37,7 +37,7 @@ public class ViewFrameTest {
         firstButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                view.setView(firstPanel);
+                view.addTab(firstPanel, "Hand");
             }
         });
         controls.add(firstButton);
@@ -46,7 +46,7 @@ public class ViewFrameTest {
         secondButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                view.setView(secondPanel);
+                view.addTab(secondPanel, "Hand");
             }
         });
         controls.add(secondButton);
@@ -57,7 +57,7 @@ public class ViewFrameTest {
         // add a test panel
         JPanel labelPanel = new JPanel();
         labelPanel.add(new JLabel("ViewFrame properly displays initial panel"));
-        view.setView(labelPanel);
+        view.addTab(labelPanel, "Hand");
     }
 
     public static void main(String[] args) {

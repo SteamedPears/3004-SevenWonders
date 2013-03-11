@@ -13,23 +13,38 @@ public class ViewFrame extends JFrame {
 
     static Logger logger = Logger.getLogger(ViewFrame.class);
 
+    JTabbedPane pane;
+
     private void init() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setBounds(0,0,WIDTH,HEIGHT);
+        setBounds(0, 0, WIDTH, HEIGHT);
         setResizable(false);
-        setVisible(true);
+        pane = new JTabbedPane();
+        setContentPane(pane);
     }
 
     /**
      * Set the view to be displayed in this frame.
      * @param view The view to be displayed in this frame.
+     * @param title
      */
-    public void setView(JPanel view) {
-        logger.info("Setting view to " + view);
-        getContentPane().removeAll();
-        getContentPane().add(view);
+    public void addTab(JPanel view, String title) {
+        synchronized (pane) {
+            if(hasTab(title)) {
+                removeTab(title);
+            }
+            pane.addTab(title, view);
+        }
         validate();
         repaint();
+    }
+
+    private boolean hasTab(String title) {
+        return pane.indexOfTab(title) != -1;
+    }
+
+    private void removeTab(String title) {
+        pane.removeTabAt(pane.indexOfTab(title));
     }
 
     public ViewFrame() {

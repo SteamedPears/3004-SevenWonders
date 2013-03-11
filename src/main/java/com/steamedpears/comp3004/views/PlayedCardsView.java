@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.util.List;
 
 public class PlayedCardsView extends JPanel {
-    private static final int SELECTED_MULTIPLIER = 4;
+    private static final int SELECTED_MULTIPLIER = 3;
 
     private Player player;
     private CardView selectedCardView;
@@ -44,7 +44,7 @@ public class PlayedCardsView extends JPanel {
         }
 
         WonderView wonderView = new WonderView(player.getWonder());
-        wonderView.setWonderWidth(540);
+        wonderView.setWonderWidth(580);
         add(wonderView,"cell 0 4, span");
     }
 }
