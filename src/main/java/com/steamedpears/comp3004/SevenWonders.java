@@ -124,7 +124,7 @@ public class SevenWonders {
         highLevelView = new HighLevelView(this);
         view.addTab(highLevelView,"Table");
         for(Player player : getGame().getPlayers()) {
-            view.addTab(new PlayedCardsView(player),"Player " + (player.getPlayerId()));
+            view.addTab(new StructuresView(player),"Player " + (player.getPlayerId()));
         }
     }
 

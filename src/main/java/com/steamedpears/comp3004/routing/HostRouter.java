@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -181,8 +182,9 @@ class HostRouter extends Router {
                 clients.put(client.clientNumber, client);
                 announceChange(this);
                 log.debug("Client added");
-            }catch(IOException e){
-                log.error("Error establishing connection to client", e);
+            } catch(IOException e){
+                log.error("Error establishing connection to client");
+                cleanup();
             }
         }
     }
@@ -372,14 +374,16 @@ class HostRouter extends Router {
         for(Client c : clients.values()) {
             try {
                 c.cleanup();
-            } catch (IOException e) {
+            } catch(IOException e) {
                 log.warn("IOException while closing client socket");
             }
         }
         try{
-            serverSocket.close();
+            if(serverSocket != null) {
+                serverSocket.close();
+            }
             serverSocket = null;
-        } catch (IOException e) {
+        } catch(IOException e) {
             log.warn("IOException while closing server socket");
         }
     }
