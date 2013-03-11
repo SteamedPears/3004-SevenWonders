@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class AssetSet extends HashSet<String> {
 

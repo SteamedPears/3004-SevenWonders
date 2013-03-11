@@ -9,11 +9,8 @@ import org.apache.log4j.Logger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.steamedpears.comp3004.models.Asset.*;
 
@@ -268,11 +265,7 @@ public class Card {
         costLessBase.subtract(command.leftPurchases);
         costLessBase.subtract(command.rightPurchases);
 
-        if(!costLessBase.isEmpty()){
-            return true;
-        }else{
-            return costLessBase.existsValidChoices(player.getOptionalAssetsComplete());
-        }
+        return costLessBase.isEmpty() ||  costLessBase.existsValidChoices(player.getOptionalAssetsComplete());
     }
 
 

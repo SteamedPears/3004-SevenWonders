@@ -1,5 +1,4 @@
 package com.steamedpears.comp3004.views;
-import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Card;
 
 import org.apache.log4j.*;
