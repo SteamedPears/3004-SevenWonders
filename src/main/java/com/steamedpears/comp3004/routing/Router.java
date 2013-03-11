@@ -142,10 +142,7 @@ public abstract class Router extends Changeable implements ChangeListener {
         return result;
     }
 
-    /**
-     * Announce a change to listeners.
-     * @param event The change event associated with the change.
-     */
+    @Override
     public void stateChanged(ChangeEvent event){
         announceChange(event.getSource());
     }
