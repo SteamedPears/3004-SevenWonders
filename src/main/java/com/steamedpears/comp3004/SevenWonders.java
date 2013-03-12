@@ -78,9 +78,9 @@ public class SevenWonders {
         router.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                if (changeEvent.getSource().getClass().equals(SevenWondersGame.class)) {
+                if (changeEvent.getSource() instanceof SevenWondersGame) {
                     handleGameChange();
-                } else if (changeEvent.getSource().getClass().equals(HumanPlayer.class)){
+                } else if (changeEvent.getSource() instanceof HumanPlayer){
                     handlePlayerChange();
                 } else {
                     handleRouterChange();
