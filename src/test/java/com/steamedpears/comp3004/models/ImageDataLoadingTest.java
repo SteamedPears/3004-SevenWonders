@@ -29,12 +29,12 @@ public class ImageDataLoadingTest {
     public void testCards() {
         JsonParser parser = new JsonParser();
         JsonArray cardJSON = parser
-                .parse(new InputStreamReader(ImageDataLoadingTest.class.getResourceAsStream(SevenWonders.PATH_CARDS)))
+                .parse(new InputStreamReader(Card.class.getResourceAsStream(SevenWonders.PATH_CARDS)))
                 .getAsJsonObject()
                 .get(Router.PROP_ROUTE_CARDS)
                 .getAsJsonArray();
         JsonArray wonderJSON = parser
-                .parse(new InputStreamReader(ImageDataLoadingTest.class.getResourceAsStream(SevenWonders.PATH_WONDERS)))
+                .parse(new InputStreamReader(Card.class.getResourceAsStream(SevenWonders.PATH_WONDERS)))
                 .getAsJsonObject()
                 .get(Router.PROP_ROUTE_WONDERS)
                 .getAsJsonArray();
