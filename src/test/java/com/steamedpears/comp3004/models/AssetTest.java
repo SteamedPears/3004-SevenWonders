@@ -20,7 +20,7 @@ public class AssetTest {
     @Test
     public void constructorTest(){
         HashSet<String> expectedSet = new HashSet<String>();
-        expectedSet.addAll(Arrays.asList(new String[]{Asset.ASSET_WOOD, Asset.ASSET_ORE}));
+        expectedSet.addAll(Arrays.asList(Asset.ASSET_WOOD, Asset.ASSET_ORE));
 
         HashMap<String, Integer> expectedMap = new HashMap<String, Integer>();
         expectedMap.put(Asset.ASSET_CLAY,2);
@@ -97,16 +97,16 @@ public class AssetTest {
     @Test
     public void validChoiceTest(){
         AssetSet set1 = new AssetSet();
-        set1.addAll(Arrays.asList(new String[]{Asset.ASSET_STONE,Asset.ASSET_CLAY,Asset.ASSET_GLASS}));
+        set1.addAll(Arrays.asList(Asset.ASSET_STONE,Asset.ASSET_CLAY,Asset.ASSET_GLASS));
 
         AssetSet set2 = new AssetSet();
-        set2.addAll(Arrays.asList(new String[]{Asset.ASSET_WOOD,Asset.ASSET_PAPYRUS,Asset.ASSET_CLAY}));
+        set2.addAll(Arrays.asList(Asset.ASSET_WOOD,Asset.ASSET_PAPYRUS,Asset.ASSET_CLAY));
 
         AssetSet set3 = new AssetSet();
-        set3.addAll(Arrays.asList(new String[]{Asset.ASSET_ORE,Asset.ASSET_STONE,Asset.ASSET_LOOM}));
+        set3.addAll(Arrays.asList(Asset.ASSET_ORE,Asset.ASSET_STONE,Asset.ASSET_LOOM));
 
         AssetSet set4 = new AssetSet();
-        set4.addAll(Arrays.asList(new String[]{Asset.ASSET_WOOD,Asset.ASSET_STONE,Asset.ASSET_LOOM}));
+        set4.addAll(Arrays.asList(Asset.ASSET_WOOD,Asset.ASSET_STONE,Asset.ASSET_LOOM));
 
         AssetMap map = new AssetMap();
         map.add(Asset.ASSET_CLAY,2);
