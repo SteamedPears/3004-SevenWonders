@@ -170,9 +170,6 @@ public class PlayerView extends JPanel {
         // assets
         add(new AssetView(this.player),"gapleft 25, gaptop 1, span");
 
-        // TODO: add some way to switch to viewing another player
-        // TODO: add some way to switch to high level view
-
         newMove();
     }
 
@@ -198,7 +195,7 @@ public class PlayerView extends JPanel {
         } else {
             int minutes = timer / 60;
             int seconds = timer % 60;
-            setMessage(minutes + ":" + seconds + " left to choose a move.");
+            setMessage(minutes + ":" + String.format("%02d",seconds) + " left to choose a move.");
             --timer;
         }
     }
