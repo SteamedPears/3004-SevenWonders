@@ -21,6 +21,7 @@ public class PlayerView extends JPanel {
     private Map<String, String> persistentMessages;
     private int timer = 0;
     private Timer scheduledUpdateTimer;
+    private boolean waiting;
 
     private JLabel messageLabel;
     private JLabel persistentMessageLabel;
@@ -33,6 +34,7 @@ public class PlayerView extends JPanel {
         setLayout(new MigLayout());
         this.player = player;
         persistentMessages = new HashMap<String, String>();
+        waiting = true;
         update();
         scheduledUpdateTimer = new Timer();
         scheduledUpdateTimer.scheduleAtFixedRate(new TimerTask() {
@@ -170,10 +172,11 @@ public class PlayerView extends JPanel {
         // assets
         add(new AssetView(this.player),"gapleft 25, gaptop 1, span");
 
-        newMove();
+        waitForTurn();
     }
 
     public void newMove() {
+        waiting = false;
         buildButton.setEnabled(true);
         playButton.setEnabled(true);
         discardButton.setEnabled(true);
@@ -181,7 +184,17 @@ public class PlayerView extends JPanel {
         updateTimer();
     }
 
+    public void waitForTurn() {
+        waiting = true;
+        buildButton.setEnabled(false);
+        playButton.setEnabled(false);
+        discardButton.setEnabled(false);
+        timer = 0;
+        updateTimer();
+    }
+
     public void doneMove() {
+        waiting = false;
         buildButton.setEnabled(false);
         playButton.setEnabled(false);
         discardButton.setEnabled(false);
@@ -190,7 +203,9 @@ public class PlayerView extends JPanel {
     }
 
     private void updateTimer() {
-        if(timer <= 0) {
+        if(waiting) {
+            setMessage("Waiting...");
+        } else if(timer <= 0) {
             setMessage("Move chosen.");
         } else {
             int minutes = timer / 60;
