@@ -82,7 +82,8 @@ public class AssetView extends JPanel {
             try {
                 result = new URL("file://");
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                log.error("Null file is malformed, file loading compromised", e);
+                System.exit(-1);
             }
         }
         return result;

@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -39,7 +38,7 @@ class ClientRouter extends Router implements Runnable{
             this.totalHumanPlayers = 0;
             start();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Could not obtain connection to host", e);
             System.exit(-1);
         }
     }
