@@ -498,7 +498,7 @@ public abstract class Player implements Runnable{
         privateAssets.put(ASSET_GOLD, getGold());
         privateAssets.put(ASSET_MILITARY_DEFEAT, getMilitaryDefeats());
         privateAssets.put(ASSET_MILITARY_VICTORY, getMilitaryWins());
-
+        privateAssets.put(ASSET_WONDER_STAGES, wonder.getCurrentStage());
         return privateAssets;
     }
 
