@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.steamedpears.comp3004.models.Asset.*;
 
@@ -62,7 +63,7 @@ public class Card {
     //If multiplierAssets is not null, multiply the values in baseAssets
     //by the number of occurences of these assets in multiplierTargets (a combination of self, left, and right)
     private AssetSet multiplierAssets;
-    private AssetSet multiplierTargets;
+    private Set<String> multiplierTargets;
     //The building the card is free to play for
     private String freeFor;
     //the cost of playing this card
@@ -70,7 +71,7 @@ public class Card {
     //the resources this card makes discounted
     private AssetSet discountsAssets;
     //the players to which this card's discountsAssets applies to
-    private AssetSet discountsTargets;
+    private Set<String> discountsTargets;
     //if true, the player may choose only *one* of the keys of baseAssets
     private boolean isChoice;
     private String id;
@@ -177,7 +178,7 @@ public class Card {
      * Gets the neighbours for which #getDiscountsAssets applies to
      * @return the neighbours for which #getDiscountsAssets applies to
      */
-    public AssetSet getDiscountsTargets(){
+    public Set<String> getDiscountsTargets(){
         return discountsTargets;
     }
 

@@ -50,4 +50,8 @@ public final class Asset {
             ASSET_MILITARY_POWER, ASSET_WONDER_STAGES
     };
 
+    public static final String[] Colors = {
+            COLOR_BROWN, COLOR_GREEN, COLOR_GREY, COLOR_PURPLE, COLOR_RED, COLOR_YELLOW
+    };
+
 }
