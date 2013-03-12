@@ -409,7 +409,7 @@ public abstract class Player implements Runnable{
      * gets the player to this player's left
      * @return the player to this player's left
      */
-    public final Player getPlayerLeft(){
+    public Player getPlayerLeft(){
         return playerLeft;
     }
 
@@ -417,7 +417,7 @@ public abstract class Player implements Runnable{
      * gets the player to this player's right
      * @return the player to this player's right
      */
-    public final Player getPlayerRight(){
+    public Player getPlayerRight(){
         return playerRight;
     }
 
