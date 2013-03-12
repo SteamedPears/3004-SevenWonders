@@ -45,9 +45,9 @@ public class ImageDataLoadingTest {
         try {
             blankurl = new URL("file://");
         } catch (MalformedURLException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.error("Null file is malformed, file loading compromised", e);
+            System.exit(-1);
         }
-
         log.info("Testing " + cards.size() + "/148 cards.");
         for(Card c : cards) {
             assertNotEquals(c.getId()+" image not found",c.getImagePath().getPath(), blankurl.getPath());
