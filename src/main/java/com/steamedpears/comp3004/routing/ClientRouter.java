@@ -73,7 +73,7 @@ class ClientRouter extends Router implements Runnable{
         try {
         JsonElement elem = parser.parse(in);
         } catch(IllegalArgumentException e) {
-            log.error("Illegal argument while parsing command");
+            log.error("Illegal argument while parsing command",e);
             cleanup();
         }
         log.debug("Got 'okay' to take turn; taking turn");
@@ -88,10 +88,10 @@ class ClientRouter extends Router implements Runnable{
             log.debug("Got player commands; applying commands: "+obj.toString());
             commands = jsonToPlayerCommands(obj);
         } catch(IllegalArgumentException e) {
-            log.error("Illegal argument while waiting for command");
+            log.error("Illegal argument while waiting for command",e);
             cleanup();
         } catch(JsonIOException e) {
-            log.error("JSON I/O error while waiting for command");
+            log.error("JSON I/O error while waiting for command",e);
             cleanup();
         }
         return getLocalGame().applyCommands(commands);

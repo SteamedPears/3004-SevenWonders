@@ -80,10 +80,12 @@ public class SevenWonders {
             public void stateChanged(ChangeEvent changeEvent) {
                 if (changeEvent.getSource() instanceof SevenWondersGame) {
                     handleGameChange();
-                } else if (changeEvent.getSource() instanceof HumanPlayer){
+                } else if (changeEvent.getSource() instanceof Player){
                     handlePlayerChange();
-                } else {
+                } else if (changeEvent.getSource() instanceof Router){
                     handleRouterChange();
+                } else {
+                    logger.error("Unknown change source!");
                 }
             }
         });
