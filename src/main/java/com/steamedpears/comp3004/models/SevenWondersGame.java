@@ -536,4 +536,10 @@ public class SevenWondersGame extends Changeable implements Runnable{
     public Map<String, Wonder> getWonders() {
         return wonders;
     }
+
+    /**
+     * Get the router associated with this game.
+     * @return The router associated with this game.
+     */
+    public Router getRouter() { return router; }
 }
