@@ -2,6 +2,7 @@ package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.SevenWondersGame;
+import com.steamedpears.comp3004.models.players.HumanPlayer;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.BasicConfigurator;
@@ -74,34 +75,17 @@ public class SevenWonders {
             router = Router.getClientRouter(ipAddress, port);
             dialog = new JoinGameDialog(view,this);
         }
-        final SevenWonders controller = this;
         router.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                try {
-                    if(isHost) {
-                        if(router != null && dialog != null)
-                            ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
-                    } else if(!gameStarted){
-                        startGame();
-                    }
-                    if(getGame().isGameOver()) {
-                        view.clearTabs();
-                        playerView = null;
-                        highLevelView = null;
-                        dialog = new ResultsDialog(view,controller);
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.setVisible(true);
-                            }
-                        });
-                    } else if(router != null && router.isPlaying()) {
-                        updateView();
-                    }
-                } catch(Exception e) {
-                    e.printStackTrace();
-                    System.exit(-1);
+                if (changeEvent.getSource() instanceof SevenWondersGame) {
+                    handleGameChange();
+                } else if (changeEvent.getSource() instanceof Player){
+                    handlePlayerChange();
+                } else if (changeEvent.getSource() instanceof Router){
+                    handleRouterChange();
+                } else {
+                    logger.error("Unknown change source!");
                 }
             }
         });
@@ -111,6 +95,39 @@ public class SevenWonders {
                 dialog.setVisible(true);
             }
         });
+    }
+
+    private void handleGameChange() {
+        logger.info("Handling game change");
+        if(!gameStarted) {
+            gameStarted = true;
+            startGame();
+        } else if(getGame().isGameOver()) {
+            view.clearTabs();
+            playerView = null;
+            highLevelView = null;
+            dialog = new ResultsDialog(view,this);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.setVisible(true);
+                }
+            });
+        } else {
+            updateView();
+        }
+    }
+
+    private void handlePlayerChange() {
+        logger.info("Handling player change");
+        playerView.newMove();
+    }
+
+    private void handleRouterChange() {
+        logger.info("Handling router change");
+        if(dialog != null) {
+            ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
+        }
     }
 
     /**
