@@ -126,7 +126,8 @@ public class Card {
                 try {
                     result = new URL("file://");
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    log.error("Null file is malformed, file loading is compromised", e);
+                    System.exit(-1);
                 }
             }
             imageURL = result;

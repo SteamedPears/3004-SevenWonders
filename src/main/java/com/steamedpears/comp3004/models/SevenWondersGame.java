@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 public class SevenWondersGame extends Changeable implements Runnable{
     public static final String PROP_GAME_CARDS = "cards";
     public static final int MAX_AGES = 3;
-    public static int TURN_LENGTH = 1000*60*2; // 2 minutes
+    public static final int TURN_LENGTH = 1000*60*2; // 2 minutes
     private static Logger log = Logger.getLogger(SevenWondersGame.class);
 
     private List<Player> players;
@@ -65,14 +65,13 @@ public class SevenWondersGame extends Changeable implements Runnable{
                 player.applyCommand(command);
             } catch (Exception e) {
                 try {
-                    log.debug(player+" made invalid move "+command+", using null move - ");
-                    e.printStackTrace();
+                    log.error(player+" made invalid move "+command+", using null move - ", e);
                     command = PlayerCommand.getNullCommand(player);
                     commands.put(player, command);
                     player.applyCommand(command);
                 } catch (Exception e1) {
                     //OH GOD EVERYTHING IS BROKEN
-                    e1.printStackTrace();
+                    log.error("Null command was rejected, everything is broken", e1);
                     System.exit(-1);
                 }
             }
@@ -132,7 +131,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
             try{
                 Thread.sleep(100);
             }catch(InterruptedException ex){
-                ex.printStackTrace();
+                log.error("Interrupted while polling players", ex);
                 System.exit(-1);
             }
 

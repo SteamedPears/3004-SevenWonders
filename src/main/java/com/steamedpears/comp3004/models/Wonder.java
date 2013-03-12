@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
+import org.apache.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,12 +17,12 @@ public class Wonder {
 
     private class WonderSide{
         //stages are represented by cards for simplicity
-        public List<Card> stages;
-        public String image;
-        public String startResource;
-        public URL imageURL;
+        private List<Card> stages;
+        private String image;
+        private String startResource;
+        private URL imageURL;
 
-        public WonderSide(JsonObject obj){
+        private WonderSide(JsonObject obj){
             this.stages = Card.parseDeck(obj.getAsJsonArray(PROP_WONDER_STAGES));
             this.image = SevenWonders.PATH_IMG_WONDERS+
                     obj.getAsJsonPrimitive(PROP_WONDER_IMAGE).getAsString()
@@ -36,6 +37,7 @@ public class Wonder {
     public static final String PROP_WONDER_STAGES =             "stages";
     public static final String PROP_WONDER_IMAGE =              "image";
     public static final String PROP_WONDER_START_RESOURCE =     "startResource";
+    private static Logger log = Logger.getLogger(Wonder.class);
 
     //static methods///////////////////////////////////////////////
 
@@ -158,7 +160,7 @@ public class Wonder {
      * @return the current side of the Wonder
      */
     public String getSide(){
-        if(currentSide==sideB){
+        if(currentSide.equals(sideB)){
             return PROP_WONDER_SIDE_B;
         }else{
             return PROP_WONDER_SIDE_A;
@@ -176,7 +178,8 @@ public class Wonder {
                 try {
                     result = new URL("file://");
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    log.error("Null file is malformed, file loading compromised", e);
+                    System.exit(-1);
                 }
             }
             currentSide.imageURL = result;
