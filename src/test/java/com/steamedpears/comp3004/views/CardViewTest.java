@@ -3,10 +3,12 @@ import com.steamedpears.comp3004.models.*;
 
 import com.google.gson.*;
 import org.apache.log4j.*;
+import org.junit.Ignore;
 
 import javax.swing.*;
 import java.io.*;
 
+@Ignore
 public class CardViewTest extends JFrame {
     public CardViewTest() throws Exception {
         setBounds(0, 0, 1000, 1000);

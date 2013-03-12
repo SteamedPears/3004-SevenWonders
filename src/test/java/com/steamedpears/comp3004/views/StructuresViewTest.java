@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.views;
 import com.google.gson.*;
 import com.steamedpears.comp3004.models.*;
 import org.apache.log4j.*;
+import org.junit.Ignore;
 
 import static org.mockito.Mockito.*;
 
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
+@Ignore
 public class StructuresViewTest extends JFrame {
     public StructuresViewTest() throws Exception {
         // initialization

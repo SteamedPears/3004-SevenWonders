@@ -2,11 +2,13 @@ package com.steamedpears.comp3004.views;
 
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.*;
+import org.junit.Ignore;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@Ignore
 public class ViewFrameTest {
     private ViewFrame view;
 
