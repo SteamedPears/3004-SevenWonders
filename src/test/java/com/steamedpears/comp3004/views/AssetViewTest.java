@@ -2,11 +2,13 @@ package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.models.AssetMap;
 import com.steamedpears.comp3004.models.Player;
+import org.junit.Ignore;
 
 import javax.swing.*;
 
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class AssetViewTest extends JFrame {
     public AssetViewTest() {
         setBounds(0,0,960,560);
