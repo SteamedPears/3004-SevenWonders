@@ -78,30 +78,10 @@ public class SevenWonders {
         router.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                try {
-                    if(isHost) {
-                        if(router != null && dialog != null)
-                            ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
-                    } else if(!gameStarted){
-                        startGame();
-                    }
-                    if(getGame().isGameOver()) {
-                        view.clearTabs();
-                        playerView = null;
-                        highLevelView = null;
-                        dialog = new ResultsDialog(view,controller);
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.setVisible(true);
-                            }
-                        });
-                    } else if(router != null && router.isPlaying()) {
-                        updateView();
-                    }
-                } catch(Exception e) {
-                    e.printStackTrace();
-                    System.exit(-1);
+                if(changeEvent.getSource().getClass().equals(SevenWondersGame.class)) {
+                    handleGameChange();
+                } else {
+                    handleRouterChange();
                 }
             }
         });
@@ -111,6 +91,33 @@ public class SevenWonders {
                 dialog.setVisible(true);
             }
         });
+    }
+
+    private void handleGameChange() {
+        if(!gameStarted) {
+            gameStarted = true;
+            startGame();
+        } else if(getGame().isGameOver()) {
+            view.clearTabs();
+            playerView = null;
+            highLevelView = null;
+            dialog = new ResultsDialog(view,this);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.setVisible(true);
+                }
+            });
+        } else {
+            updateView();
+        }
+    }
+
+    private void handleRouterChange() {
+        // must be host
+        if(dialog != null) {
+            ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
+        }
     }
 
     /**

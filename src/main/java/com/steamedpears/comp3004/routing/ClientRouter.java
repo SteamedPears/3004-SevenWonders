@@ -1,6 +1,7 @@
 package com.steamedpears.comp3004.routing;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -86,7 +88,10 @@ class ClientRouter extends Router implements Runnable{
             log.debug("Got player commands; applying commands: "+obj.toString());
             commands = jsonToPlayerCommands(obj);
         } catch(IllegalArgumentException e) {
-            log.error("Illegal argument while parsing command");
+            log.error("Illegal argument while waiting for command");
+            cleanup();
+        } catch(JsonIOException e) {
+            log.error("JSON I/O error while waiting for command");
             cleanup();
         }
         return getLocalGame().applyCommands(commands);
