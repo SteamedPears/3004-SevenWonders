@@ -3,11 +3,15 @@ package com.steamedpears.comp3004.models;
 import com.google.gson.JsonParser;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AssetTest {
 
@@ -88,5 +92,43 @@ public class AssetTest {
         assertEquals("Difference should match",
                 expectedMap,
                 map1);
+    }
+
+    @Test
+    public void validChoiceTest(){
+        AssetSet set1 = new AssetSet();
+        set1.addAll(Arrays.asList(new String[]{Asset.ASSET_STONE,Asset.ASSET_CLAY,Asset.ASSET_GLASS}));
+
+        AssetSet set2 = new AssetSet();
+        set2.addAll(Arrays.asList(new String[]{Asset.ASSET_WOOD,Asset.ASSET_PAPYRUS,Asset.ASSET_CLAY}));
+
+        AssetSet set3 = new AssetSet();
+        set3.addAll(Arrays.asList(new String[]{Asset.ASSET_ORE,Asset.ASSET_STONE,Asset.ASSET_LOOM}));
+
+        AssetSet set4 = new AssetSet();
+        set4.addAll(Arrays.asList(new String[]{Asset.ASSET_WOOD,Asset.ASSET_STONE,Asset.ASSET_LOOM}));
+
+        AssetMap map = new AssetMap();
+        map.add(Asset.ASSET_CLAY,2);
+        map.add(Asset.ASSET_ORE);
+
+        List<AssetSet> choices = new ArrayList<AssetSet>();
+        choices.add(set1);
+        choices.add(set2);
+
+        assertFalse("Shoudn't be a valid choice",
+                map.existsValidChoices(choices));
+
+        choices.add(set3);
+
+        assertTrue("Should be a valid choice",
+                map.existsValidChoices(choices));
+
+        choices.add(1, set4);
+
+        assertTrue("Should still be a valid choice",
+                map.existsValidChoices(choices));
+
+
     }
 }
