@@ -2,6 +2,7 @@ package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.SevenWondersGame;
+import com.steamedpears.comp3004.models.players.HumanPlayer;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.BasicConfigurator;
@@ -74,12 +75,13 @@ public class SevenWonders {
             router = Router.getClientRouter(ipAddress, port);
             dialog = new JoinGameDialog(view,this);
         }
-        final SevenWonders controller = this;
         router.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                if(changeEvent.getSource().getClass().equals(SevenWondersGame.class)) {
+                if (changeEvent.getSource().getClass().equals(SevenWondersGame.class)) {
                     handleGameChange();
+                } else if (changeEvent.getSource().getClass().equals(HumanPlayer.class)){
+                    handlePlayerChange();
                 } else {
                     handleRouterChange();
                 }
@@ -94,6 +96,7 @@ public class SevenWonders {
     }
 
     private void handleGameChange() {
+        logger.info("Handling game change");
         if(!gameStarted) {
             gameStarted = true;
             startGame();
@@ -113,8 +116,13 @@ public class SevenWonders {
         }
     }
 
+    private void handlePlayerChange() {
+        logger.info("Handling player change");
+        playerView.newMove();
+    }
+
     private void handleRouterChange() {
-        // must be host
+        logger.info("Handling router change");
         if(dialog != null) {
             ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
         }

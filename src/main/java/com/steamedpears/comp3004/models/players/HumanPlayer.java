@@ -11,12 +11,14 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(Wonder wonder, SevenWondersGame game){
         super(wonder, game);
+        addChangeListener(game.getRouter());
     }
 
     @Override
     protected void handleTurn() {
         log.info("handleTurn called");
         setCurrentCommand(PlayerCommand.getNullCommand(this));
+        announceChange(this);
         try {
             Thread.sleep(SevenWondersGame.TURN_LENGTH);
         } catch(InterruptedException e) {

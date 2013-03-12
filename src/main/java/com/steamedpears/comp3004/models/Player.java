@@ -12,7 +12,7 @@ import java.util.Set;
 import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
 import static com.steamedpears.comp3004.models.Asset.*;
 
-public abstract class Player implements Runnable{
+public abstract class Player extends Changeable implements Runnable{
     //static variables//////////////////////////////////////////////////////
     private static int currentId = 0;
     private static Logger log = Logger.getLogger(Player.class);
@@ -55,7 +55,7 @@ public abstract class Player implements Runnable{
     private List<Card> playedCards;
     private Player playerLeft;
     private Player playerRight;
-    private SevenWondersGame game;
+    protected SevenWondersGame game;
     private PlayerCommand currentCommand;
     private List<Card> hand;
     private List<Integer> militaryResults;
