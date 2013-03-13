@@ -2,7 +2,6 @@ package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.SevenWondersGame;
-import com.steamedpears.comp3004.models.players.HumanPlayer;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.BasicConfigurator;
