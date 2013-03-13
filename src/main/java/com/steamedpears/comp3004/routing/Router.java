@@ -13,18 +13,29 @@ import org.apache.log4j.Logger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public abstract class Router extends Changeable implements ChangeListener {
 
+    /**
+     * Gets a new HostRouter instance
+     * @param port The port to have it listen to
+     * @param totalPlayers the total players the Router should make the game with
+     * @return a new HostRouter
+     */
     public static Router getHostRouter(int port, int totalPlayers){
         log.debug("Creating Host Router");
-        totalPlayers = Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS);
-        return new HostRouter(port, totalPlayers);
+        return new HostRouter(port,
+                Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS));
     }
 
+    /**
+     * Gets a new ClientRouter instance
+     * @param ipAddress the ip to connect to
+     * @param port the port to connect to
+     * @return a new ClientRouter
+     */
     public static Router getClientRouter(String ipAddress, int port){
         log.debug("Creating Client Router");
         return new ClientRouter(ipAddress, port);
@@ -32,15 +43,14 @@ public abstract class Router extends Changeable implements ChangeListener {
 
     public static final int HOST_PORT = 1567;
 
-    public static String PROP_ROUTE_CARDS = "cards";
-    public static String PROP_ROUTE_WONDERS = "wonders";
-    public static String PROP_ROUTE_DECK = "deck";
-    public static String PROP_ROUTE_PLAYERS = "players";
-    public static String PROP_ROUTE_YOU_ARE = "ur";
+    public static final String PROP_ROUTE_CARDS = "cards";
+    public static final String PROP_ROUTE_WONDERS = "wonders";
+    public static final String PROP_ROUTE_DECK = "deck";
+    public static final String PROP_ROUTE_PLAYERS = "players";
+    public static final String PROP_ROUTE_YOU_ARE = "ur";
 
-    public static String COMMAND_ROUTE_TAKE_TURN = "takeUrTurn";
-    public static String COMMAND_ROUTE_OK = "k";
-    public static String COMMAND_ROUTE_CONNECT = "ohai";
+    public static final String COMMAND_ROUTE_TAKE_TURN = "takeUrTurn";
+    public static final String COMMAND_ROUTE_OK = "k";
 
     private static Logger log = Logger.getLogger(Router.class);
 
@@ -48,8 +58,7 @@ public abstract class Router extends Changeable implements ChangeListener {
     //localGame#applyCommands should be called when every player has decided on a command
     private SevenWondersGame localGame;
     private boolean playing;
-    protected int localPlayerId;
-    protected List<ChangeListener> changeListeners;
+    private int localPlayerId;
 
     protected Router() {
         this.localGame = new SevenWondersGame(this);
@@ -81,6 +90,14 @@ public abstract class Router extends Changeable implements ChangeListener {
      */
     protected void setPlaying(boolean playing){
         this.playing = playing;
+    }
+
+    /**
+     * Set the localPlayerId of the Router
+     * @param localPlayerId the localPlayerId
+     */
+    protected void setLocalPlayerId(int localPlayerId) {
+        this.localPlayerId = localPlayerId;
     }
 
     /**

@@ -49,7 +49,7 @@ class HostRouter extends Router {
         }
         this.clients = new HashMap<Integer, Client>();
         this.maxPlayers = maxPlayers;
-        localPlayerId = 0;
+        setLocalPlayerId(0);
 
         registeredMoves = new HashMap<Player, PlayerCommand>();
         pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+2);
@@ -268,7 +268,6 @@ class HostRouter extends Router {
 
     private void broadcastInitialConfig(){
         log.debug("broadcasting initial config");
-        Gson gson = new Gson();
         JsonObject result = new JsonObject();
         result.add(PROP_ROUTE_CARDS, this.cardJSON);
         result.add(PROP_ROUTE_WONDERS, this.wonderJSON);

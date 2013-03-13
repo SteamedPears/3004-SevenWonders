@@ -55,7 +55,7 @@ public abstract class Player extends Changeable implements Runnable{
     private List<Card> playedCards;
     private Player playerLeft;
     private Player playerRight;
-    protected SevenWondersGame game;
+    private SevenWondersGame game;
     private PlayerCommand currentCommand;
     private List<Card> hand;
     private List<Integer> militaryResults;

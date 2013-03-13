@@ -112,8 +112,8 @@ class ClientRouter extends Router implements Runnable{
     private void waitForLocalPlayerId() {
         log.debug("Getting localPlayerId from host");
         JsonObject obj = parser.parse(in).getAsJsonObject();
-        localPlayerId = obj.get(PROP_ROUTE_YOU_ARE).getAsInt();
-        log.debug("Got localPlayerId: "+localPlayerId);
+        setLocalPlayerId(obj.get(PROP_ROUTE_YOU_ARE).getAsInt());
+        log.debug("Got localPlayerId: "+getLocalPlayerId());
     }
 
     @Override
@@ -157,4 +157,5 @@ class ClientRouter extends Router implements Runnable{
             log.warn("IOException while closing socket");
         }
     }
+
 }

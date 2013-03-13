@@ -34,7 +34,6 @@ public class SevenWondersGame extends Changeable implements Runnable{
     private Map<String, Wonder> wonders;
     private List<List<Card>> deck;
     private int age;
-    private int maxPlayers; //useless?
     private Router router;
     private final ExecutorService pool;
     private Map<Future, Player> runningPlayers;

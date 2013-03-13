@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Changeable {
 
-    protected List<ChangeListener> changeListeners;
+    private List<ChangeListener> changeListeners;
 
     public Changeable(){
         changeListeners = new ArrayList<ChangeListener>();

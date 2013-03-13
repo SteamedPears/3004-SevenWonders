@@ -27,10 +27,9 @@ public class SevenWonders {
     public static final int MAX_PLAYERS = 7;
     public static final int MIN_PLAYERS = 3;
 
-    static Logger logger = Logger.getLogger(SevenWonders.class);
+    private static Logger logger = Logger.getLogger(SevenWonders.class);
 
     public static void main(String[] args){
-        //Logger.getRootLogger().setLevel(Level.INFO);
         BasicConfigurator.configure();
         new SevenWonders();
     }

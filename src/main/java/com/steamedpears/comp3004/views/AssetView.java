@@ -35,7 +35,7 @@ public class AssetView extends JPanel {
 
     static Logger log = Logger.getLogger(ViewFrame.class);
 
-    public static String MIG_CONFIG = "w 60!";
+    public static final String MIG_CONFIG = "w 60!";
 
     public AssetView(Player player) {
         this(Arrays.asList(player));
