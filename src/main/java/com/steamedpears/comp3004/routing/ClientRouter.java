@@ -29,6 +29,11 @@ class ClientRouter extends Router implements Runnable{
     private Executor pool = Executors.newFixedThreadPool(1);
     private int totalHumanPlayers;
 
+    /**
+     * Creates a new ClientRouter talking to the given ip and port
+     * @param ipAddress the ip of the Host
+     * @param port the port of the Host
+     */
     public ClientRouter(String ipAddress, int port) {
         try {
             this.host = new Socket(ipAddress, port);

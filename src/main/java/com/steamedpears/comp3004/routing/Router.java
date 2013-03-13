@@ -60,6 +60,9 @@ public abstract class Router extends Changeable implements ChangeListener {
     private boolean playing;
     private int localPlayerId;
 
+    /**
+     * Creates a new Router
+     */
     protected Router() {
         this.localGame = new SevenWondersGame(this);
         localGame.addChangeListener(this);

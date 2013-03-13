@@ -77,6 +77,11 @@ public class Card {
     private String id;
 
     //constructor///////////////////////////////////////////////////
+
+    /**
+     * Creates a Card that matches the give JSON object
+     * @param obj the JSON object describing this Card
+     */
     public Card(JsonObject obj){
         this.name = obj.has(PROP_CARD_NAME) ? obj.getAsJsonPrimitive(PROP_CARD_NAME).getAsString() : "";
         this.color = obj.has(PROP_CARD_COLOR) ? obj.getAsJsonPrimitive(PROP_CARD_COLOR).getAsString() : "";

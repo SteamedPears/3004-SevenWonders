@@ -9,6 +9,9 @@ public class Changeable {
 
     private List<ChangeListener> changeListeners;
 
+    /**
+     * Creates a Changeable with no listeners registered
+     */
     public Changeable(){
         changeListeners = new ArrayList<ChangeListener>();
     }
