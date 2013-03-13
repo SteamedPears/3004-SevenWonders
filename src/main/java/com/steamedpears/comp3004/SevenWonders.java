@@ -2,7 +2,6 @@ package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.SevenWondersGame;
-import com.steamedpears.comp3004.models.players.HumanPlayer;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
 import org.apache.log4j.BasicConfigurator;
@@ -27,10 +26,9 @@ public class SevenWonders {
     public static final int MAX_PLAYERS = 7;
     public static final int MIN_PLAYERS = 3;
 
-    static Logger logger = Logger.getLogger(SevenWonders.class);
+    private static Logger logger = Logger.getLogger(SevenWonders.class);
 
     public static void main(String[] args){
-        //Logger.getRootLogger().setLevel(Level.INFO);
         BasicConfigurator.configure();
         new SevenWonders();
     }

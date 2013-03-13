@@ -34,12 +34,15 @@ public class SevenWondersGame extends Changeable implements Runnable{
     private Map<String, Wonder> wonders;
     private List<List<Card>> deck;
     private int age;
-    private int maxPlayers; //useless?
     private Router router;
     private final ExecutorService pool;
     private Map<Future, Player> runningPlayers;
     private boolean gameOver;
 
+    /**
+     * Creates a SevenWondersGame with the given Router
+     * @param router the local router the game is running under
+     */
     public SevenWondersGame(Router router){
         this.players = new ArrayList<Player>();
         this.localPlayers = new HashSet<Player>();

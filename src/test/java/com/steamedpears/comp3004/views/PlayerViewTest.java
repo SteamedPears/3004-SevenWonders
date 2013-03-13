@@ -31,7 +31,7 @@ public class PlayerViewTest extends JFrame {
         // build resources
         AssetMap assets = new AssetMap();
         int i = 0;
-        for(String assetType : Asset.AssetTypes) {
+        for(String assetType : Asset.ASSET_TYPES) {
             assets.put(assetType,++i);
         }
 

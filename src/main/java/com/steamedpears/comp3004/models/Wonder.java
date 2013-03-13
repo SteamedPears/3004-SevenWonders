@@ -65,6 +65,11 @@ public class Wonder {
     private int undiscards;
 
     //constructor//////////////////////////////////////////////////
+
+    /**
+     * Creates a Wonder that matches the given JSON object
+     * @param obj the JSON object describing the Wonder
+     */
     public Wonder(JsonObject obj){
         this.name = obj.getAsJsonPrimitive(PROP_WONDER_NAME).getAsString();
         this.sideA = new WonderSide(obj.getAsJsonObject(PROP_WONDER_SIDE_A));

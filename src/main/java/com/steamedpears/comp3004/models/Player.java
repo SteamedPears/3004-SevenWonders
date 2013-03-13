@@ -55,7 +55,7 @@ public abstract class Player extends Changeable implements Runnable{
     private List<Card> playedCards;
     private Player playerLeft;
     private Player playerRight;
-    protected SevenWondersGame game;
+    private SevenWondersGame game;
     private PlayerCommand currentCommand;
     private List<Card> hand;
     private List<Integer> militaryResults;
@@ -64,7 +64,14 @@ public abstract class Player extends Changeable implements Runnable{
     private int stagedCommandResult;
 
     //constructor///////////////////////////////////////////////////////////
-    public Player(Wonder wonder, SevenWondersGame game, int id){
+
+    /**
+     * Creates a Player with the given wonder, game, and id
+     * @param wonder the wonder of the player
+     * @param game the game the player is part of
+     * @param id the unique id of the player
+     */
+    private Player(Wonder wonder, SevenWondersGame game, int id){
         this.wonder = wonder;
         this.game = game;
         this.playedCards = new ArrayList<Card>();
@@ -74,6 +81,11 @@ public abstract class Player extends Changeable implements Runnable{
         this.id = id;
     }
 
+    /**
+     * Creates a Player with the given wonder and game
+     * @param wonder the wonder of the player
+     * @param game the game the player is part of
+     */
     public Player(Wonder wonder, SevenWondersGame game){
         this(wonder, game, getNextId());
     }
