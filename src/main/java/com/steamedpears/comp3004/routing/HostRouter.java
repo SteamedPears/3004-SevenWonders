@@ -1,6 +1,5 @@
 package com.steamedpears.comp3004.routing;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -40,6 +39,11 @@ class HostRouter extends Router {
 
     private static Logger log = Logger.getLogger(Router.class);
 
+    /**
+     * Creates a HostRouter with the given port which creates a game with the given number of players
+     * @param port the port to listen on
+     * @param maxPlayers the number of players the game has
+     */
     public HostRouter(int port, int maxPlayers) {
         try {
             this.serverSocket = new ServerSocket(port);
@@ -49,7 +53,7 @@ class HostRouter extends Router {
         }
         this.clients = new HashMap<Integer, Client>();
         this.maxPlayers = maxPlayers;
-        localPlayerId = 0;
+        setLocalPlayerId(0);
 
         registeredMoves = new HashMap<Player, PlayerCommand>();
         pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+2);
@@ -268,7 +272,6 @@ class HostRouter extends Router {
 
     private void broadcastInitialConfig(){
         log.debug("broadcasting initial config");
-        Gson gson = new Gson();
         JsonObject result = new JsonObject();
         result.add(PROP_ROUTE_CARDS, this.cardJSON);
         result.add(PROP_ROUTE_WONDERS, this.wonderJSON);
@@ -306,7 +309,7 @@ class HostRouter extends Router {
         private PrintWriter out;
         private Socket client;
 
-        public Client(Socket client, int clientNumber){
+        private Client(Socket client, int clientNumber){
             log.debug("Establishing connection with client:" +clientNumber);
             this.client = client;
             try {
@@ -326,7 +329,7 @@ class HostRouter extends Router {
             sendMessage(obj.toString());
         }
 
-        public void getOkay(){
+        private void getOkay(){
             try {
                 in.readLine();
             } catch (IOException e) {
@@ -336,11 +339,12 @@ class HostRouter extends Router {
             log.debug("Got okay: "+clientNumber);
         }
 
-        public void sendMessage(String message){
+        private void sendMessage(String message){
             log.debug("Sending ("+clientNumber+"): "+message);
             out.println(message);
         }
 
+        @Override
         public void run(){
             log.debug("Listening for client commands: "+clientNumber);
             try {
@@ -359,11 +363,11 @@ class HostRouter extends Router {
 
         }
 
-        public boolean isClosed() {
+        private boolean isClosed() {
             return client.isClosed() || !client.isConnected();
         }
 
-        public void cleanup() throws IOException {
+        private void cleanup() throws IOException {
             client.close();
         }
     }

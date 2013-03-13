@@ -3,8 +3,6 @@ package com.steamedpears.comp3004.views;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ViewFrame extends JFrame {
     public static final int WIDTH = 960;
@@ -25,7 +23,7 @@ public class ViewFrame extends JFrame {
     /**
      * Set the view to be displayed in this frame.
      * @param view The view to be displayed in this frame.
-     * @param title
+     * @param title the title of the frame
      */
     public void addTab(JPanel view, String title) {
         synchronized (pane) {

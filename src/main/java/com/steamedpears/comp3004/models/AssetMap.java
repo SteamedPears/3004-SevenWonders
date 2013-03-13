@@ -56,8 +56,15 @@ public class AssetMap extends HashMap<String, Integer> {
         return result;
     }
 
+    /**
+     * Creates an empty AssetMap
+     */
     public AssetMap(){}
 
+    /**
+     * Creates an AssetMap matching the given JSON object
+     * @param obj the JSON object to match
+     */
     public AssetMap(JsonObject obj){
         if(obj!=null){
             Set<Map.Entry<String, JsonElement>> entrySet = obj.entrySet();
@@ -67,6 +74,11 @@ public class AssetMap extends HashMap<String, Integer> {
         }
     }
 
+    /**
+     * Creates an AssetMap matching the child of the given JSON object, or a blank one if no child exists
+     * @param obj The JSON object to extract the child from
+     * @param key The key of the JSON object to get
+     */
     public AssetMap(JsonObject obj, String key){
         this(obj.has(key) ? obj.getAsJsonObject(key) : new JsonObject());
     }

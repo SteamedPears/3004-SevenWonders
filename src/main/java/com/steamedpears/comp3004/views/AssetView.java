@@ -35,7 +35,7 @@ public class AssetView extends JPanel {
 
     static Logger log = Logger.getLogger(ViewFrame.class);
 
-    public static String MIG_CONFIG = "w 60!";
+    public static final String MIG_CONFIG = "w 60!";
 
     public AssetView(Player player) {
         this(Arrays.asList(player));
@@ -69,7 +69,7 @@ public class AssetView extends JPanel {
             if(players.size() > 1) add(new JLabel("" + player.getPlayerId()));
             else add(new JLabel());
             AssetMap playerAssets = player.getAssets();
-            for(String asset : Asset.AssetTypes) {
+            for(String asset : Asset.ASSET_TYPES) {
                 add(newTextJLabel("" + playerAssets.get(asset)),MIG_CONFIG);
             }
         }

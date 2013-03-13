@@ -65,10 +65,10 @@ public class CardTest {
 
         richPlayer = mock(Player.class);
         AssetMap allTheAssets = new AssetMap();
-        for(String asset: Asset.AssetTypes){
+        for(String asset: Asset.ASSET_TYPES){
             allTheAssets.add(asset, 100);
         }
-        for(String color: Asset.Colors){
+        for(String color: Asset.COLORS){
             allTheAssets.add(color, 100);
         }
         when(richPlayer.getConcreteAssets()).thenReturn(allTheAssets);
