@@ -15,6 +15,7 @@ import javax.swing.event.ChangeListener;
 import java.io.File;
 
 public class SevenWonders {
+
     public static final String PATH_RESOURCE = File.separator;
     public static final String PATH_DATA = PATH_RESOURCE + "data"+ File.separator;
     public static final String PATH_IMG = PATH_RESOURCE + "img"+File.separator;

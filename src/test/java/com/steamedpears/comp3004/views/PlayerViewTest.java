@@ -37,6 +37,7 @@ public class PlayerViewTest extends JFrame {
         Player player = mock(Player.class);
         when(player.getHand()).thenReturn(hand);
         when(player.getAssets()).thenReturn(assets);
+        when(player.isValid(any(PlayerCommand.class))).thenReturn(true);
 
         // create view
         PlayerView view = new PlayerView(player);
