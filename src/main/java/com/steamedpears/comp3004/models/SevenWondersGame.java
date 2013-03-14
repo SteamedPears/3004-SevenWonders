@@ -111,6 +111,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
                 curPlayer.registerMilitaryVictory(age);
                 oldPlayer.registerMilitaryDefeat();
             }
+            oldPlayer = curPlayer;
         }
     }
 

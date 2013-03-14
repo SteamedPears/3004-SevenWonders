@@ -48,7 +48,7 @@ function reformatCards(data){
 				if(from=="all"){
 					multiplierTargets = ["left", "self", "right"];
 				}else if(from=="player"){
-					multiplerTargets = ["self"];
+					multiplierTargets = ["self"];
 				}else if(from=="neighbors"){
 					multiplierTargets = ["left", "right"];
 				}

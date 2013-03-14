@@ -114,6 +114,9 @@ public class SevenWonders {
                 }
             });
         } else {
+            for(Player p : getGame().getPlayers()) {
+                logger.info(p + " has " + p.getFinalVictoryPoints() + " victory points");
+            }
             updateView();
         }
     }

@@ -201,6 +201,9 @@ public class Card {
             int multiplier = 1;
             if(!multiplierAssets.isEmpty()){
                 multiplier = 0;
+                if(multiplierTargets.isEmpty()){
+                    multiplierTargets.add(PLAYER_SELF);
+                }
                 for(String target: multiplierTargets){
                     Player targetPlayer;
                     if(target.equals(PLAYER_LEFT)){
