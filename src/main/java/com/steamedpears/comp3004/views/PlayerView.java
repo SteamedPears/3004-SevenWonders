@@ -188,20 +188,22 @@ public class PlayerView extends JPanel {
 
     public void waitForTurn() {
         waiting = true;
-        buildButton.setEnabled(false);
-        playButton.setEnabled(false);
-        discardButton.setEnabled(false);
+        disableAllButtons();
         timer = 0;
         updateTimer();
     }
 
     public void doneMove() {
         waiting = false;
+        disableAllButtons();
+        timer = 0;
+        updateTimer();
+    }
+
+    public void disableAllButtons() {
         buildButton.setEnabled(false);
         playButton.setEnabled(false);
         discardButton.setEnabled(false);
-        timer = 0;
-        updateTimer();
     }
 
     private void updateTimer() {
