@@ -66,10 +66,12 @@ public class PlayerView extends JPanel {
 
     private void updatePersistentMessages() {
         StringBuffer message = new StringBuffer();
+        message.append("<html>");
         for(String s : persistentMessages.values()) {
             message.append(s);
-            message.append("\n");
+            message.append("<br>");
         }
+        message.append("</html>");
         persistentMessageLabel.setText(message.toString());
     }
 

@@ -41,7 +41,16 @@ public class PlayerViewTest extends JFrame {
         // create view
         PlayerView view = new PlayerView(player);
         add(view);
-        setVisible(true);
+
+        view.addMessage("One","One");
+        view.addMessage("Two","Two");
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setVisible(true);
+            }
+        });
     }
 
     public static void main(String[] args) throws Exception {
