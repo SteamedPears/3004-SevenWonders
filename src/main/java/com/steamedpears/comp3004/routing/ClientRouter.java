@@ -75,7 +75,7 @@ class ClientRouter extends Router implements Runnable{
     private void waitForTakeTurn(){
         log.debug("Waiting for host to give 'okay' to take turn");
         try {
-        JsonElement elem = parser.parse(in);
+            JsonElement elem = parser.parse(in);
         } catch(IllegalArgumentException e) {
             log.error("Illegal argument while parsing command",e);
             cleanup();
