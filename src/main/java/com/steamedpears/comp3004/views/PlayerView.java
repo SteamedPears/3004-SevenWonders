@@ -179,31 +179,41 @@ public class PlayerView extends JPanel {
 
     public void newMove() {
         waiting = false;
-        buildButton.setEnabled(true);
-        playButton.setEnabled(true);
-        discardButton.setEnabled(true);
+        setAllButtonsEnabled(true);
         timer = SevenWondersGame.TURN_LENGTH / 1000;
         updateTimer();
     }
 
     public void waitForTurn() {
         waiting = true;
-        disableAllButtons();
+        setAllButtonsEnabled(false);
         timer = 0;
         updateTimer();
     }
 
     public void doneMove() {
         waiting = false;
-        disableAllButtons();
+        setAllButtonsEnabled(false);
         timer = 0;
         updateTimer();
     }
 
-    public void disableAllButtons() {
-        buildButton.setEnabled(false);
-        playButton.setEnabled(false);
-        discardButton.setEnabled(false);
+    public void setAllButtonsEnabled(boolean enabled) {
+        setBuildButtonEnabled(enabled);
+        setPlayButtonEnabled(enabled);
+        setDiscardButtonEnabled(enabled);
+    }
+
+    public void setBuildButtonEnabled(boolean enabled) {
+        buildButton.setEnabled(enabled);
+    }
+
+    public void setPlayButtonEnabled(boolean enabled) {
+        playButton.setEnabled(enabled);
+    }
+
+    public void setDiscardButtonEnabled(boolean enabled) {
+        discardButton.setEnabled(enabled);
     }
 
     private void updateTimer() {
