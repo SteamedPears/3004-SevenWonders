@@ -315,7 +315,7 @@ public abstract class Player extends Changeable implements Runnable{
      * @param command the command to validate
      * @return true only if the command is valid on this player
      */
-    public final boolean isValid(PlayerCommand command){
+    public boolean isValid(PlayerCommand command){
         log.debug(this+" validating move "+command);
         //initial result: either they're doing one action, or their other action is UNDISCARD
         log.debug("validating number/types of moves");
