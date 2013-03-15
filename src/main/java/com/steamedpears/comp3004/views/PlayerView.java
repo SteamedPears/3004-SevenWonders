@@ -49,6 +49,29 @@ public class PlayerView extends JPanel {
         },new Date(),1000);
     }
 
+    private CardSelectionListener cardSelectionListener = new CardSelectionListener(){
+        @Override
+        public void handleSelection(Card card) {
+            logger.info("Selecting " + card);
+            if(selectedCardView != null) {
+                selectedCardView.setCard(card);
+            }
+            // check if player can play the card
+            PlayerCommand move = new PlayerCommand();
+            move.action = PlayerCardAction.PLAY;
+            move.card = card.getId();
+            validPlay = player.isValid(move);
+            move.action = PlayerCardAction.BUILD;
+            validBuild = player.isValid(move);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateButtonState();
+                }
+            });
+        }
+    };
+
     /**
      * Set the ephemeral message on this view.
      * @param message The ephemeral message to be displayed.
@@ -86,23 +109,7 @@ public class PlayerView extends JPanel {
         removeAll();
 
         // cards in hand
-        List<Card> hand = player.getHand();
-        CardSelectionListener cardSelectionListener = new CardSelectionListener(){
-            @Override
-            public void handleSelection(Card card) {
-                logger.info("Selecting " + card);
-                if(selectedCardView != null) {
-                    selectedCardView.setCard(card);
-                }
-                // check if player can play the card
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.PLAY;
-                move.card = card.getId();
-                validPlay = player.isValid(move);
-                move.action = PlayerCardAction.BUILD;
-                validBuild = player.isValid(move);
-            }
-        };
+        final List<Card> hand = player.getHand();
         for(Card c : hand) {
             CardView cv = new CardView(c);
             cv.setSelectionListener(cardSelectionListener);
@@ -113,7 +120,12 @@ public class PlayerView extends JPanel {
         if(hand.size() > 0) {
             selectedCardView = new CardView(hand.get(0), CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
             add(selectedCardView, "newline, span " + SELECTED_MULTIPLIER);
-            cardSelectionListener.handleSelection(hand.get(0));
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    cardSelectionListener.handleSelection(hand.get(0));
+                }
+            });
         }
 
         // group action buttons together
@@ -148,7 +160,6 @@ public class PlayerView extends JPanel {
                 player.wake();
             }
         });
-        // TODO: disable if can't actually play
         buttonPanel.add(playButton,"span");
 
         // build wonder button
@@ -167,7 +178,6 @@ public class PlayerView extends JPanel {
         if(player.hasFinishedWonder()) {
             buildButton.setEnabled(false);
         }
-        // TODO: disable if can't actually build
         buttonPanel.add(buildButton,"span");
 
         add(buttonPanel,"span 2");
@@ -212,21 +222,40 @@ public class PlayerView extends JPanel {
     }
 
     public void updateButtonState() {
-        setDiscardButtonEnabled(!waiting);
-        setPlayButtonEnabled(validPlay && !waiting);
-        setBuildButtonEnabled(validBuild && !waiting);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setDiscardButtonEnabled(!waiting);
+                setPlayButtonEnabled(validPlay && !waiting);
+                setBuildButtonEnabled(validBuild && !waiting);            }
+        });
     }
 
-    public void setBuildButtonEnabled(boolean enabled) {
-        buildButton.setEnabled(enabled);
+    public void setBuildButtonEnabled(final boolean enabled) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                buildButton.setEnabled(enabled);
+            }
+        });
     }
 
-    public void setPlayButtonEnabled(boolean enabled) {
-        playButton.setEnabled(enabled);
+    public void setPlayButtonEnabled(final boolean enabled) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                playButton.setEnabled(enabled);
+            }
+        });
     }
 
-    public void setDiscardButtonEnabled(boolean enabled) {
-        discardButton.setEnabled(enabled);
+    public void setDiscardButtonEnabled(final boolean enabled) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                discardButton.setEnabled(enabled);
+            }
+        });
     }
 
     private void updateTimer() {
