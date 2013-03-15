@@ -22,6 +22,8 @@ public class PlayerView extends JPanel {
     private int timer = 0;
     private Timer scheduledUpdateTimer;
     private boolean waiting;
+    private boolean validPlay;
+    private boolean validBuild;
 
     private JLabel messageLabel;
     private JLabel persistentMessageLabel;
@@ -35,6 +37,8 @@ public class PlayerView extends JPanel {
         this.player = player;
         persistentMessages = new HashMap<String, String>();
         waiting = true;
+        validPlay = false;
+        validBuild = false;
         update();
         scheduledUpdateTimer = new Timer();
         scheduledUpdateTimer.scheduleAtFixedRate(new TimerTask() {
@@ -44,6 +48,29 @@ public class PlayerView extends JPanel {
             }
         },new Date(),1000);
     }
+
+    private CardSelectionListener cardSelectionListener = new CardSelectionListener(){
+        @Override
+        public void handleSelection(Card card) {
+            logger.info("Selecting " + card);
+            if(selectedCardView != null) {
+                selectedCardView.setCard(card);
+            }
+            // check if player can play the card
+            PlayerCommand move = new PlayerCommand();
+            move.action = PlayerCardAction.PLAY;
+            move.card = card.getId();
+            validPlay = player.isValid(move);
+            move.action = PlayerCardAction.BUILD;
+            validBuild = player.isValid(move);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateButtonState();
+                }
+            });
+        }
+    };
 
     /**
      * Set the ephemeral message on this view.
@@ -66,10 +93,12 @@ public class PlayerView extends JPanel {
 
     private void updatePersistentMessages() {
         StringBuffer message = new StringBuffer();
+        message.append("<html>");
         for(String s : persistentMessages.values()) {
             message.append(s);
-            message.append("\n");
+            message.append("<br>");
         }
+        message.append("</html>");
         persistentMessageLabel.setText(message.toString());
     }
 
@@ -80,18 +109,10 @@ public class PlayerView extends JPanel {
         removeAll();
 
         // cards in hand
-        List<Card> hand = player.getHand();
+        final List<Card> hand = player.getHand();
         for(Card c : hand) {
             CardView cv = new CardView(c);
-            cv.setSelectionListener(new CardSelectionListener(){
-                @Override
-                public void handleSelection(Card card) {
-                    logger.info("Selecting " + card);
-                    if(selectedCardView != null) {
-                        selectedCardView.setCard(card);
-                    }
-                }
-            });
+            cv.setSelectionListener(cardSelectionListener);
             add(cv, "aligny top");
         }
 
@@ -99,6 +120,12 @@ public class PlayerView extends JPanel {
         if(hand.size() > 0) {
             selectedCardView = new CardView(hand.get(0), CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
             add(selectedCardView, "newline, span " + SELECTED_MULTIPLIER);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    cardSelectionListener.handleSelection(hand.get(0));
+                }
+            });
         }
 
         // group action buttons together
@@ -133,7 +160,6 @@ public class PlayerView extends JPanel {
                 player.wake();
             }
         });
-        // TODO: disable if can't actually play
         buttonPanel.add(playButton,"span");
 
         // build wonder button
@@ -152,7 +178,6 @@ public class PlayerView extends JPanel {
         if(player.hasFinishedWonder()) {
             buildButton.setEnabled(false);
         }
-        // TODO: disable if can't actually build
         buttonPanel.add(buildButton,"span");
 
         add(buttonPanel,"span 2");
@@ -177,29 +202,60 @@ public class PlayerView extends JPanel {
 
     public void newMove() {
         waiting = false;
-        buildButton.setEnabled(true);
-        playButton.setEnabled(true);
-        discardButton.setEnabled(true);
+        updateButtonState();
         timer = SevenWondersGame.TURN_LENGTH / 1000;
         updateTimer();
     }
 
     public void waitForTurn() {
         waiting = true;
-        buildButton.setEnabled(false);
-        playButton.setEnabled(false);
-        discardButton.setEnabled(false);
+        updateButtonState();
         timer = 0;
         updateTimer();
     }
 
     public void doneMove() {
         waiting = false;
-        buildButton.setEnabled(false);
-        playButton.setEnabled(false);
-        discardButton.setEnabled(false);
+        updateButtonState();
         timer = 0;
         updateTimer();
+    }
+
+    public void updateButtonState() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setDiscardButtonEnabled(!waiting);
+                setPlayButtonEnabled(validPlay && !waiting);
+                setBuildButtonEnabled(validBuild && !waiting);            }
+        });
+    }
+
+    public void setBuildButtonEnabled(final boolean enabled) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                buildButton.setEnabled(enabled);
+            }
+        });
+    }
+
+    public void setPlayButtonEnabled(final boolean enabled) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                playButton.setEnabled(enabled);
+            }
+        });
+    }
+
+    public void setDiscardButtonEnabled(final boolean enabled) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                discardButton.setEnabled(enabled);
+            }
+        });
     }
 
     private void updateTimer() {
