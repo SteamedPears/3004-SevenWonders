@@ -350,6 +350,11 @@ class HostRouter extends Router {
             try {
                 String result = in.readLine();
                 log.debug("got: "+result);
+                if(result == null) {
+                    // deal with client disconnect here
+                    log.error("Client disconnect, BAIL OUT");
+                    System.exit(-1);
+                }
                 JsonObject commandsJSON = parser.parse(result).getAsJsonObject();
                 Map<Player, PlayerCommand> commands = jsonToPlayerCommands(commandsJSON);
                 for(Player player: commands.keySet()){

@@ -43,8 +43,6 @@ public class SevenWonders {
     private JDialog dialog;
     private PlayerView playerView;
     private HighLevelView highLevelView;
-    private PlayerTradesView tradesLeft;
-    private PlayerTradesView tradesRight;
 
     public SevenWonders() {
         view = new ViewFrame();
