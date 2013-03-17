@@ -91,7 +91,7 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private void discardCard(Card card, boolean isFinal){
-        log.debug("discarding cardID: " + isFinal);
+        log.debug("discarding card: " + isFinal);
         if(isFinal){
             game.discard(card);
             hand.remove(card);
@@ -113,7 +113,7 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private void playCard(Card card, boolean isFinal){
-        log.debug("playing cardID: "+isFinal);
+        log.debug("playing card: "+isFinal);
         if(isFinal){
             card.playCard(this);
             playedCards.add(card);
@@ -124,7 +124,7 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private void undiscard(Card card, boolean isFinal){
-        log.debug("undiscarding cardID: "+isFinal);
+        log.debug("undiscarding card: "+isFinal);
         if(isFinal){
             playedCards.add(card);
             game.undiscard(card);
@@ -353,12 +353,12 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private boolean validateHasCard(PlayerCommand command){
-        log.debug("validating player has cardID");
+        log.debug("validating player has card");
         return hand.contains(game.getCardById(command.cardID));
     }
 
     private boolean validateHasNotPlayedCard(PlayerCommand command){
-        log.debug("validating player hasn't already player that cardID");
+        log.debug("validating player hasn't already player that card");
         Card card = game.getCardById(command.cardID);
         for(Card playedCard: playedCards){
             if(playedCard.getName().equals(card.getName())){
@@ -369,33 +369,33 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private boolean validatePlayFree(PlayerCommand command) {
-        log.debug("validating player can play this cardID for free");
+        log.debug("validating player can play this card for free");
         return validateHasCard(command)
                 && validateHasNotPlayedCard(command)
                 && getAssets().containsKey(ASSET_BUILD_FREE);
     }
 
     private boolean validateUndiscard(PlayerCommand command) {
-        log.debug("validating player can undiscard this cardID");
+        log.debug("validating player can undiscard this card");
         return game.getDiscard().contains(game.getCardById(command.cardID))
                 && validateHasNotPlayedCard(command)
                 && getAssets().containsKey(ASSET_DISCARD);
     }
 
     private boolean validateDiscard(PlayerCommand command) {
-        log.debug("validating player can discard this cardID");
+        log.debug("validating player can discard this card");
         return validateHasCard(command);
     }
 
     private boolean validatePlayCard(PlayerCommand command) {
-        log.debug("validating player can play cardID");
+        log.debug("validating player can play card");
         return validateHasCard(command)
                 && validateHasNotPlayedCard(command)
                 && game.getCardById(command.cardID).canAfford(this, command);
     }
 
     private boolean validateBuildWonder(PlayerCommand command) {
-        log.debug("validating player can build out wonder with this cardID");
+        log.debug("validating player can build out wonder with this card");
         return validateHasCard(command)
                 && wonder.getNextStage()!=null
                 && wonder.getNextStage().canAfford(this, command);
@@ -407,13 +407,13 @@ public abstract class Player extends Changeable implements Runnable{
                 && validateCanMakeTradesInternal(command.rightPurchases, getPlayerRight());
     }
 
-    private boolean validateCanMakeTradesInternal(AssetMap purchases, Player neighbor){
+    private boolean validateCanMakeTradesInternal(AssetMap purchases, Player player){
         if(purchases.isEmpty()){
             return true;
         }else{
-            AssetMap tradeables = neighbor.getAssetsTradeable();
+            AssetMap tradeables = player.getAssetsTradeable();
             AssetMap purchasesLessBase = AssetMap.difference(purchases, tradeables);
-            return purchasesLessBase.existsValidChoices(neighbor.getOptionalAssetsCompleteTradeable());
+            return purchasesLessBase.existsValidChoices(player.getOptionalAssetsCompleteTradeable());
         }
     }
 
