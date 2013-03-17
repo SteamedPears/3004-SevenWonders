@@ -1,20 +1,34 @@
 package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.models.Asset;
+import com.steamedpears.comp3004.models.AssetMap;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import net.miginfocom.swing.MigLayout;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class TradesView extends JPanel {
     private Player player;
-
+    private AssetMap leftTrades;
+    private AssetMap rightTrades;
     private String MIG_CONFIG = "w 60!";
+
+    private static Logger log = Logger.getLogger(TradesView.class);
 
     public TradesView(Player player) {
         this.player = player;
+        this.leftTrades = new AssetMap();
+        this.rightTrades = new AssetMap();
         setLayout(new MigLayout("gap 0, inset 0"));
         update();
     }
@@ -32,8 +46,36 @@ public class TradesView extends JPanel {
                 "span");
 
         add(new JLabel(""));
-        for(String s : Asset.TRADEABLE_ASSET_TYPES) {
-            add(new JTextField("0"),MIG_CONFIG);
+        for(final String s : Asset.TRADEABLE_ASSET_TYPES) {
+            final JFormattedTextField assetField = new JFormattedTextField(new JFormattedTextField.AbstractFormatterFactory() {
+                @Override
+                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField jFormattedTextField) {
+                    return new JFormattedTextField.AbstractFormatter() {
+                        @Override
+                        public Object stringToValue(String s) throws ParseException {
+                            Integer val = new Integer(0);
+                            try{
+                                val = Integer.parseInt(s,10);
+                            } catch(Exception e) {
+                                log.info("User entered invalid value");
+                            }
+                            return val;
+                        }
+
+                        @Override
+                        public String valueToString(Object o) throws ParseException {
+                            return o.toString();
+                        }
+                    };
+                }
+            },new Integer(0));
+            assetField.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    log.info("Player wishes to trade " + assetField.getText() + " " + s);
+                }
+            });
+            add(assetField, MIG_CONFIG);
         }
 
         add(new JLabel("Right"),"newline");
@@ -43,8 +85,36 @@ public class TradesView extends JPanel {
                 "span");
 
         add(new JLabel(""),"newline");
-        for(String s : Asset.TRADEABLE_ASSET_TYPES) {
-            add(new JTextField("0"),MIG_CONFIG);
+        for(final String s : Asset.TRADEABLE_ASSET_TYPES) {
+            final JFormattedTextField assetField = new JFormattedTextField(new JFormattedTextField.AbstractFormatterFactory() {
+                @Override
+                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField jFormattedTextField) {
+                    return new JFormattedTextField.AbstractFormatter() {
+                        @Override
+                        public Object stringToValue(String s) throws ParseException {
+                            Integer val = new Integer(0);
+                            try{
+                                val = Integer.parseInt(s,10);
+                            } catch(Exception e) {
+                                log.info("User entered invalid value");
+                            }
+                            return val;
+                        }
+
+                        @Override
+                        public String valueToString(Object o) throws ParseException {
+                            return o.toString();
+                        }
+                    };
+                }
+            },new Integer(0));
+            assetField.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    log.info("Player wishes to trade " + assetField.getText() + " " + s);
+                }
+            });
+            add(assetField, MIG_CONFIG);
         }
     }
 }

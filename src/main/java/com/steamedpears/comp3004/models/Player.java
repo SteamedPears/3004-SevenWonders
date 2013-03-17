@@ -407,13 +407,13 @@ public abstract class Player extends Changeable implements Runnable{
                 && validateCanMakeTradesInternal(command.rightPurchases, getPlayerRight());
     }
 
-    private boolean validateCanMakeTradesInternal(AssetMap purchases, Player player){
+    private boolean validateCanMakeTradesInternal(AssetMap purchases, Player neighbor){
         if(purchases.isEmpty()){
             return true;
         }else{
-            AssetMap tradeables = player.getAssetsTradeable();
+            AssetMap tradeables = neighbor.getAssetsTradeable();
             AssetMap purchasesLessBase = AssetMap.difference(purchases, tradeables);
-            return purchasesLessBase.existsValidChoices(player.getOptionalAssetsCompleteTradeable());
+            return purchasesLessBase.existsValidChoices(neighbor.getOptionalAssetsCompleteTradeable());
         }
     }
 
