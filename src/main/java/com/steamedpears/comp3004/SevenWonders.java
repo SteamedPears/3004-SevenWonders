@@ -1,5 +1,6 @@
 package com.steamedpears.comp3004;
 
+import com.steamedpears.comp3004.models.AssetMap;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.routing.*;
@@ -42,6 +43,7 @@ public class SevenWonders {
     private NewGameDialog newGameDialog;
     private JDialog dialog;
     private PlayerView playerView;
+    private TradesView tradesView;
     private HighLevelView highLevelView;
 
     public SevenWonders() {
@@ -151,7 +153,14 @@ public class SevenWonders {
         Player thisPlayer = getLocalPlayer();
         playerView = new PlayerView(thisPlayer);
         view.addTab(playerView, "Hand");
-        view.addTab(new TradesView(thisPlayer),"Trades");
+        tradesView = new TradesView(thisPlayer);
+        tradesView.setListener(new TradesView.TradeChangeListener() {
+            @Override
+            public void handleChange(AssetMap leftTrades, AssetMap rightTrades) {
+                playerView.setTrades(leftTrades,rightTrades);
+            }
+        });
+        view.addTab(tradesView,"Trades");
         highLevelView = new HighLevelView(this);
         view.addTab(highLevelView,"Table");
         for(Player player : getGame().getPlayers()) {

@@ -24,6 +24,8 @@ public class PlayerView extends JPanel {
     private boolean waiting;
     private boolean validPlay;
     private boolean validBuild;
+    private AssetMap leftTrades;
+    private AssetMap rightTrades;
 
     private JLabel messageLabel;
     private JLabel persistentMessageLabel;
@@ -56,21 +58,31 @@ public class PlayerView extends JPanel {
             if(selectedCardView != null) {
                 selectedCardView.setCard(card);
             }
-            // check if player can play the cardID
-            PlayerCommand move = new PlayerCommand();
-            move.action = PlayerCardAction.PLAY;
-            move.cardID = card.getId();
-            validPlay = player.isValid(move);
-            move.action = PlayerCardAction.BUILD;
-            validBuild = player.isValid(move);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    updateButtonState();
-                }
-            });
+            validateMoves();
         }
     };
+
+    public void validateMoves() {
+        PlayerCommand move = new PlayerCommand(PlayerCardAction.PLAY,selectedCardView.getCard().getId());
+        if(leftTrades != null) move.leftPurchases = leftTrades;
+        if(rightTrades != null) move.rightPurchases = rightTrades;
+        validPlay = player.isValid(move);
+        move.action = PlayerCardAction.BUILD;
+        validBuild = player.isValid(move);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                updateButtonState();
+            }
+        });
+
+    }
+
+    public void setTrades(AssetMap leftTrades, AssetMap rightTrades) {
+        this.leftTrades = leftTrades;
+        this.rightTrades = rightTrades;
+        validateMoves();
+    }
 
     /**
      * Set the ephemeral message on this view.
@@ -138,10 +150,9 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.DISCARD;
-                move.cardID = selectedCardView.getCard().getId();
-                player.setCurrentCommand(move);
+                player.setCurrentCommand(new PlayerCommand(
+                        PlayerCardAction.DISCARD,
+                        selectedCardView.getCard().getId()));
                 player.wake();
             }
         });
@@ -153,9 +164,11 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.PLAY;
-                move.cardID = selectedCardView.getCard().getId();
+                PlayerCommand move = new PlayerCommand(
+                        PlayerCardAction.PLAY,
+                        selectedCardView.getCard().getId());
+                if(leftTrades != null) move.leftPurchases = leftTrades;
+                if(rightTrades != null) move.rightPurchases = rightTrades;
                 player.setCurrentCommand(move);
                 player.wake();
             }
@@ -168,9 +181,11 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.BUILD;
-                move.cardID = selectedCardView.getCard().getId();
+                PlayerCommand move = new PlayerCommand(
+                        PlayerCardAction.BUILD,
+                        selectedCardView.getCard().getId());
+                if(leftTrades != null) move.leftPurchases = leftTrades;
+                if(rightTrades != null) move.rightPurchases = rightTrades;
                 player.setCurrentCommand(move);
                 player.wake();
             }

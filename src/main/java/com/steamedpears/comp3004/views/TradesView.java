@@ -1,9 +1,6 @@
 package com.steamedpears.comp3004.views;
 
-import com.steamedpears.comp3004.models.Asset;
-import com.steamedpears.comp3004.models.AssetMap;
-import com.steamedpears.comp3004.models.Player;
-import com.steamedpears.comp3004.models.PlayerCommand;
+import com.steamedpears.comp3004.models.*;
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 
@@ -23,6 +20,7 @@ public class TradesView extends JPanel {
     private Player player;
     private AssetMap leftTrades;
     private AssetMap rightTrades;
+    private TradeChangeListener listener;
     private String MIG_CONFIG = "w 60!";
 
     private static Logger log = Logger.getLogger(TradesView.class);
@@ -35,6 +33,14 @@ public class TradesView extends JPanel {
         update();
     }
 
+    public AssetMap getLeftTrades() { return leftTrades; }
+    public AssetMap getRightTrades() { return rightTrades; }
+
+    public void setListener(TradeChangeListener listener) { this.listener = listener; }
+
+    /**
+     * Updates this trade view
+     */
     public void update() {
         removeAll();
 
@@ -55,6 +61,7 @@ public class TradesView extends JPanel {
                 public void insertUpdate(DocumentEvent documentEvent) {
                     log.info("adding to left trades: " + assetField.getValue() + " " + s);
                     leftTrades.put(s,(Integer)assetField.getValue());
+                    if(listener != null) listener.handleChange(leftTrades,rightTrades);
                 }
             });
             add(assetField, MIG_CONFIG);
@@ -74,6 +81,7 @@ public class TradesView extends JPanel {
                 public void insertUpdate(DocumentEvent documentEvent) {
                     log.info("adding to right trades: " + assetField.getValue() + " " + s);
                     rightTrades.put(s,(Integer)assetField.getValue());
+                    if(listener != null) listener.handleChange(leftTrades,rightTrades);
                 }
             });
             add(assetField, MIG_CONFIG);
@@ -114,5 +122,9 @@ public class TradesView extends JPanel {
 
         @Override
         public void changedUpdate(DocumentEvent documentEvent) {}
+    }
+
+    public interface TradeChangeListener {
+        public void handleChange(AssetMap leftTrades,AssetMap rightTrades);
     }
 }
