@@ -265,16 +265,16 @@ public class SevenWondersGame extends Changeable implements Runnable{
     //setters/////////////////////////////////////////////////////////////////////
 
     /**
-     * Places the given card in the discard pile.
-     * @param card The card to discard.
+     * Places the given cardID in the discard pile.
+     * @param card The cardID to discard.
      */
     public void discard(Card card){
         discard.add(card);
     }
 
     /**
-     * Removes the given card from the discard pile.
-     * @param card The card to undiscard.
+     * Removes the given cardID from the discard pile.
+     * @param card The cardID to undiscard.
      */
     public void undiscard(Card card){
         discard.remove(card);
@@ -482,9 +482,9 @@ public class SevenWondersGame extends Changeable implements Runnable{
     }
 
     /**
-     * Get the card with the given ID.
-     * @param id The ID of the desired card.
-     * @return The card with the given ID.
+     * Get the cardID with the given ID.
+     * @param id The ID of the desired cardID.
+     * @return The cardID with the given ID.
      */
     public Card getCardById(String id){
         return cards.get(id);

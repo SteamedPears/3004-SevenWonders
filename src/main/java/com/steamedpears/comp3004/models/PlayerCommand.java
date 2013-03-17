@@ -6,27 +6,34 @@ public class PlayerCommand{
     }
 
     /**
-     * Gets the null command for a given player.  This command is to discard the first card in the player's hand, which
+     * Gets the null command for a given player.  This command is to discard the first cardID in the player's hand, which
      * is always a valid move.
      * @param player the player whose null move to generate
      * @return the generated null move for the given player
      */
     public static PlayerCommand getNullCommand(Player player){
-        PlayerCommand result = new PlayerCommand();
-        result.action = PlayerCardAction.DISCARD;
-        result.card = player.getHand().get(0).getId();
+        return new PlayerCommand(PlayerCardAction.DISCARD,player.getHand().get(0).getId());
+    }
 
-        return result;
+    public PlayerCommand() {
+        this(null,null);
+    }
+
+    public PlayerCommand(PlayerCardAction action, String cardID) {
+        this.action = action;
+        this.cardID = cardID;
+        leftPurchases = new AssetMap();
+        rightPurchases = new AssetMap();
     }
 
     public PlayerCardAction action;
-    public String card;
+    public String cardID;
     public AssetMap leftPurchases = new AssetMap();
     public AssetMap rightPurchases = new AssetMap();
     public PlayerCommand followup; //for if you can perform multiple actions this turn
 
     @Override
     public String toString() {
-        return "PlayerCommand[" + this.action.toString() + " " + this.card + "]";
+        return "PlayerCommand[" + this.action.toString() + " " + this.cardID + "]";
     }
 }

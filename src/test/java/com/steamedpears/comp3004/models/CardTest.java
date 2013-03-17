@@ -100,7 +100,7 @@ public class CardTest {
         assertFalse("Broke player shouldn't be able to pay for this",
                 cards.get(CARD_NAME_COST_MONEY).canAfford(brokePlayer, new PlayerCommand()));
 
-        assertTrue("Rich player should be able to afford this card",
+        assertTrue("Rich player should be able to afford this cardID",
                 cards.get(CARD_NAME_COST_MONEY).canAfford(richPlayer, new PlayerCommand()));
 
 
@@ -172,19 +172,19 @@ public class CardTest {
         String[] assets = {Asset.ASSET_ORE, Asset.ASSET_STONE, Asset.ASSET_WOOD, Asset.ASSET_CLAY};
         expectedDiscounts.addAll(Arrays.asList(assets));
 
-        assertEquals("card should not have discount targets",
+        assertEquals("cardID should not have discount targets",
                 new HashSet<String>(),
                 cards.get(CARD_NAME_FREE).getDiscountsTargets());
 
-        assertEquals("card should not have discount assets",
+        assertEquals("cardID should not have discount assets",
                 new AssetSet(),
                 cards.get(CARD_NAME_FREE).getDiscountsAssets());
 
-        assertEquals("card should have discount targets",
+        assertEquals("cardID should have discount targets",
                 expectedTargets,
                 cards.get(CARD_NAME_TRADES).getDiscountsTargets());
 
-        assertEquals("card should have discount assets",
+        assertEquals("cardID should have discount assets",
                 expectedDiscounts,
                 cards.get(CARD_NAME_TRADES).getDiscountsAssets());
     }

@@ -27,22 +27,22 @@ public class RandomAIPlayer extends AIPlayer{
 
         Collections.shuffle(orderOfChoices);
 
-        //just try to play any card
+        //just try to play any cardID
         for(int choice: orderOfChoices){
             Card curCard = hand.get(choice);
             if(curCard.canAfford(this, command)){
-                command.card = curCard.getId();
+                command.cardID = curCard.getId();
                 command.action = PlayerCommand.PlayerCardAction.PLAY;
                 setCurrentCommand(command);
                 return;
             }
         }
 
-        //can't play any card, try to build wonder
+        //can't play any cardID, try to build wonder
         if(!hasFinishedWonder()){
             Card nextStage = getWonder().getNextStage();
             if(nextStage.canAfford(this, command)){
-                command.card = hand.get(orderOfChoices.get(0)).getId();
+                command.cardID = hand.get(orderOfChoices.get(0)).getId();
                 command.action = PlayerCommand.PlayerCardAction.BUILD;
                 setCurrentCommand(command);
                 return;
@@ -50,7 +50,7 @@ public class RandomAIPlayer extends AIPlayer{
         }
 
         //can't build, just discard
-        command.card = hand.get(orderOfChoices.get(0)).getId();
+        command.cardID = hand.get(orderOfChoices.get(0)).getId();
         command.action = PlayerCommand.PlayerCardAction.DISCARD;
         setCurrentCommand(command);
     }

@@ -56,10 +56,10 @@ public class PlayerView extends JPanel {
             if(selectedCardView != null) {
                 selectedCardView.setCard(card);
             }
-            // check if player can play the card
+            // check if player can play the cardID
             PlayerCommand move = new PlayerCommand();
             move.action = PlayerCardAction.PLAY;
-            move.card = card.getId();
+            move.cardID = card.getId();
             validPlay = player.isValid(move);
             move.action = PlayerCardAction.BUILD;
             validBuild = player.isValid(move);
@@ -116,7 +116,7 @@ public class PlayerView extends JPanel {
             add(cv, "aligny top");
         }
 
-        // selected card
+        // selected cardID
         if(hand.size() > 0) {
             selectedCardView = new CardView(hand.get(0), CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
             add(selectedCardView, "newline, span " + SELECTED_MULTIPLIER);
@@ -140,7 +140,7 @@ public class PlayerView extends JPanel {
                 doneMove();
                 PlayerCommand move = new PlayerCommand();
                 move.action = PlayerCardAction.DISCARD;
-                move.card = selectedCardView.getCard().getId();
+                move.cardID = selectedCardView.getCard().getId();
                 player.setCurrentCommand(move);
                 player.wake();
             }
@@ -155,7 +155,7 @@ public class PlayerView extends JPanel {
                 doneMove();
                 PlayerCommand move = new PlayerCommand();
                 move.action = PlayerCardAction.PLAY;
-                move.card = selectedCardView.getCard().getId();
+                move.cardID = selectedCardView.getCard().getId();
                 player.setCurrentCommand(move);
                 player.wake();
             }
@@ -170,7 +170,7 @@ public class PlayerView extends JPanel {
                 doneMove();
                 PlayerCommand move = new PlayerCommand();
                 move.action = PlayerCardAction.BUILD;
-                move.card = selectedCardView.getCard().getId();
+                move.cardID = selectedCardView.getCard().getId();
                 player.setCurrentCommand(move);
                 player.wake();
             }

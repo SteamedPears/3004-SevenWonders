@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.views;
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Asset;
 import com.steamedpears.comp3004.models.AssetMap;
+import com.steamedpears.comp3004.models.AssetSet;
 import com.steamedpears.comp3004.models.Player;
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
@@ -36,6 +37,22 @@ public class AssetView extends JPanel {
     static Logger log = Logger.getLogger(ViewFrame.class);
 
     public static final String MIG_CONFIG = "w 60!";
+
+    public AssetView() {
+        setLayout(new MigLayout(
+                "aligny top,wrap 15", // Layout Constraints
+                "0[]0[]0", // Column Constraints
+                "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
+        ));
+
+        add(newJLabel(WOOD_ICON), MIG_CONFIG);
+        add(newJLabel(STONE_ICON), MIG_CONFIG);
+        add(newJLabel(CLAY_ICON), MIG_CONFIG);
+        add(newJLabel(ORE_ICON), MIG_CONFIG);
+        add(newJLabel(LOOM_ICON), MIG_CONFIG);
+        add(newJLabel(PAPYRUS_ICON), MIG_CONFIG);
+        add(newJLabel(GLASS_ICON), MIG_CONFIG);
+    }
 
     public AssetView(Player player) {
         this(Arrays.asList(player));
@@ -72,6 +89,18 @@ public class AssetView extends JPanel {
             for(String asset : Asset.ASSET_TYPES) {
                 add(newTextJLabel("" + playerAssets.get(asset)),MIG_CONFIG);
             }
+        }
+    }
+
+    public AssetView(AssetMap assets,List<AssetSet> optionalAssets) {
+        setLayout(new MigLayout(
+                "aligny top,wrap 15", // Layout Constraints
+                "0[]0[]0", // Column Constraints
+                "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
+        ));
+
+        for(String asset : Asset.TRADEABLE_ASSET_TYPES) {
+            add(newTextJLabel("" + assets.get(asset)),MIG_CONFIG);
         }
     }
 

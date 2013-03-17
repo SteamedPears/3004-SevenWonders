@@ -43,6 +43,8 @@ public class SevenWonders {
     private JDialog dialog;
     private PlayerView playerView;
     private HighLevelView highLevelView;
+    private PlayerTradesView tradesLeft;
+    private PlayerTradesView tradesRight;
 
     public SevenWonders() {
         view = new ViewFrame();
@@ -146,6 +148,7 @@ public class SevenWonders {
         Player thisPlayer = getLocalPlayer();
         playerView = new PlayerView(thisPlayer);
         view.addTab(playerView, "Hand");
+        view.addTab(new TradesView(thisPlayer),"Trades");
         highLevelView = new HighLevelView(this);
         view.addTab(highLevelView,"Table");
         for(Player player : getGame().getPlayers()) {

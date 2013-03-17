@@ -174,7 +174,7 @@ public class Wonder {
 
     /**
      * Get the URL to the image representation of this Card
-     * @return the URL of this card's image
+     * @return the URL of this cardID's image
      */
     public URL getImagePath(){
         if(currentSide.imageURL==null){
