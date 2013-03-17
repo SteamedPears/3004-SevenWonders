@@ -24,6 +24,11 @@ public class PlayerTradesView extends JPanel {
 
         // set up view
         setLayout(new MigLayout("insets 0, gap 0"));
+        update();
+    }
+
+    public void update() {
+        removeAll();
 
         // display assets
         add(new AssetView(neighbor.getAssetsTradeable(),neighbor.getOptionalAssetsCompleteTradeable()));
