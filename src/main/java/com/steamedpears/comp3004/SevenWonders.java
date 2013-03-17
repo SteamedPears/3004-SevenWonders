@@ -139,7 +139,10 @@ public class SevenWonders {
 
     private void handleRouterChange() {
         logger.info("Handling router change");
-        if(dialog != null) {
+        if(router != null && !router.isValid()) {
+            router = null;
+            openNewGameDialog();
+        } else if(dialog != null) {
             ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
         }
     }

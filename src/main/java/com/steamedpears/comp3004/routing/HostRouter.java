@@ -37,7 +37,7 @@ class HostRouter extends Router {
     private Future listenerThread;
     private int maxPlayers;
 
-    private static Logger log = Logger.getLogger(Router.class);
+    private static Logger log = Logger.getLogger(HostRouter.class);
 
     /**
      * Creates a HostRouter with the given port which creates a game with the given number of players
@@ -304,22 +304,12 @@ class HostRouter extends Router {
 
     private class Client implements Runnable{
         private int clientNumber;
-        private BufferedReader in;
+        private SocketWrapper socket;
         private JsonParser parser;
-        private PrintWriter out;
-        private Socket client;
 
         private Client(Socket client, int clientNumber){
             log.debug("Establishing connection with client:" +clientNumber);
-            this.client = client;
-            try {
-                this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                this.out = new PrintWriter(client.getOutputStream(), true);
-            } catch (IOException e) {
-                log.error("Error setting up client streams", e);
-                System.exit(-1);
-            }
-
+            this.socket = new SocketWrapper(client);
             this.parser = new JsonParser();
             this.clientNumber = clientNumber;
 
@@ -330,10 +320,9 @@ class HostRouter extends Router {
         }
 
         private void getOkay(){
-            try {
-                in.readLine();
-            } catch (IOException e) {
-                log.error("Error waiting for okay from client", e);
+            String line = socket.readLine();
+            if(!socket.isValid()) {
+                log.error("Error waiting for okay from client");
                 System.exit(-1);
             }
             log.debug("Got okay: "+clientNumber);
@@ -341,44 +330,43 @@ class HostRouter extends Router {
 
         private void sendMessage(String message){
             log.debug("Sending ("+clientNumber+"): "+message);
-            out.println(message);
+            socket.println(message);
         }
 
         @Override
         public void run(){
             log.debug("Listening for client commands: "+clientNumber);
+            String result = socket.readLine();
+            if(result == null) {
+                // deal with client disconnect here
+                log.error("Client disconnect, BAIL OUT");
+                System.exit(-1);
+            }
             try {
-                String result = in.readLine();
-                log.debug("got: "+result);
-                if(result == null) {
-                    // deal with client disconnect here
-                    log.error("Client disconnect, BAIL OUT");
-                    System.exit(-1);
-                }
                 JsonObject commandsJSON = parser.parse(result).getAsJsonObject();
                 Map<Player, PlayerCommand> commands = jsonToPlayerCommands(commandsJSON);
                 for(Player player: commands.keySet()){
                     registerMove(player, commands.get(player));
                 }
                 log.debug("Got client commands: "+clientNumber);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("error waiting for commands from client", e);
                 System.exit(-1);
             }
-
         }
 
         private boolean isClosed() {
-            return client.isClosed() || !client.isConnected();
+            return socket.isValid();
         }
 
         private void cleanup() throws IOException {
-            client.close();
+            socket.close();
         }
     }
 
     @Override
     public void cleanup() {
+        super.cleanup();
         for(Client c : clients.values()) {
             try {
                 c.cleanup();

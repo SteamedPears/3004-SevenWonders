@@ -26,6 +26,10 @@ public class TradesView extends JPanel {
         update();
     }
 
+    /**
+     * Sets the trade change listener on this view
+     * @param listener the trade change listener to handle trade changes
+     */
     public void setListener(TradeChangeListener listener) { this.listener = listener; }
 
     /**
@@ -114,6 +118,9 @@ public class TradesView extends JPanel {
         public void changedUpdate(DocumentEvent documentEvent) {}
     }
 
+    /**
+     * An interface for listening for and handling trade changes
+     */
     public interface TradeChangeListener {
         public void handleChange(AssetMap leftTrades,AssetMap rightTrades);
     }

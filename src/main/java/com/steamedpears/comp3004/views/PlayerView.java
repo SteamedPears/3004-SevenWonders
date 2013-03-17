@@ -62,6 +62,9 @@ public class PlayerView extends JPanel {
         }
     };
 
+    /**
+     * Validates play and build player actions, including left and right trades
+     */
     public void validateMoves() {
         PlayerCommand move = new PlayerCommand(PlayerCardAction.PLAY,selectedCardView.getCard().getId());
         if(leftTrades != null) move.leftPurchases = leftTrades;
@@ -78,6 +81,11 @@ public class PlayerView extends JPanel {
 
     }
 
+    /**
+     * Set the left and right trades to be performed when making a player action
+     * @param leftTrades the trades with the player's left neighbor
+     * @param rightTrades the trades with the player's right neighbor
+     */
     public void setTrades(AssetMap leftTrades, AssetMap rightTrades) {
         this.leftTrades = leftTrades;
         this.rightTrades = rightTrades;
@@ -215,6 +223,9 @@ public class PlayerView extends JPanel {
         waitForTurn();
     }
 
+    /**
+     * Signal that the UI is no longer waiting for the protocol to allow player actions
+     */
     public void newMove() {
         waiting = false;
         updateButtonState();
@@ -222,6 +233,9 @@ public class PlayerView extends JPanel {
         updateTimer();
     }
 
+    /**
+     * Signal that the UI should wait for the protocol to allow player actions
+     */
     public void waitForTurn() {
         waiting = true;
         updateButtonState();
@@ -229,6 +243,9 @@ public class PlayerView extends JPanel {
         updateTimer();
     }
 
+    /**
+     * Signal that the player has chosen a move and is now waiting for the turn to end
+     */
     public void doneMove() {
         waiting = false;
         updateButtonState();
@@ -240,9 +257,11 @@ public class PlayerView extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                setDiscardButtonEnabled(!waiting);
-                setPlayButtonEnabled(validPlay && !waiting);
-                setBuildButtonEnabled(validBuild && !waiting);            }
+                boolean timeLimitExpired = timer <= 0;
+                setDiscardButtonEnabled(!waiting && !timeLimitExpired);
+                setPlayButtonEnabled(validPlay && !waiting && !timeLimitExpired);
+                setBuildButtonEnabled(validBuild && !waiting && !timeLimitExpired);
+            }
         });
     }
 
