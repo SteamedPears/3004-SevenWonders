@@ -122,7 +122,12 @@ public class SevenWonders {
 
     private void handlePlayerChange() {
         logger.info("Handling player change");
-        playerView.newMove();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                playerView.newMove();
+            }
+        });
     }
 
     private void handleRouterChange() {
