@@ -26,8 +26,8 @@ public class CardView extends JLabel {
     }
 
     /**
-     * Set the cardID associated with this view, and update.
-     * @param card The cardID to be associated with this view.
+     * Set the card associated with this view, and update.
+     * @param card The card to be associated with this view.
      */
     public void setCard(Card card) {
         this.card = card;
@@ -35,15 +35,15 @@ public class CardView extends JLabel {
     }
 
     /**
-     * Get the cardID associated with this view.
-     * @return The cardID associated with this view.
+     * Get the card associated with this view.
+     * @return The card associated with this view.
      */
     public Card getCard() {
         return this.card;
     }
 
     /**
-     * Set the width of the displayed cardID.
+     * Set the width of the displayed card.
      * @param width The desired width.
      */
     public void setCardWidth(int width) {
@@ -52,8 +52,8 @@ public class CardView extends JLabel {
     }
 
     /**
-     * Set the selection listener to be associated with selecting a cardID in this view.
-     * @param selectionListener The selection listener to be associated with selecting a cardID.
+     * Set the selection listener to be associated with selecting a card in this view.
+     * @param selectionListener The selection listener to be associated with selecting a card.
      */
     public void setSelectionListener(CardSelectionListener selectionListener) {
         this.selectionListener = selectionListener;
