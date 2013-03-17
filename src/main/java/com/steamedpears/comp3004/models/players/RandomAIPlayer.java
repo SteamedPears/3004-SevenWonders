@@ -27,7 +27,7 @@ public class RandomAIPlayer extends AIPlayer{
 
         Collections.shuffle(orderOfChoices);
 
-        //just try to play any cardID
+        //just try to play any card
         for(int choice: orderOfChoices){
             Card curCard = hand.get(choice);
             if(curCard.canAfford(this, command)){
@@ -38,7 +38,7 @@ public class RandomAIPlayer extends AIPlayer{
             }
         }
 
-        //can't play any cardID, try to build wonder
+        //can't play any card, try to build wonder
         if(!hasFinishedWonder()){
             Card nextStage = getWonder().getNextStage();
             if(nextStage.canAfford(this, command)){
