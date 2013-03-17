@@ -69,6 +69,7 @@ class HostRouter extends Router {
 
     @Override
     public void beginGame() {
+        if(isPlaying()) return;
         log.debug("Beginning game");
         lobbyThread.cancel(true);
 
@@ -298,6 +299,7 @@ class HostRouter extends Router {
 
     private void broadcast(String message){
         for(Client client: clients.values()){
+            log.info(String.format("Broadcasting to client %d",client.clientNumber));
             client.sendMessage(message);
         }
     }
@@ -320,7 +322,7 @@ class HostRouter extends Router {
         }
 
         private void getOkay(){
-            String line = socket.readLine();
+            socket.readLine();
             if(!socket.isValid()) {
                 log.error("Error waiting for okay from client");
                 System.exit(-1);
