@@ -8,6 +8,8 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -48,10 +50,11 @@ public class TradesView extends JPanel {
         add(new JLabel(""));
         for(final String s : Asset.TRADEABLE_ASSET_TYPES) {
             final JFormattedTextField assetField = new JFormattedTextField(new NumberFormatterFactory(),new Integer(0));
-            assetField.addActionListener(new ActionListener() {
+            assetField.getDocument().addDocumentListener(new DocumentListenerAdapter() {
                 @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    log.info("Player wishes to trade " + assetField.getText() + " " + s);
+                public void insertUpdate(DocumentEvent documentEvent) {
+                    log.info("adding to left trades: " + assetField.getValue() + " " + s);
+                    leftTrades.put(s,(Integer)assetField.getValue());
                 }
             });
             add(assetField, MIG_CONFIG);
@@ -66,10 +69,11 @@ public class TradesView extends JPanel {
         add(new JLabel(""),"newline");
         for(final String s : Asset.TRADEABLE_ASSET_TYPES) {
             final JFormattedTextField assetField = new JFormattedTextField(new NumberFormatterFactory(),new Integer(0));
-            assetField.addActionListener(new ActionListener() {
+            assetField.getDocument().addDocumentListener(new DocumentListenerAdapter() {
                 @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    log.info("Player wishes to trade " + assetField.getText() + " " + s);
+                public void insertUpdate(DocumentEvent documentEvent) {
+                    log.info("adding to right trades: " + assetField.getValue() + " " + s);
+                    rightTrades.put(s,(Integer)assetField.getValue());
                 }
             });
             add(assetField, MIG_CONFIG);
@@ -98,5 +102,17 @@ public class TradesView extends JPanel {
                 }
             };
         }
+    }
+
+    private class DocumentListenerAdapter implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent documentEvent) {}
+
+        @Override
+        public void removeUpdate(DocumentEvent documentEvent) {}
+
+        @Override
+        public void changedUpdate(DocumentEvent documentEvent) {}
     }
 }
