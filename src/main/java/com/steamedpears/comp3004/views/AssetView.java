@@ -92,7 +92,7 @@ public class AssetView extends JPanel {
         }
     }
 
-    public AssetView(AssetMap assets,List<AssetSet> optionalAssets) {
+    public AssetView(AssetMap assets) {
         setLayout(new MigLayout(
                 "aligny top,wrap 15", // Layout Constraints
                 "0[]0[]0", // Column Constraints

@@ -7,14 +7,7 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
 import java.text.ParseException;
-import java.util.ArrayList;
 
 public class TradesView extends JPanel {
     private Player player;
@@ -33,9 +26,6 @@ public class TradesView extends JPanel {
         update();
     }
 
-    public AssetMap getLeftTrades() { return leftTrades; }
-    public AssetMap getRightTrades() { return rightTrades; }
-
     public void setListener(TradeChangeListener listener) { this.listener = listener; }
 
     /**
@@ -49,8 +39,8 @@ public class TradesView extends JPanel {
 
         add(new JLabel("Left"));
         Player leftNeighbor = player.getPlayerLeft();
-        add(new AssetView(leftNeighbor.getAssetsTradeable(),
-                leftNeighbor.getOptionalAssetsCompleteTradeable()),
+        add(new AssetView(leftNeighbor.getAssetsTradeable()
+        ),
                 "span");
 
         add(new JLabel(""));
@@ -69,8 +59,8 @@ public class TradesView extends JPanel {
 
         add(new JLabel("Right"),"newline");
         Player rightNeighbor = player.getPlayerRight();
-        add(new AssetView(rightNeighbor.getAssetsTradeable(),
-                rightNeighbor.getOptionalAssetsCompleteTradeable()),
+        add(new AssetView(rightNeighbor.getAssetsTradeable()
+        ),
                 "span");
 
         add(new JLabel(""),"newline");

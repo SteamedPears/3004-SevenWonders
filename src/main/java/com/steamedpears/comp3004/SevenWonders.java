@@ -118,7 +118,12 @@ public class SevenWonders {
             for(Player p : getGame().getPlayers()) {
                 logger.info(p + " has " + p.getFinalVictoryPoints() + " victory points");
             }
-            updateView();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateView();
+                }
+            });
         }
     }
 
