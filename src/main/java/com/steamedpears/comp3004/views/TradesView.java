@@ -47,28 +47,7 @@ public class TradesView extends JPanel {
 
         add(new JLabel(""));
         for(final String s : Asset.TRADEABLE_ASSET_TYPES) {
-            final JFormattedTextField assetField = new JFormattedTextField(new JFormattedTextField.AbstractFormatterFactory() {
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField jFormattedTextField) {
-                    return new JFormattedTextField.AbstractFormatter() {
-                        @Override
-                        public Object stringToValue(String s) throws ParseException {
-                            Integer val = new Integer(0);
-                            try{
-                                val = Integer.parseInt(s,10);
-                            } catch(Exception e) {
-                                log.info("User entered invalid value");
-                            }
-                            return val;
-                        }
-
-                        @Override
-                        public String valueToString(Object o) throws ParseException {
-                            return o.toString();
-                        }
-                    };
-                }
-            },new Integer(0));
+            final JFormattedTextField assetField = new JFormattedTextField(new NumberFormatterFactory(),new Integer(0));
             assetField.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -86,28 +65,7 @@ public class TradesView extends JPanel {
 
         add(new JLabel(""),"newline");
         for(final String s : Asset.TRADEABLE_ASSET_TYPES) {
-            final JFormattedTextField assetField = new JFormattedTextField(new JFormattedTextField.AbstractFormatterFactory() {
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField jFormattedTextField) {
-                    return new JFormattedTextField.AbstractFormatter() {
-                        @Override
-                        public Object stringToValue(String s) throws ParseException {
-                            Integer val = new Integer(0);
-                            try{
-                                val = Integer.parseInt(s,10);
-                            } catch(Exception e) {
-                                log.info("User entered invalid value");
-                            }
-                            return val;
-                        }
-
-                        @Override
-                        public String valueToString(Object o) throws ParseException {
-                            return o.toString();
-                        }
-                    };
-                }
-            },new Integer(0));
+            final JFormattedTextField assetField = new JFormattedTextField(new NumberFormatterFactory(),new Integer(0));
             assetField.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -115,6 +73,30 @@ public class TradesView extends JPanel {
                 }
             });
             add(assetField, MIG_CONFIG);
+        }
+    }
+
+    private class NumberFormatterFactory extends JFormattedTextField.AbstractFormatterFactory {
+
+        @Override
+        public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField jFormattedTextField) {
+            return new JFormattedTextField.AbstractFormatter() {
+                @Override
+                public Object stringToValue(String s) throws ParseException {
+                    Integer val = new Integer(0);
+                    try{
+                        val = Integer.parseInt(s,10);
+                    } catch(Exception e) {
+                        log.info("User entered invalid value");
+                    }
+                    return val;
+                }
+
+                @Override
+                public String valueToString(Object o) throws ParseException {
+                    return o.toString();
+                }
+            };
         }
     }
 }
