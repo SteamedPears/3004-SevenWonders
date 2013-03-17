@@ -58,19 +58,19 @@ public class Card {
     private URL imageURL;
     private int minPlayers;
     private int age;
-    //The base amount of assets this cardID yields
+    //The base amount of assets this card yields
     private AssetMap baseAssets;
     //If multiplierAssets is not null, multiply the values in baseAssets
     //by the number of occurences of these assets in multiplierTargets (a combination of self, left, and right)
     private AssetSet multiplierAssets;
     private Set<String> multiplierTargets;
-    //The building the cardID is free to play for
+    //The building the card is free to play for
     private String freeFor;
-    //the cost of playing this cardID
+    //the cost of playing this card
     private AssetMap cost;
-    //the resources this cardID makes discounted
+    //the resources this card makes discounted
     private AssetSet discountsAssets;
-    //the players to which this cardID's discountsAssets applies to
+    //the players to which this card's discountsAssets applies to
     private Set<String> discountsTargets;
     //if true, the player may choose only *one* of the keys of baseAssets
     private boolean isChoice;
@@ -91,7 +91,7 @@ public class Card {
         this.id = this.getName().replace(" ","")+"_"+this.age+"_"+this.minPlayers;
         this.image = SevenWonders.PATH_IMG_CARDS+getId()+SevenWonders.IMAGE_TYPE_SUFFIX;
 
-        //figure out what this cardID actually does
+        //figure out what this card actually does
         this.baseAssets = new AssetMap(obj, PROP_CARD_BASE_ASSETS);
         this.multiplierAssets = new AssetSet(obj,PROP_CARD_MULTIPLIER_ASSETS);
         this.multiplierTargets = new AssetSet(obj,PROP_CARD_MULTIPLIER_TARGETS);
@@ -141,8 +141,8 @@ public class Card {
     }
 
     /**
-     * Gets the minimum number of Players necessary to use this cardID in a game
-     * @return the minimum number of Players necessary to use this cardID in a game
+     * Gets the minimum number of Players necessary to use this card in a game
+     * @return the minimum number of Players necessary to use this card in a game
      */
     public int getMinPlayers(){
         return minPlayers;
@@ -165,8 +165,8 @@ public class Card {
     }
 
     /**
-     * Gets the Asset cost of playing this cardID
-     * @return the Asset cost of playing this cardID
+     * Gets the Asset cost of playing this card
+     * @return the Asset cost of playing this card
      */
     public AssetMap getCost(){
         return cost;
@@ -189,7 +189,7 @@ public class Card {
     }
 
     /**
-     * Charges the given Player the cost of playing this cardID
+     * Charges the given Player the cost of playing this card
      * @param player the player being charged
      */
     public void playCard(Player player){
@@ -198,7 +198,7 @@ public class Card {
 
     /**
      * Gets the Assets this Card would yield the given Player, if played, before optional choices
-     * @param player the player that would play this cardID
+     * @param player the player that would play this card
      * @return the Assets
      */
     public AssetMap getAssets(Player player){
@@ -234,7 +234,7 @@ public class Card {
 
     /**
      * Gets the optional Assets this Card would yield the given Player, if played
-     * @param player the player that would play this cardID
+     * @param player the player that would play this card
      * @return the Assets
      */
     public AssetSet getAssetsOptional(Player player){
