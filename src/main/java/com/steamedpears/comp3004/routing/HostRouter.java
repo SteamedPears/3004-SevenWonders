@@ -358,7 +358,7 @@ class HostRouter extends Router {
         }
 
         private boolean isClosed() {
-            return socket.isValid();
+            return !socket.isValid();
         }
 
         private void cleanup() throws IOException {
