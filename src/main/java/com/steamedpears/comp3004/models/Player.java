@@ -719,6 +719,12 @@ public abstract class Player extends Changeable implements Runnable{
         return playedCards;
     }
 
+    /**
+     * Get the game associated with this player
+     * @return the game associated with this player
+     */
+    public SevenWondersGame getGame() { return game; }
+
     @Override
     public String toString(){
         return "Player "+getPlayerId();
