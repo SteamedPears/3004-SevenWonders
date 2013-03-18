@@ -136,7 +136,7 @@ public class PlayerView extends JPanel {
             add(cv, "aligny top");
         }
 
-        // selected cardID
+        // selected card
         if(hand.size() > 0) {
             selectedCardView = new CardView(hand.get(0), CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
             add(selectedCardView, "newline, span " + SELECTED_MULTIPLIER);
