@@ -210,7 +210,7 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private Set<String> getDiscounts(Player targetPlayer) {
-        String player = null;
+        String player;
         if(targetPlayer.equals(getPlayerLeft())){
             player = Card.PLAYER_LEFT;
         }else if(targetPlayer.equals(getPlayerRight())){
@@ -375,6 +375,17 @@ public abstract class Player extends Changeable implements Runnable{
                 return false;
             }
         }
+
+        log.debug("validating player will not be playing that card again this turn");
+        command = command.followup;
+        while(command!=null){
+            if(command.action==PLAY || command.action==PLAY_FREE || command.action == UNDISCARD){
+                if(getGame().getCardById(command.cardID).getName().equals(card.getName())){
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
