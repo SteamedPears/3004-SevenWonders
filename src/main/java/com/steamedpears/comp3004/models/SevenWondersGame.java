@@ -47,7 +47,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
         this.players = new ArrayList<Player>();
         this.localPlayers = new HashSet<Player>();
         this.discard = new HashSet<Card>();
-        this.age = 1;
+        this.age = 0;
         this.router = router;
         this.pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+1);
         this.gameOver = false;
