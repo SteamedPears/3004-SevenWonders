@@ -69,7 +69,7 @@ public class SevenWonders {
         logger.info("Creating game");
         this.isHost = isHosting;
         closeNewGameDialog();
-        if(isHost){
+        if(isHosting){
             router = Router.getHostRouter(port, players);
             dialog = new HostGameDialog(view,this);
         }else{
@@ -215,7 +215,12 @@ public class SevenWonders {
         }
         router = null;
         newGameDialog = new NewGameDialog(view,this);
-        newGameDialog.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                newGameDialog.setVisible(true);
+            }
+        });
     }
 
     /**
@@ -223,9 +228,14 @@ public class SevenWonders {
      */
     public void closeNewGameDialog() {
         if(newGameDialog == null) return;
-        newGameDialog.setVisible(false);
-        newGameDialog.dispose();
-        newGameDialog = null;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                newGameDialog.setVisible(false);
+                newGameDialog.dispose();
+                newGameDialog = null;
+            }
+        });
     }
 
     /**

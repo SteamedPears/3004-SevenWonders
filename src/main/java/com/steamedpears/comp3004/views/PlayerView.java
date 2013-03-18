@@ -16,6 +16,10 @@ public class PlayerView extends JPanel {
 
     static Logger logger = Logger.getLogger(PlayerView.class);
 
+    public static final String AGE1_ICON = AssetView.PATH_ICON + "age1" + AssetView.IMAGE_TYPE_SUFFIX;
+    public static final String AGE2_ICON = AssetView.PATH_ICON + "age2" + AssetView.IMAGE_TYPE_SUFFIX;
+    public static final String AGE3_ICON = AssetView.PATH_ICON + "age3" + AssetView.IMAGE_TYPE_SUFFIX;
+
     private Player player;
     private CardView selectedCardView;
     private Map<String, String> persistentMessages;
@@ -218,7 +222,28 @@ public class PlayerView extends JPanel {
         add(messagePanel,"span");
 
         // assets
-        add(new AssetView(this.player),"gapleft 25, gaptop 1, span");
+        add(new AssetView(this.player),"gapleft 0, gaptop 1, span 8");
+
+        // age
+        JLabel ageLabel = new JLabel();
+        switch(player.getGame().getAge()) {
+            case 1:
+                logger.info("First age");
+                ageLabel = AssetView.newJLabel(AGE1_ICON);
+                break;
+            case 2:
+                logger.info("Second age");
+                ageLabel = AssetView.newJLabel(AGE2_ICON);
+                break;
+            case 3:
+                logger.info("Third age");
+                ageLabel = AssetView.newJLabel(AGE3_ICON);
+                break;
+            default:
+                logger.error("Age was not 1,2, or 3...how?!");
+                break;
+        }
+        add(ageLabel);
 
         waitForTurn();
     }
