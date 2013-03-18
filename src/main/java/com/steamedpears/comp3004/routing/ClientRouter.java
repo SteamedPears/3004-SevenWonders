@@ -10,6 +10,7 @@ import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -22,9 +23,7 @@ import java.util.concurrent.Executors;
 class ClientRouter extends Router implements Runnable{
     private static Logger log = Logger.getLogger(ClientRouter.class);
 
-    private Socket host;
-    private JsonReader in;
-    private PrintWriter out;
+    private SocketWrapper socket;
     private JsonParser parser;
     private Executor pool = Executors.newFixedThreadPool(1);
     private int totalHumanPlayers;
@@ -36,9 +35,7 @@ class ClientRouter extends Router implements Runnable{
      */
     public ClientRouter(String ipAddress, int port) {
         try {
-            this.host = new Socket(ipAddress, port);
-            this.in = new JsonReader(new InputStreamReader(host.getInputStream()));
-            this.out = new PrintWriter(host.getOutputStream(), true);
+            this.socket = new SocketWrapper(new Socket(ipAddress, port));
             this.parser = new JsonParser();
             this.totalHumanPlayers = 0;
             start();
@@ -69,13 +66,20 @@ class ClientRouter extends Router implements Runnable{
 
     private void send(String string){
         log.debug("Sending JSON: "+string);
-        out.println(string);
+        socket.println(string);
     }
 
     private void waitForTakeTurn(){
         log.debug("Waiting for host to give 'okay' to take turn");
+        String line = socket.readLine();
+        log.debug("got: "+line);
+        if(!socket.isValid()) {
+            // deal with host disconnect here
+            log.error("Host disconnect, BAIL OUT");
+            System.exit(-1);
+        }
         try {
-            JsonElement elem = parser.parse(in);
+            JsonElement elem = parser.parse(line);
         } catch(IllegalArgumentException e) {
             log.error("Illegal argument while parsing command",e);
             cleanup();
@@ -87,15 +91,18 @@ class ClientRouter extends Router implements Runnable{
     private boolean waitForCommands(){
         log.debug("Waiting for host to send back all the player commands");
         Map<Player, PlayerCommand> commands = new HashMap<Player, PlayerCommand>();
+        String line = socket.readLine();
+        log.debug("got: " + line);
+        if(!socket.isValid()) {
+            log.error("Host disconnect, BAIL OUT");
+            System.exit(-1);
+        }
         try {
-            JsonObject obj = parser.parse(in).getAsJsonObject();
+            JsonObject obj = parser.parse(line).getAsJsonObject();
             log.debug("Got player commands; applying commands: "+obj.toString());
             commands = jsonToPlayerCommands(obj);
-        } catch(IllegalArgumentException e) {
-            log.error("Illegal argument while waiting for command",e);
-            cleanup();
-        } catch(JsonIOException e) {
-            log.error("JSON I/O error while waiting for command",e);
+        } catch(Exception e) {
+            log.error("Exception while parsing commands",e);
             cleanup();
         }
         return getLocalGame().applyCommands(commands);
@@ -103,22 +110,44 @@ class ClientRouter extends Router implements Runnable{
 
     private void waitForInitialConfig(){
         log.debug("Waiting for initial config from host");
-        JsonObject obj = parser.parse(in).getAsJsonObject();
+        String line = socket.readLine();
+        log.debug("got: " + line);
+        if(!socket.isValid()) {
+            log.error("Host disconnect while waiting for initial config, BAIL OUT");
+            System.exit(-1);
+        }
+        try {
+            JsonObject obj = parser.parse(line).getAsJsonObject();
 
-        log.debug("Got initial config from host, building model: "+obj.toString());
-        SevenWondersGame game = getLocalGame();
-        game.setCards(obj.getAsJsonArray(PROP_ROUTE_CARDS));
-        game.setDeck(obj.getAsJsonArray(PROP_ROUTE_DECK));
-        game.setWonders(obj.getAsJsonArray(PROP_ROUTE_WONDERS));
-        game.setPlayers(obj.getAsJsonObject(PROP_ROUTE_PLAYERS));
-        log.debug("Model built");
+            log.debug("Got initial config from host, building model: "+obj.toString());
+            SevenWondersGame game = getLocalGame();
+            game.setCards(obj.getAsJsonArray(PROP_ROUTE_CARDS));
+            game.setDeck(obj.getAsJsonArray(PROP_ROUTE_DECK));
+            game.setWonders(obj.getAsJsonArray(PROP_ROUTE_WONDERS));
+            game.setPlayers(obj.getAsJsonObject(PROP_ROUTE_PLAYERS));
+            log.debug("Model built");
+        } catch(Exception e) {
+            log.error("Exception while parsing initial config");
+            cleanup();
+        }
     }
 
     private void waitForLocalPlayerId() {
         log.debug("Getting localPlayerId from host");
-        JsonObject obj = parser.parse(in).getAsJsonObject();
-        setLocalPlayerId(obj.get(PROP_ROUTE_YOU_ARE).getAsInt());
-        log.debug("Got localPlayerId: "+getLocalPlayerId());
+        String line = socket.readLine();
+        log.debug("got: " + line);
+        if(!socket.isValid()) {
+            log.error("Host disconnect while waiting for initial config, BAIL OUT");
+            System.exit(-1);
+        }
+        try {
+            JsonObject obj = parser.parse(line).getAsJsonObject();
+            setLocalPlayerId(obj.get(PROP_ROUTE_YOU_ARE).getAsInt());
+            log.debug("Got localPlayerId: "+getLocalPlayerId());
+        } catch(Exception e) {
+            log.error("IO Exception while waiting for local player ID");
+            cleanup();
+        }
     }
 
     @Override
@@ -153,14 +182,9 @@ class ClientRouter extends Router implements Runnable{
 
     @Override
     public void cleanup() {
-        try {
-            if(host != null) {
-                host.close();
-            }
-            host = null;
-        } catch (IOException e) {
-            log.warn("IOException while closing socket");
-        }
+        super.cleanup();
+        socket.close();
+        announceChange(this);
     }
 
 }

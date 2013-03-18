@@ -1,5 +1,6 @@
 package com.steamedpears.comp3004;
 
+import com.steamedpears.comp3004.models.AssetMap;
 import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.routing.*;
@@ -42,6 +43,7 @@ public class SevenWonders {
     private NewGameDialog newGameDialog;
     private JDialog dialog;
     private PlayerView playerView;
+    private TradesView tradesView;
     private HighLevelView highLevelView;
 
     public SevenWonders() {
@@ -116,18 +118,31 @@ public class SevenWonders {
             for(Player p : getGame().getPlayers()) {
                 logger.info(p + " has " + p.getFinalVictoryPoints() + " victory points");
             }
-            updateView();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateView();
+                }
+            });
         }
     }
 
     private void handlePlayerChange() {
         logger.info("Handling player change");
-        playerView.newMove();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                playerView.newMove();
+            }
+        });
     }
 
     private void handleRouterChange() {
         logger.info("Handling router change");
-        if(dialog != null) {
+        if(router != null && !router.isValid()) {
+            router = null;
+            openNewGameDialog();
+        } else if(dialog != null) {
             ((HostGameDialog)dialog).setPlayersJoined(router.getTotalHumanPlayers());
         }
     }
@@ -146,6 +161,14 @@ public class SevenWonders {
         Player thisPlayer = getLocalPlayer();
         playerView = new PlayerView(thisPlayer);
         view.addTab(playerView, "Hand");
+        tradesView = new TradesView(thisPlayer);
+        tradesView.setListener(new TradesView.TradeChangeListener() {
+            @Override
+            public void handleChange(AssetMap leftTrades, AssetMap rightTrades) {
+                playerView.setTrades(leftTrades,rightTrades);
+            }
+        });
+        view.addTab(tradesView,"Trades");
         highLevelView = new HighLevelView(this);
         view.addTab(highLevelView,"Table");
         for(Player player : getGame().getPlayers()) {

@@ -50,6 +50,10 @@ public final class Asset {
             ASSET_MILITARY_POWER, ASSET_WONDER_STAGES
     };
 
+    public static final String[] TRADEABLE_ASSET_TYPES = {
+            ASSET_WOOD, ASSET_STONE, ASSET_CLAY, ASSET_ORE, ASSET_LOOM, ASSET_PAPYRUS, ASSET_GLASS
+    };
+
     public static final String[] COLORS = {
             COLOR_BROWN, COLOR_GREEN, COLOR_GREY, COLOR_PURPLE, COLOR_RED, COLOR_YELLOW
     };
