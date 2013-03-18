@@ -36,11 +36,11 @@ public class AssetView extends JPanel {
 
     static Logger log = Logger.getLogger(ViewFrame.class);
 
-    public static final String MIG_CONFIG = "w 60!";
+    public static final String MIG_CONFIG = "w 60!,gaptop 0";
 
     public AssetView() {
         setLayout(new MigLayout(
-                "aligny top,wrap 15", // Layout Constraints
+                "aligny top,wrap 15, gap 0", // Layout Constraints
                 "0[]0[]0", // Column Constraints
                 "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
@@ -60,7 +60,7 @@ public class AssetView extends JPanel {
 
     public AssetView(List<Player> players) {
         setLayout(new MigLayout(
-                "aligny top,wrap 15", // Layout Constraints
+                "aligny top,wrap 15, gap 0", // Layout Constraints
                 "0[]0[]0", // Column Constraints
                 "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
@@ -80,8 +80,9 @@ public class AssetView extends JPanel {
         add(newJLabel(GOLD_ICON), MIG_CONFIG);
         add(newJLabel(VICTORY_ICON), MIG_CONFIG);
         add(newJLabel(SHIELD_ICON), MIG_CONFIG);
-        add(newJLabel(STAGE_ICON), MIG_CONFIG);
-
+        JLabel stageLabel = newJLabel(STAGE_ICON);
+        resizeJLabelIcon(stageLabel,-1,60);
+        add(stageLabel, MIG_CONFIG);
         for(Player player : players) {
             if(players.size() > 1) add(new JLabel("" + player.getPlayerId()));
             else add(new JLabel());
@@ -90,6 +91,11 @@ public class AssetView extends JPanel {
                 add(newTextJLabel("" + playerAssets.get(asset)),MIG_CONFIG);
             }
         }
+    }
+
+    private static void resizeJLabelIcon(JLabel label,int width,int height) {
+        label.setIcon(
+                new ImageIcon(((ImageIcon)label.getIcon()).getImage().getScaledInstance(-1,60,Image.SCALE_SMOOTH)));
     }
 
     public AssetView(AssetMap assets) {
@@ -104,7 +110,7 @@ public class AssetView extends JPanel {
         }
     }
 
-    private URL getImagePath(String image){
+    private static URL getImagePath(String image){
         URL result = AssetView.class.getResource(image);
         if(result==null){
             log.warn("Missing file " + image);
@@ -118,19 +124,19 @@ public class AssetView extends JPanel {
         return result;
     }
 
-    private ImageIcon newImageIcon(String image) {
+    private static ImageIcon newImageIcon(String image) {
         return new ImageIcon(getImagePath(image));
     }
 
-    private JLabel newJLabel(String image) {
+    public static JLabel newJLabel(String image) {
         JLabel label = new JLabel(newImageIcon(image),JLabel.CENTER);
-        label.setPreferredSize(new Dimension(70,10));
+        label.setPreferredSize(new Dimension(60,10));
         return label;
     }
 
-    private JLabel newTextJLabel(String text) {
+    public static JLabel newTextJLabel(String text) {
         JLabel label = new JLabel(text,JLabel.CENTER);
-        label.setPreferredSize(new Dimension(70,10));
+        label.setPreferredSize(new Dimension(60,10));
         return label;
     }
 }

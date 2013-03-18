@@ -35,11 +35,16 @@ public class PlayerViewTest extends JFrame {
             assets.put(assetType,++i);
         }
 
+        // build game
+        SevenWondersGame game = mock(SevenWondersGame.class);
+        when(game.getAge()).thenReturn(1);
+
         // build player
         Player player = mock(Player.class);
         when(player.getHand()).thenReturn(hand);
         when(player.getAssets()).thenReturn(assets);
         when(player.isValid(any(PlayerCommand.class))).thenReturn(true);
+        when(player.getGame()).thenReturn(game);
 
         // create view
         PlayerView view = new PlayerView(player);
