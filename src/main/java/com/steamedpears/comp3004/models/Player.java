@@ -200,7 +200,6 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private void payForTrades(PlayerCommand command) {
-        int total = 0;
 
         Set<String> leftDiscounts = new HashSet<String>();
         Set<String> rightDiscounts = new HashSet<String>();
@@ -221,10 +220,11 @@ public abstract class Player extends Changeable implements Runnable{
                 rightDiscounts.addAll(card.getDiscountsAssets());
             }
         }
-
-        total+=getCostOfTrade(command.leftPurchases, leftDiscounts);
-        total+=getCostOfTrade(command.rightPurchases, rightDiscounts);
-        gold-=total;
+        int leftTotal = getCostOfTrade(command.leftPurchases, leftDiscounts);
+        int rightTotal = getCostOfTrade(command.rightPurchases, rightDiscounts);
+        getPlayerLeft().changeGold(leftTotal);
+        getPlayerRight().changeGold(rightTotal);
+        changeGold(-leftTotal-rightTotal);
     }
 
     private int getCostOfTrade(Map<String,Integer> purchases, Set<String> discounts) {
