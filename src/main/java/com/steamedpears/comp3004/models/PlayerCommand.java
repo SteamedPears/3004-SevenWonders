@@ -6,7 +6,7 @@ public class PlayerCommand{
     }
 
     /**
-     * Gets the null command for a given player.  This command is to discard the first cardID in the player's hand, which
+     * Gets the null command for a given player.  This command is to discard the first card in the player's hand, which
      * is always a valid move.
      * @param player the player whose null move to generate
      * @return the generated null move for the given player
