@@ -339,7 +339,7 @@ class HostRouter extends Router {
         public void run(){
             log.debug("Listening for client commands: "+clientNumber);
             String result = socket.readLine();
-            if(result == null) {
+            if(!socket.isValid()) {
                 // deal with client disconnect here
                 log.error("Client disconnect, BAIL OUT");
                 System.exit(-1);
