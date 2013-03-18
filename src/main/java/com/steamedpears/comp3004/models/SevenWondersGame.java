@@ -88,6 +88,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
         if(shouldDeal()){
             discardExtraCards();
             runMilitaryConflict();
+            nextAge();
             if(age>MAX_AGES){
                 gameOver = true;
                 announceChange(this);
@@ -192,7 +193,6 @@ public class SevenWondersGame extends Changeable implements Runnable{
         log.debug("Changing hands");
         if(shouldDeal()){
             deal();
-            nextAge();
         }else{
             rotateHands();
         }
