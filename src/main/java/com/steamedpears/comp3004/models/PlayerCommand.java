@@ -28,8 +28,8 @@ public class PlayerCommand{
 
     public PlayerCardAction action;
     public String cardID;
-    public AssetMap leftPurchases = new AssetMap();
-    public AssetMap rightPurchases = new AssetMap();
+    public AssetMap leftPurchases;
+    public AssetMap rightPurchases;
     public PlayerCommand followup; //for if you can perform multiple actions this turn
 
     @Override
