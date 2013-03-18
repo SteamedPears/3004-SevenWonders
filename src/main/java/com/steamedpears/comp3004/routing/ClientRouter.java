@@ -112,7 +112,7 @@ class ClientRouter extends Router implements Runnable{
         log.debug("Waiting for initial config from host");
         String line = socket.readLine();
         log.debug("got: " + line);
-        if(line == null) {
+        if(!socket.isValid()) {
             log.error("Host disconnect while waiting for initial config, BAIL OUT");
             System.exit(-1);
         }
@@ -136,7 +136,7 @@ class ClientRouter extends Router implements Runnable{
         log.debug("Getting localPlayerId from host");
         String line = socket.readLine();
         log.debug("got: " + line);
-        if(line == null) {
+        if(!socket.isValid()) {
             log.error("Host disconnect while waiting for initial config, BAIL OUT");
             System.exit(-1);
         }
