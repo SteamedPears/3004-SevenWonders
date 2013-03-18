@@ -24,6 +24,8 @@ public class PlayerView extends JPanel {
     private boolean waiting;
     private boolean validPlay;
     private boolean validBuild;
+    private AssetMap leftTrades;
+    private AssetMap rightTrades;
 
     private JLabel messageLabel;
     private JLabel persistentMessageLabel;
@@ -56,21 +58,39 @@ public class PlayerView extends JPanel {
             if(selectedCardView != null) {
                 selectedCardView.setCard(card);
             }
-            // check if player can play the card
-            PlayerCommand move = new PlayerCommand();
-            move.action = PlayerCardAction.PLAY;
-            move.card = card.getId();
-            validPlay = player.isValid(move);
-            move.action = PlayerCardAction.BUILD;
-            validBuild = player.isValid(move);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    updateButtonState();
-                }
-            });
+            validateMoves();
         }
     };
+
+    /**
+     * Validates play and build player actions, including left and right trades
+     */
+    public void validateMoves() {
+        PlayerCommand move = new PlayerCommand(PlayerCardAction.PLAY,selectedCardView.getCard().getId());
+        if(leftTrades != null) move.leftPurchases = leftTrades;
+        if(rightTrades != null) move.rightPurchases = rightTrades;
+        validPlay = player.isValid(move);
+        move.action = PlayerCardAction.BUILD;
+        validBuild = player.isValid(move);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                updateButtonState();
+            }
+        });
+
+    }
+
+    /**
+     * Set the left and right trades to be performed when making a player action
+     * @param leftTrades the trades with the player's left neighbor
+     * @param rightTrades the trades with the player's right neighbor
+     */
+    public void setTrades(AssetMap leftTrades, AssetMap rightTrades) {
+        this.leftTrades = leftTrades;
+        this.rightTrades = rightTrades;
+        validateMoves();
+    }
 
     /**
      * Set the ephemeral message on this view.
@@ -138,10 +158,9 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.DISCARD;
-                move.card = selectedCardView.getCard().getId();
-                player.setCurrentCommand(move);
+                player.setCurrentCommand(new PlayerCommand(
+                        PlayerCardAction.DISCARD,
+                        selectedCardView.getCard().getId()));
                 player.wake();
             }
         });
@@ -153,9 +172,11 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.PLAY;
-                move.card = selectedCardView.getCard().getId();
+                PlayerCommand move = new PlayerCommand(
+                        PlayerCardAction.PLAY,
+                        selectedCardView.getCard().getId());
+                if(leftTrades != null) move.leftPurchases = leftTrades;
+                if(rightTrades != null) move.rightPurchases = rightTrades;
                 player.setCurrentCommand(move);
                 player.wake();
             }
@@ -168,9 +189,11 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand();
-                move.action = PlayerCardAction.BUILD;
-                move.card = selectedCardView.getCard().getId();
+                PlayerCommand move = new PlayerCommand(
+                        PlayerCardAction.BUILD,
+                        selectedCardView.getCard().getId());
+                if(leftTrades != null) move.leftPurchases = leftTrades;
+                if(rightTrades != null) move.rightPurchases = rightTrades;
                 player.setCurrentCommand(move);
                 player.wake();
             }
@@ -200,6 +223,9 @@ public class PlayerView extends JPanel {
         waitForTurn();
     }
 
+    /**
+     * Signal that the UI is no longer waiting for the protocol to allow player actions
+     */
     public void newMove() {
         waiting = false;
         updateButtonState();
@@ -207,6 +233,9 @@ public class PlayerView extends JPanel {
         updateTimer();
     }
 
+    /**
+     * Signal that the UI should wait for the protocol to allow player actions
+     */
     public void waitForTurn() {
         waiting = true;
         updateButtonState();
@@ -214,6 +243,9 @@ public class PlayerView extends JPanel {
         updateTimer();
     }
 
+    /**
+     * Signal that the player has chosen a move and is now waiting for the turn to end
+     */
     public void doneMove() {
         waiting = false;
         updateButtonState();
@@ -225,9 +257,11 @@ public class PlayerView extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                setDiscardButtonEnabled(!waiting);
-                setPlayButtonEnabled(validPlay && !waiting);
-                setBuildButtonEnabled(validBuild && !waiting);            }
+                boolean timeLimitExpired = timer <= 0;
+                setDiscardButtonEnabled(!waiting && !timeLimitExpired);
+                setPlayButtonEnabled(validPlay && !waiting && !timeLimitExpired);
+                setBuildButtonEnabled(validBuild && !waiting && !timeLimitExpired);
+            }
         });
     }
 

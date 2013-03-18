@@ -171,7 +171,7 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private void resolveCommand(PlayerCommand command, boolean isFinal){
-        Card card = game.getCardById(command.card);
+        Card card = game.getCardById(command.cardID);
         if(command.action.equals(BUILD)){
             buildWonder(card, isFinal);
         }else if(command.action.equals(PLAY)){
@@ -354,12 +354,12 @@ public abstract class Player extends Changeable implements Runnable{
 
     private boolean validateHasCard(PlayerCommand command){
         log.debug("validating player has card");
-        return hand.contains(game.getCardById(command.card));
+        return hand.contains(game.getCardById(command.cardID));
     }
 
     private boolean validateHasNotPlayedCard(PlayerCommand command){
         log.debug("validating player hasn't already player that card");
-        Card card = game.getCardById(command.card);
+        Card card = game.getCardById(command.cardID);
         for(Card playedCard: playedCards){
             if(playedCard.getName().equals(card.getName())){
                 return false;
@@ -377,7 +377,7 @@ public abstract class Player extends Changeable implements Runnable{
 
     private boolean validateUndiscard(PlayerCommand command) {
         log.debug("validating player can undiscard this card");
-        return game.getDiscard().contains(game.getCardById(command.card))
+        return game.getDiscard().contains(game.getCardById(command.cardID))
                 && validateHasNotPlayedCard(command)
                 && getAssets().containsKey(ASSET_DISCARD);
     }
@@ -391,7 +391,7 @@ public abstract class Player extends Changeable implements Runnable{
         log.debug("validating player can play card");
         return validateHasCard(command)
                 && validateHasNotPlayedCard(command)
-                && game.getCardById(command.card).canAfford(this, command);
+                && game.getCardById(command.cardID).canAfford(this, command);
     }
 
     private boolean validateBuildWonder(PlayerCommand command) {

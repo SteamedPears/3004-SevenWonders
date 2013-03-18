@@ -25,7 +25,7 @@ public abstract class Router extends Changeable implements ChangeListener {
      * @return a new HostRouter
      */
     public static Router getHostRouter(int port, int totalPlayers){
-        log.debug("Creating Host Router");
+        log.debug(String.format("Creating Host Router(port:%d,players:%d)",port,totalPlayers));
         return new HostRouter(port,
                 Math.max(Math.min(totalPlayers, SevenWonders.MAX_PLAYERS), SevenWonders.MIN_PLAYERS));
     }
@@ -58,6 +58,7 @@ public abstract class Router extends Changeable implements ChangeListener {
     //localGame#applyCommands should be called when every player has decided on a command
     private SevenWondersGame localGame;
     private boolean playing;
+    private boolean valid;
     private int localPlayerId;
 
     /**
@@ -67,6 +68,7 @@ public abstract class Router extends Changeable implements ChangeListener {
         this.localGame = new SevenWondersGame(this);
         localGame.addChangeListener(this);
         this.playing = false;
+        this.valid = true;
     }
 
     /**
@@ -164,7 +166,13 @@ public abstract class Router extends Changeable implements ChangeListener {
     /**
      * Cleans up router after game is finished.
      */
-    public abstract void cleanup();
+    public void cleanup() { this.valid = false; }
+
+    /**
+     * Check if this router is still valid
+     * @return true iff this router is valid
+     */
+    public boolean isValid() { return this.valid; }
 
     @Override
     public void stateChanged(ChangeEvent event){
