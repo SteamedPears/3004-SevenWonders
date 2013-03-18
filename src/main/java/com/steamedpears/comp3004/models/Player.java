@@ -200,31 +200,38 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     private void payForTrades(PlayerCommand command) {
-        int total = 0;
 
-        Set<String> leftDiscounts = new HashSet<String>();
-        Set<String> rightDiscounts = new HashSet<String>();
+
+        int leftTotal = getCostOfTrade(command.leftPurchases, getDiscounts(getPlayerLeft()));
+        int rightTotal = getCostOfTrade(command.rightPurchases, getDiscounts(getPlayerRight()));
+        getPlayerLeft().changeGold(leftTotal);
+        getPlayerRight().changeGold(rightTotal);
+        changeGold(-leftTotal-rightTotal);
+    }
+
+    private Set<String> getDiscounts(Player targetPlayer) {
+        String player;
+        if(targetPlayer.equals(getPlayerLeft())){
+            player = Card.PLAYER_LEFT;
+        }else if(targetPlayer.equals(getPlayerRight())){
+            player = Card.PLAYER_RIGHT;
+        }else{
+            //can't trade with this player
+            return new AssetSet();
+        }
+        Set<String> discounts = new HashSet<String>();
 
         List<Card> cards = new ArrayList<Card>();
         cards.addAll(playedCards);
 
-        List<Card> stages = wonder.getStages();
-        for(int i=0; i<wonder.getCurrentStage(); ++i){
-            cards.add(stages.get(i));
-        }
+        cards.addAll(wonder.getStages());
 
         for(Card card: cards){
-            if(card.getDiscountsTargets().contains(Card.PLAYER_LEFT)){
-                leftDiscounts.addAll(card.getDiscountsAssets());
-            }
-            if(card.getDiscountsTargets().contains(Card.PLAYER_RIGHT)){
-                rightDiscounts.addAll(card.getDiscountsAssets());
+            if(card.getDiscountsTargets().contains(player)){
+                discounts.addAll(card.getDiscountsAssets());
             }
         }
-
-        total+=getCostOfTrade(command.leftPurchases, leftDiscounts);
-        total+=getCostOfTrade(command.rightPurchases, rightDiscounts);
-        gold-=total;
+        return discounts;
     }
 
     private int getCostOfTrade(Map<String,Integer> purchases, Set<String> discounts) {
@@ -332,6 +339,9 @@ public abstract class Player extends Changeable implements Runnable{
         }
         if(!result) log.debug("validating failed after move type sanity check");
 
+        result = result && validateGoldCosts(command);
+        if(!result) log.debug("validating failed after gold cost check");
+
         result = result && validateCanMakeTrades(command);
         if(!result) log.debug("validation failed after trade check");
 
@@ -365,6 +375,17 @@ public abstract class Player extends Changeable implements Runnable{
                 return false;
             }
         }
+
+        log.debug("validating player will not be playing that card again this turn");
+        command = command.followup;
+        while(command!=null){
+            if(command.action==PLAY || command.action==PLAY_FREE || command.action == UNDISCARD){
+                if(getGame().getCardById(command.cardID).getName().equals(card.getName())){
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
@@ -405,6 +426,19 @@ public abstract class Player extends Changeable implements Runnable{
         log.debug("validating player can make the trades they are trying to make");
         return validateCanMakeTradesInternal(command.leftPurchases, getPlayerLeft())
                 && validateCanMakeTradesInternal(command.rightPurchases, getPlayerRight());
+    }
+
+    private boolean validateGoldCosts(PlayerCommand command){
+        int total = 0;
+        while(command!=null){
+            total+=getCostOfTrade(command.leftPurchases, getDiscounts(getPlayerLeft()));
+            total+=getCostOfTrade(command.rightPurchases, getDiscounts(getPlayerRight()));
+            if(command.action==PLAY){
+                total+=getGame().getCardById(command.cardID).getCost(this).get(ASSET_GOLD);
+            }
+            command = command.followup;
+        }
+        return total<=getGold();
     }
 
     private boolean validateCanMakeTradesInternal(AssetMap purchases, Player player){

@@ -168,7 +168,12 @@ public class Card {
      * Gets the Asset cost of playing this card
      * @return the Asset cost of playing this card
      */
-    public AssetMap getCost(){
+    public AssetMap getCost(Player player){
+        for(Card card: player.getPlayedCards()){
+            if(card.getName().equals(freeFor)){
+                return new AssetMap();
+            }
+        }
         return cost;
     }
 
@@ -193,7 +198,7 @@ public class Card {
      * @param player the player being charged
      */
     public void playCard(Player player){
-        player.changeGold(-getCost().get(ASSET_GOLD));
+        player.changeGold(-getCost(player).get(ASSET_GOLD));
     }
 
     /**
