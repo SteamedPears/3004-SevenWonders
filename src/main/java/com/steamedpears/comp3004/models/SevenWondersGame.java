@@ -47,7 +47,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
         this.players = new ArrayList<Player>();
         this.localPlayers = new HashSet<Player>();
         this.discard = new HashSet<Card>();
-        this.age = 0;
+        this.age = 1;
         this.router = router;
         this.pool = Executors.newFixedThreadPool(SevenWonders.MAX_PLAYERS+1);
         this.gameOver = false;
@@ -88,6 +88,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
         if(shouldDeal()){
             discardExtraCards();
             runMilitaryConflict();
+            nextAge();
             if(age>MAX_AGES){
                 gameOver = true;
                 announceChange(this);
@@ -192,7 +193,6 @@ public class SevenWondersGame extends Changeable implements Runnable{
         log.debug("Changing hands");
         if(shouldDeal()){
             deal();
-            nextAge();
         }else{
             rotateHands();
         }
