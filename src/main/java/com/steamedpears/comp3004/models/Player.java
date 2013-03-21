@@ -24,6 +24,13 @@ public abstract class Player extends Changeable implements Runnable{
     }
 
     /**
+     * cleanup state after a game is over
+     */
+    public static void cleanup(){
+        currentId = 0;
+    }
+
+    /**
      * Given the count of each science, calculate the total victory points.
      * @param science1 the count of cuneiform tablet science cards
      * @param science2 the count of compass and right angle science cards
@@ -763,4 +770,5 @@ public abstract class Player extends Changeable implements Runnable{
     public String toString(){
         return "Player "+getPlayerId();
     }
+
 }

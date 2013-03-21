@@ -166,7 +166,10 @@ public abstract class Router extends Changeable implements ChangeListener {
     /**
      * Cleans up router after game is finished.
      */
-    public void cleanup() { this.valid = false; }
+    public void cleanup() {
+        this.valid = false;
+        Player.cleanup();
+    }
 
     /**
      * Check if this router is still valid
