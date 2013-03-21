@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.Timer;
 
 public class PlayerView extends JPanel {
     private static final int SELECTED_MULTIPLIER = 4;
@@ -24,7 +23,6 @@ public class PlayerView extends JPanel {
     private CardView selectedCardView;
     private Map<String, String> persistentMessages;
     private int timer = 0;
-    private Timer scheduledUpdateTimer;
     private boolean waiting;
     private boolean validPlay;
     private boolean validBuild;
@@ -46,13 +44,6 @@ public class PlayerView extends JPanel {
         validPlay = false;
         validBuild = false;
         update();
-        scheduledUpdateTimer = new Timer();
-        scheduledUpdateTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateTimer();
-            }
-        },new Date(),1000);
     }
 
     private CardSelectionListener cardSelectionListener = new CardSelectionListener(){
@@ -317,7 +308,11 @@ public class PlayerView extends JPanel {
         });
     }
 
-    private void updateTimer() {
+    /**
+     * Updates the timer associated with this view.
+     */
+    public void updateTimer() {
+        logger.info("Updating timer");
         if(waiting) {
             setMessage("Waiting...");
         } else if(timer <= 0) {
