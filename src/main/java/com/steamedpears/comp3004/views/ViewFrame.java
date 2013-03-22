@@ -64,6 +64,7 @@ public class ViewFrame extends JFrame {
     }
 
     public ViewFrame() {
+        super("Seven Wonders by Team 4");
         init();
     }
 }
