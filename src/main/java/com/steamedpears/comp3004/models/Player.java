@@ -2,6 +2,7 @@ package com.steamedpears.comp3004.models;
 
 import com.steamedpears.comp3004.models.players.AIPlayer;
 import com.steamedpears.comp3004.models.players.GreedyAIPlayer;
+import com.steamedpears.comp3004.models.players.HumanPlayer;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,6 +17,9 @@ import static com.steamedpears.comp3004.models.Asset.*;
 
 public abstract class Player extends Changeable implements Runnable{
     //static variables//////////////////////////////////////////////////////
+
+    public static boolean TESTING_AI = true;
+
     private static int currentId = 0;
     private static Logger log = Logger.getLogger(Player.class);
     private Thread thread;
@@ -57,6 +61,10 @@ public abstract class Player extends Changeable implements Runnable{
      */
     public static Player newAIPlayer(Wonder wonder, SevenWondersGame game){
         return new GreedyAIPlayer(wonder, game);
+    }
+
+    public static Player newHumanPlayer(Wonder wonder, SevenWondersGame game){
+        return TESTING_AI ? new AIPlayer(wonder, game) : new HumanPlayer(wonder, game);
     }
 
     //instance variables////////////////////////////////////////////////////

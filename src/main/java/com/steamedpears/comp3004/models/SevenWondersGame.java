@@ -358,7 +358,7 @@ public class SevenWondersGame extends Changeable implements Runnable{
             int playerId = Integer.parseInt(entry.getKey());
             String wonderId = entry.getValue().getAsString();
             if(playerId==router.getLocalPlayerId()){
-                addLocalPlayer(new HumanPlayer(getWonderById(wonderId), this));
+                addLocalPlayer(Player.newHumanPlayer(getWonderById(wonderId), this));
                 //addLocalPlayer(Player.newAIPlayer(getWonderById(wonderId), this)); //use this to bypass client GUI (?)
             }else{
                 addPlayer(Player.newAIPlayer(getWonderById(wonderId), this));

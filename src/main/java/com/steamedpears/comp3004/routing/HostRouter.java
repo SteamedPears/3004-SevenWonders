@@ -131,7 +131,7 @@ class HostRouter extends Router {
             Wonder wonder = wonderList.get(i);
             wonder.randomizeSide();
             if(i<=clients.size()){
-                player = new HumanPlayer(wonder, game);
+                player = Player.newHumanPlayer(wonder, game);
             }else{
                 player = Player.newAIPlayer(wonder, game);
             }
@@ -250,7 +250,10 @@ class HostRouter extends Router {
                 if(!gameOver){
                     startNextTurn();
                 }else{
-                    log.info("game is over");
+                    log.info("game is over: "+getLocalGame().tabulateResults());
+                    if(Player.TESTING_AI){
+                        System.exit(0);
+                    }
                 }
             }
             try {
