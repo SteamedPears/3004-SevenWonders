@@ -1,6 +1,7 @@
 package com.steamedpears.comp3004.models;
 
 import com.steamedpears.comp3004.models.players.AIPlayer;
+import com.steamedpears.comp3004.models.players.GreedyAIPlayer;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public abstract class Player extends Changeable implements Runnable{
      * @return an AIPlayer
      */
     public static Player newAIPlayer(Wonder wonder, SevenWondersGame game){
-        return new AIPlayer(wonder, game);
+        return new GreedyAIPlayer(wonder, game);
     }
 
     //instance variables////////////////////////////////////////////////////
@@ -769,6 +770,28 @@ public abstract class Player extends Changeable implements Runnable{
     @Override
     public String toString(){
         return "Player "+getPlayerId();
+    }
+
+    /**
+     * Creates a generic player with the same state to try hypothetical states out on.
+     * @return
+     */
+    @Override
+    public Player clone(){
+        log.debug("Cloning self");
+        Player clone = new Player(getWonder().getClone(),getGame(),getPlayerId()){
+            @Override
+            protected void handleTurn() {}
+        };
+
+        clone.getHand().addAll(getHand());
+        clone.getPlayedCards().addAll(getPlayedCards());
+        clone.setPlayerRight(getPlayerRight());
+        clone.setPlayerLeft(getPlayerLeft());
+        clone.gold = getGold();
+        clone.getMilitaryResults().addAll(getMilitaryResults());
+
+        return clone;
     }
 
 }
