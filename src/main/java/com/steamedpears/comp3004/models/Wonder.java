@@ -15,6 +15,15 @@ import java.util.Map;
 
 public class Wonder {
 
+    public Wonder getClone() {
+        Wonder clone = new Wonder(origin);
+        clone.setSide(getSide());
+        clone.currentStage = currentStage;
+        clone.builtFreeThisAge = builtFreeThisAge;
+        clone.undiscards = undiscards;
+        return clone;
+    }
+
     private class WonderSide{
         //stages are represented by cards for simplicity
         private List<Card> stages;
@@ -63,6 +72,7 @@ public class Wonder {
     private int currentStage = 0;
     private boolean builtFreeThisAge;
     private int undiscards;
+    private JsonObject origin;
 
     //constructor//////////////////////////////////////////////////
 
@@ -71,6 +81,7 @@ public class Wonder {
      * @param obj the JSON object describing the Wonder
      */
     public Wonder(JsonObject obj){
+        this.origin = obj;
         this.name = obj.getAsJsonPrimitive(PROP_WONDER_NAME).getAsString();
         this.sideA = new WonderSide(obj.getAsJsonObject(PROP_WONDER_SIDE_A));
         this.sideB = new WonderSide(obj.getAsJsonObject(PROP_WONDER_SIDE_B));
@@ -269,4 +280,5 @@ public class Wonder {
     public int hashCode(){
         return getName().hashCode();
     }
+
 }
