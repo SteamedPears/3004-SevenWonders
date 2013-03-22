@@ -4,6 +4,7 @@ import com.steamedpears.comp3004.models.players.AIPlayer;
 import com.steamedpears.comp3004.models.players.GreedyAIPlayer;
 import org.apache.log4j.Logger;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -795,13 +796,24 @@ public abstract class Player extends Changeable implements Runnable{
      * Creates a generic player with the same state to try hypothetical states out on.
      * @return
      */
-    @Override
-    public Player clone(){
+    public Player clone(Class<? extends AIPlayer> aiClass){
         log.debug("Cloning self");
-        Player clone = new Player(getWonder().getClone(),getGame(),getPlayerId()){
-            @Override
-            protected void handleTurn() {}
-        };
+        Player clone = null;
+        try {
+            clone = aiClass.getConstructor(Wonder.class, SevenWondersGame.class).newInstance(getWonder(), getGame());
+        } catch (InstantiationException e) {
+            log.debug("Could not instantiate AI class");
+            System.exit(-1);
+        } catch (IllegalAccessException e) {
+            log.debug("Could not instantiate AI class");
+            System.exit(-1);
+        } catch (InvocationTargetException e) {
+            log.debug("Could not instantiate AI class");
+            System.exit(-1);
+        } catch (NoSuchMethodException e) {
+            log.debug("Could not instantiate AI class");
+            System.exit(-1);
+        }
 
         clone.getHand().addAll(getHand());
         clone.getPlayedCards().addAll(getPlayedCards());

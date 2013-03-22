@@ -1,6 +1,5 @@
 package com.steamedpears.comp3004.models.players;
 
-import com.steamedpears.comp3004.models.Asset;
 import com.steamedpears.comp3004.models.AssetMap;
 import com.steamedpears.comp3004.models.AssetSet;
 import com.steamedpears.comp3004.models.Card;
@@ -25,7 +24,7 @@ public class GreedyAIPlayer extends AIPlayer {
 
     @Override
     protected void handleTurn(){
-        Player clone = this.clone();
+        Player clone = this.clone(GreedyAIPlayer.class);
         log.debug("Clone successful");
         PlayerCommand potentialCommand;
         int newTotal;
@@ -44,7 +43,7 @@ public class GreedyAIPlayer extends AIPlayer {
             potentialCommand = new PlayerCommand(PlayerCommand.PlayerCardAction.PLAY, card.getId());
             if(clone.isValid(potentialCommand)){
                 clone.getPlayedCards().add(card);
-                newTotal = clone.getFinalVictoryPoints() + getResourceHeuristic(clone, card);
+                newTotal = getCardPlayHeuristic(clone, card);
                 if(newTotal>bestTotal){
                     //best command yet, ship it! (until further notice)
                     log.debug("Playing card: "+card);
@@ -62,8 +61,9 @@ public class GreedyAIPlayer extends AIPlayer {
         //See the value of building the wonder
         potentialCommand = new PlayerCommand(PlayerCommand.PlayerCardAction.BUILD, getHand().get(0).getId());
         if(clone.isValid(potentialCommand)){
+            Card nextStage = clone.getWonder().getNextStage();
             clone.getWonder().buildNextStage(this);
-            newTotal = clone.getFinalVictoryPoints();
+            newTotal = getCardPlayHeuristic(clone, nextStage);
             if(newTotal>bestTotal){
                 //best command yet, ship it!
                 log.debug("Building wonder");
@@ -73,22 +73,47 @@ public class GreedyAIPlayer extends AIPlayer {
         }
     }
 
-    private int getResourceHeuristic(Player player, Card card) {
+    private static int getCardPlayHeuristic(Player player, Card card) {
         AssetMap assets = player.getOptionalAssetsSummary();
+        AssetMap leftAssets = player.getPlayerLeft().getAssets();
+        AssetMap rightAssets = player.getPlayerRight().getAssets();
         assets.add(player.getAssets());
         AssetMap cardAssets = card.getAssets(player);
         AssetSet cardAssetsOptional = card.getAssetsOptional(player);
-        int total = 0;
-        List resources = Arrays.asList(Asset.TRADEABLE_ASSET_TYPES);
+
+
+
+        int total = player.getFinalVictoryPoints();
+
+        List resources = Arrays.asList(TRADEABLE_ASSET_TYPES);
+        List sciences = Arrays.asList(ASSET_SCIENCE_1, ASSET_SCIENCE_2, ASSET_SCIENCE_3);
         for(String key: cardAssets.keySet()){
             if(resources.contains(key)){
                 total+= 2*(2*cardAssets.get(key)-assets.get(key));
+            }
+            if(sciences.contains(key)){
+                total+=3;
+            }
+            if(key.equals(ASSET_MILITARY_POWER)){
+                int delta =  cardAssets.get(ASSET_MILITARY_POWER);
+                int ownPower = assets.get(ASSET_MILITARY_POWER);
+                int leftPower = leftAssets.get(ASSET_MILITARY_POWER);
+                int rightPower = rightAssets.get(ASSET_MILITARY_POWER);
+                if(ownPower<=leftPower && ownPower+delta>=leftPower){
+                    total+=5;
+                }
+                if(ownPower<=rightPower && ownPower+delta>=rightPower){
+                    total+=5;
+                }
             }
         }
 
         for(String key: cardAssetsOptional){
             if(resources.contains(key)){
                 total+= 2*(2*cardAssets.get(key)-assets.get(key));
+            }
+            if(sciences.contains(key)){
+                total+=3;
             }
         }
         log.debug(card.getId()+": "+total);
