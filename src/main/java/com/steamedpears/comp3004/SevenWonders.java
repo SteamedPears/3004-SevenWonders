@@ -1,18 +1,16 @@
 package com.steamedpears.comp3004;
 
-import com.steamedpears.comp3004.models.AssetMap;
-import com.steamedpears.comp3004.models.Player;
-import com.steamedpears.comp3004.models.SevenWondersGame;
+import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
-import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.*;
 
 import org.apache.log4j.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.io.File;
+import javax.swing.event.*;
+import java.io.*;
+import java.util.*;
 
 public class SevenWonders {
 
@@ -38,6 +36,7 @@ public class SevenWonders {
     private Router router;
     private boolean isHost;
     private boolean gameStarted;
+    private java.util.Timer scheduledUpdateTimer;
 
     private ViewFrame view;
     private NewGameDialog newGameDialog;
@@ -48,6 +47,15 @@ public class SevenWonders {
 
     public SevenWonders() {
         view = new ViewFrame();
+        scheduledUpdateTimer = new java.util.Timer();
+        scheduledUpdateTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if(playerView != null) {
+                    playerView.updateTimer();
+                }
+            }
+        },new Date(),1000);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

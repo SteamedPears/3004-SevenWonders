@@ -702,9 +702,28 @@ public abstract class Player extends Changeable implements Runnable{
 
     /**
      * gets the final total victory points for this player
+     *
      * @return the final total victory points for this player
      */
     public int getFinalVictoryPoints() {
+        int total = 0;
+        AssetMap assets = getAssets();
+        if (assets.get(ASSET_GUILD_COPY) > 0) {
+            List<Card> guildChoices = new ArrayList<Card>();
+            guildChoices.addAll(getPlayerLeft().getGuilds());
+            guildChoices.addAll(getPlayerRight().getGuilds());
+            for (Card guild : guildChoices) {
+                playedCards.add(guild);
+                total = Math.max(total, getFinalVictoryPointsInternal());
+                playedCards.remove(guild);
+            }
+        } else {
+            total = getFinalVictoryPointsInternal();
+        }
+        return total;
+    }
+
+    private int getFinalVictoryPointsInternal(){
         int total = 0;
         AssetMap assets = getAssets();
         List<AssetSet> optionalAssets = getOptionalAssetsComplete();
@@ -794,4 +813,17 @@ public abstract class Player extends Changeable implements Runnable{
         return clone;
     }
 
+    /**
+     * Get all the guilds this player has played
+     * @return the guilds the player has played
+     */
+    public Set<Card> getGuilds() {
+        Set<Card> guilds = new HashSet<Card>();
+        for(Card card: playedCards){
+            if(card.getColor().equals(COLOR_PURPLE)){
+                guilds.add(card);
+            }
+        }
+        return guilds;
+    }
 }
