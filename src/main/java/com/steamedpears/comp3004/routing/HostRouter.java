@@ -8,13 +8,10 @@ import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
-import com.steamedpears.comp3004.models.players.HumanPlayer;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -131,7 +128,7 @@ class HostRouter extends Router {
             Wonder wonder = wonderList.get(i);
             wonder.randomizeSide();
             if(i<=clients.size()){
-                player = new HumanPlayer(wonder, game);
+                player = Player.newHumanPlayer(wonder, game);
             }else{
                 player = Player.newAIPlayer(wonder, game);
             }
@@ -250,7 +247,13 @@ class HostRouter extends Router {
                 if(!gameOver){
                     startNextTurn();
                 }else{
-                    log.info("game is over");
+                    log.info("game is over: "+getLocalGame().tabulateResults());
+                    for(Player player: getLocalGame().getPlayers()){
+                        log.info(player+" had "+player.getAssets());
+                    }
+                    if(Player.TESTING_AI){
+                        System.exit(0);
+                    }
                 }
             }
             try {

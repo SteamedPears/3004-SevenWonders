@@ -3,12 +3,7 @@ package com.steamedpears.comp3004.models;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class AssetMap extends HashMap<String, Integer> {
 
@@ -204,6 +199,129 @@ public class AssetMap extends HashMap<String, Integer> {
         }
         //if we've gotten to here, no choice in this subtree works
         return false;
+    }
+
+    /**
+     * Get some valid choices for trades that pay for the cost described by this AssetMap, or null if none appears to exist
+     * NOTE: this method is not guaranteed to always return a correct or optimal answer
+     * @param choices List of AssetMaps representing the definite resources of a target
+     * @param optionalChoices List of Lists of AssetSets representing the optional choices each target has
+     * @param discounts the discounts are target has
+     * @return The valid choices, or null if none is found
+     */
+    public List<AssetMap> getValidChoices(List<AssetMap> choices, List<List<AssetSet>> optionalChoices, List<AssetSet> discounts){
+        List<AssetMap> result = new ArrayList<AssetMap>();
+        Map<AssetMap, AssetMap> originalAssociations = new HashMap<AssetMap,AssetMap>();
+        for(int i=0; i<choices.size(); ++i){
+            result.add(new AssetMap());
+            originalAssociations.put(choices.get(i),result.get(i));
+        }
+
+        AssetMap costLessBase = new AssetMap();
+        costLessBase.add(this);
+
+        CheapestComparator cheapestComparator = new CheapestComparator(choices, discounts);
+
+        for(String asset: keySet()){
+            cheapestComparator.setAsset(asset);
+            Collections.sort(choices, cheapestComparator);
+            for(AssetMap choiceMap: choices){
+                int amount = Math.min(choiceMap.get(asset), costLessBase.get(asset));
+                costLessBase.subtract(asset, amount);
+                originalAssociations.get(choiceMap).add(asset, amount);
+            }
+        }
+
+        //note: this method call changes result
+        if(costLessBase.recursiveSearchForValidChoices(result, optionalChoices, 0)){
+            return null;
+        }
+
+        return result;
+    }
+
+    private boolean recursiveSearchForValidChoices(List<AssetMap> result, List<List<AssetSet>> choicesList, int index){
+        int offset = 0;
+        int targetNumber = 0;
+        int totalSize = 0;
+
+        for(List<AssetSet> choices: choicesList){
+            totalSize+=choices.size();
+        }
+
+        List<AssetSet> choices = choicesList.get(0);
+
+        while(index-offset>=choices.size()){
+            offset+=choices.size();
+            targetNumber++;
+            if(targetNumber>=choicesList.size()){
+                return isEmpty();
+            }
+            choices = choicesList.get(targetNumber);
+        }
+
+        AssetMap currentResult = result.get(targetNumber);
+
+        Set<String> choice = choices.get(index);
+        //loop over every asset in this choice
+        boolean everRecursed = false;
+        for(String asset: choice){
+            //if this asset would help pay for the cost, try it
+            if(containsKey(asset)){
+                everRecursed = true;
+                subtract(asset);
+                currentResult.add(asset);
+                //see if we've found a solution
+                boolean foundSolution = isEmpty();
+
+                //if that didn't solve it, recurse on the next choice
+                if(!foundSolution && index+1<totalSize){
+                    foundSolution = recursiveSearchForValidChoices(choices, index+1);
+                }
+                //if we found a solution, return true; otherwise put the asset back and try the next asset in the choice
+                if(foundSolution){
+                    return true;
+                }
+
+                //note: this undo only happens if we didn't find a result
+                add(asset);
+                currentResult.remove(asset);
+            }
+        }
+        //this asset is totally useless, go around it!
+        if(!everRecursed && index+1<totalSize){
+            return recursiveSearchForValidChoices(choices, index+1);
+        }
+
+        //if we've gotten to here, no choice in this subtree works
+        return false;
+    }
+
+    private class CheapestComparator implements Comparator<AssetMap>{
+        private String asset;
+        private Map<AssetMap, AssetSet> discounts;
+
+        private CheapestComparator(List<AssetMap> choices, List<AssetSet> discounts){
+            this.discounts = new HashMap<AssetMap, AssetSet>();
+            for(int i=0; i<choices.size(); ++i){
+                this.discounts.put(choices.get(i), discounts.get(i));
+            }
+        }
+
+        @Override
+        public int compare(AssetMap o1, AssetMap o2) {
+            if(discounts.get(o1).contains(asset)){
+                return 1;
+            }else if(discounts.get(o2).contains(asset)){
+                return -1;
+            }else{
+                return 0;
+            }
+        }
+
+        private void setAsset(String asset){
+            this.asset = asset;
+        }
     }
 
 }
