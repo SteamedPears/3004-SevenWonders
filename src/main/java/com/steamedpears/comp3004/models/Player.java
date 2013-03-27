@@ -18,7 +18,7 @@ import static com.steamedpears.comp3004.models.Asset.*;
 public abstract class Player extends Changeable implements Runnable{
     //static variables//////////////////////////////////////////////////////
 
-    public static boolean TESTING_AI = true;
+    public static boolean TESTING_AI = false;
 
     private static int currentId = 0;
     private static Logger log = Logger.getLogger(Player.class);
@@ -226,7 +226,12 @@ public abstract class Player extends Changeable implements Runnable{
         changeGold(-leftTotal-rightTotal);
     }
 
-    private Set<String> getDiscounts(Player targetPlayer) {
+    /**
+     * Gets the discounts this player gets when trading with the given player
+     * @param targetPlayer the player to trade with
+     * @return a set of assets which are discounted
+     */
+    public AssetSet getDiscounts(Player targetPlayer) {
         String player;
         if(targetPlayer.equals(getPlayerLeft())){
             player = Card.PLAYER_LEFT;
@@ -236,7 +241,7 @@ public abstract class Player extends Changeable implements Runnable{
             //can't trade with this player
             return new AssetSet();
         }
-        Set<String> discounts = new HashSet<String>();
+        AssetSet discounts = new AssetSet();
 
         List<Card> cards = new ArrayList<Card>();
         cards.addAll(playedCards);
@@ -251,7 +256,13 @@ public abstract class Player extends Changeable implements Runnable{
         return discounts;
     }
 
-    private int getCostOfTrade(Map<String,Integer> purchases, Set<String> discounts) {
+    /**
+     * gets the cost of a given trade
+     * @param purchases an AssetMap of the purchases made
+     * @param discounts as AssetSet of the discounts applicable to this trade
+     * @return the gold cost of the trade
+     */
+    public int getCostOfTrade(AssetMap purchases, AssetSet discounts) {
         if(purchases==null){
             return 0;
         }else{
@@ -564,7 +575,6 @@ public abstract class Player extends Changeable implements Runnable{
         privateAssets.put(ASSET_WONDER_STAGES, wonder.getCurrentStage());
         return privateAssets;
     }
-
     /**
      * gets all the Assets the player definitely has before any decisions
      * @return the map
@@ -808,18 +818,19 @@ public abstract class Player extends Changeable implements Runnable{
         log.debug("Cloning self");
         Player clone = null;
         try {
-            clone = aiClass.getConstructor(Wonder.class, SevenWondersGame.class).newInstance(getWonder(), getGame());
+            clone = aiClass.getConstructor(Wonder.class, SevenWondersGame.class)
+                    .newInstance(getWonder(), getGame());
         } catch (InstantiationException e) {
-            log.debug("Could not instantiate AI class");
+            log.error("Could not instantiate AI class",e);
             System.exit(-1);
         } catch (IllegalAccessException e) {
-            log.debug("Could not instantiate AI class");
+            log.error("Could not instantiate AI class",e);
             System.exit(-1);
         } catch (InvocationTargetException e) {
-            log.debug("Could not instantiate AI class");
+            log.error("Could not instantiate AI class",e);
             System.exit(-1);
         } catch (NoSuchMethodException e) {
-            log.debug("Could not instantiate AI class");
+            log.error("Could not instantiate AI class",e);
             System.exit(-1);
         }
 
@@ -829,6 +840,7 @@ public abstract class Player extends Changeable implements Runnable{
         clone.setPlayerLeft(getPlayerLeft());
         clone.gold = getGold();
         clone.getMilitaryResults().addAll(getMilitaryResults());
+        clone.id = id;
 
         return clone;
     }

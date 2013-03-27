@@ -9,8 +9,10 @@ import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static com.steamedpears.comp3004.models.Asset.*;
 
@@ -34,6 +36,8 @@ public class GreedyAIPlayer extends AIPlayer {
         log.debug("Starting with null move");
         setCurrentCommand(PlayerCommand.getNullCommand(this));
 
+        AssetMap cloneAssets = clone.getAssets();
+
         //See the value of playing each card
         for(Card card: getHand()){
             if(Thread.interrupted()){
@@ -41,9 +45,10 @@ public class GreedyAIPlayer extends AIPlayer {
                 return;
             }
             potentialCommand = new PlayerCommand(PlayerCommand.PlayerCardAction.PLAY, card.getId());
+            setValidTradesFor(clone, potentialCommand, cloneAssets);
             if(clone.isValid(potentialCommand)){
                 clone.getPlayedCards().add(card);
-                newTotal = getCardPlayHeuristic(clone, card);
+                newTotal = getCardPlayHeuristic(clone, potentialCommand);
                 if(newTotal>bestTotal){
                     //best command yet, ship it! (until further notice)
                     log.debug("Playing card: "+card);
@@ -60,10 +65,11 @@ public class GreedyAIPlayer extends AIPlayer {
         }
         //See the value of building the wonder
         potentialCommand = new PlayerCommand(PlayerCommand.PlayerCardAction.BUILD, getHand().get(0).getId());
+        setValidTradesFor(clone, potentialCommand, cloneAssets);
         if(clone.isValid(potentialCommand)){
             Card nextStage = clone.getWonder().getNextStage();
             clone.getWonder().buildNextStage(this);
-            newTotal = getCardPlayHeuristic(clone, nextStage);
+            newTotal = getCardPlayHeuristic(clone, potentialCommand);
             if(newTotal>bestTotal){
                 //best command yet, ship it!
                 log.debug("Building wonder");
@@ -73,7 +79,8 @@ public class GreedyAIPlayer extends AIPlayer {
         }
     }
 
-    private static int getCardPlayHeuristic(Player player, Card card) {
+    private static int getCardPlayHeuristic(Player player, PlayerCommand command) {
+        Card card = player.getGame().getCardById(command.cardID);
         AssetMap assets = player.getOptionalAssetsSummary();
         AssetMap leftAssets = player.getPlayerLeft().getAssets();
         AssetMap rightAssets = player.getPlayerRight().getAssets();
@@ -81,42 +88,81 @@ public class GreedyAIPlayer extends AIPlayer {
         AssetMap cardAssets = card.getAssets(player);
         AssetSet cardAssetsOptional = card.getAssetsOptional(player);
 
-
-
-        int total = player.getFinalVictoryPoints();
+        int tradeCost = player.getCostOfTrade(command.leftPurchases,player.getDiscounts(player.getPlayerLeft()))
+                + player.getCostOfTrade(command.rightPurchases,player.getDiscounts(player.getPlayerRight()));
+        player.changeGold(-tradeCost);
+        int base = player.getFinalVictoryPoints();
+        player.changeGold(tradeCost);
+        int heuristic = 0;
 
         List resources = Arrays.asList(TRADEABLE_ASSET_TYPES);
         List sciences = Arrays.asList(ASSET_SCIENCE_1, ASSET_SCIENCE_2, ASSET_SCIENCE_3);
+
         for(String key: cardAssets.keySet()){
             if(resources.contains(key)){
-                total+= 2*(2*cardAssets.get(key)-assets.get(key));
+                heuristic+= 3*(2*cardAssets.get(key)-assets.get(key));
             }
             if(sciences.contains(key)){
-                total+=3;
+                heuristic+=3;
             }
             if(key.equals(ASSET_MILITARY_POWER)){
                 int delta =  cardAssets.get(ASSET_MILITARY_POWER);
-                int ownPower = assets.get(ASSET_MILITARY_POWER);
+                int ownPower = assets.get(ASSET_MILITARY_POWER)-delta;
                 int leftPower = leftAssets.get(ASSET_MILITARY_POWER);
                 int rightPower = rightAssets.get(ASSET_MILITARY_POWER);
                 if(ownPower<=leftPower && ownPower+delta>=leftPower){
-                    total+=5;
+                    heuristic+=3*(5-player.getGame().getAge());
                 }
                 if(ownPower<=rightPower && ownPower+delta>=rightPower){
-                    total+=5;
+                    heuristic+=3*(5-player.getGame().getAge());
                 }
             }
         }
 
         for(String key: cardAssetsOptional){
             if(resources.contains(key)){
-                total+= 2*(2*cardAssets.get(key)-assets.get(key));
+                heuristic+= 3*(2*cardAssets.get(key)-assets.get(key));
             }
             if(sciences.contains(key)){
-                total+=3;
+                heuristic+=3;
             }
         }
-        log.debug(card.getId()+": "+total);
-        return total;
+        log.debug(player+" - base: "+base+"; heur: "+heuristic+"; card: "+card.getId());
+        return base+heuristic;
     }
+
+    private static void setValidTradesFor(Player player, PlayerCommand command, AssetMap playerAssets){
+        Card card = player.getGame().getCardById(command.cardID);
+        if(card.canAfford(player, command)){
+            return;
+        }
+
+        AssetMap costLessBase = new AssetMap();
+
+        costLessBase.add(card.getCost(player));
+        costLessBase.subtract(playerAssets);
+
+        List<AssetMap> choices = new ArrayList<AssetMap>();
+        List<List<AssetSet>> optionalChoices = new ArrayList<List<AssetSet>>();
+        List<AssetSet> discounts = new ArrayList<AssetSet>();
+        List<Player> targets = Arrays.asList(player.getPlayerLeft(), player.getPlayerRight());
+
+        for(Player target: targets){
+            choices.add(target.getAssetsTradeable());
+            optionalChoices.add(target.getOptionalAssetsCompleteTradeable());
+            discounts.add(player.getDiscounts(target));
+        }
+
+        //please work...
+        log.debug(player+" - Looking for valid trades for "+card.getId());
+        List<AssetMap> result = costLessBase.getValidChoices(choices, optionalChoices, discounts);
+        if(result!=null){
+            command.leftPurchases = result.get(0);
+            command.rightPurchases = result.get(1);
+            log.debug(player+" - Got positive result for "+command+": "+command.leftPurchases+" "+command.rightPurchases);
+        }else{
+            log.debug(player+" - Got negative result for "+command);
+        }
+    }
+
 }
