@@ -1,4 +1,4 @@
-package com.steamedpears.comp3004.models.players;
+package com.steamedpears.comp3004.models.players.strategies;
 
 import com.steamedpears.comp3004.models.AssetMap;
 import com.steamedpears.comp3004.models.AssetSet;
@@ -7,26 +7,22 @@ import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
+import com.steamedpears.comp3004.models.players.AIPlayer;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static com.steamedpears.comp3004.models.Asset.*;
 
-public class GreedyAIPlayer extends AIPlayer {
+public class GreedyStrategy implements Strategy {
 
-    private static Logger log = Logger.getLogger(GreedyAIPlayer.class);
-
-    public GreedyAIPlayer(Wonder wonder, SevenWondersGame game) {
-        super(wonder, game);
-    }
+    private static Logger log = Logger.getLogger(GreedyStrategy.class);
 
     @Override
-    protected void handleTurn(){
-        Player clone = this.clone(GreedyAIPlayer.class);
+    public void handleTurn(Player player){
+        Player clone = player.clone(new GreedyStrategy());
         log.debug("Clone successful");
         PlayerCommand potentialCommand;
         int newTotal;
@@ -34,12 +30,12 @@ public class GreedyAIPlayer extends AIPlayer {
         //Default to the null command
         int bestTotal = clone.getFinalVictoryPoints()+1;
         log.debug("Starting with null move");
-        setCurrentCommand(PlayerCommand.getNullCommand(this));
+        player.setCurrentCommand(PlayerCommand.getNullCommand(player));
 
         AssetMap cloneAssets = clone.getAssets();
 
         //See the value of playing each card
-        for(Card card: getHand()){
+        for(Card card: player.getHand()){
             if(Thread.interrupted()){
                 log.debug("AI thread Interrupted");
                 return;
@@ -52,7 +48,7 @@ public class GreedyAIPlayer extends AIPlayer {
                 if(newTotal>bestTotal){
                     //best command yet, ship it! (until further notice)
                     log.debug("Playing card: "+card);
-                    setCurrentCommand(potentialCommand);
+                    player.setCurrentCommand(potentialCommand);
                     bestTotal = newTotal;
                 }
                 clone.getPlayedCards().remove(card);
@@ -64,16 +60,16 @@ public class GreedyAIPlayer extends AIPlayer {
             return;
         }
         //See the value of building the wonder
-        potentialCommand = new PlayerCommand(PlayerCommand.PlayerCardAction.BUILD, getHand().get(0).getId());
+        potentialCommand = new PlayerCommand(PlayerCommand.PlayerCardAction.BUILD, player.getHand().get(0).getId());
         setValidTradesFor(clone, potentialCommand, cloneAssets);
         if(clone.isValid(potentialCommand)){
             Card nextStage = clone.getWonder().getNextStage();
-            clone.getWonder().buildNextStage(this);
+            clone.getWonder().buildNextStage(player);
             newTotal = getCardPlayHeuristic(clone, potentialCommand);
             if(newTotal>bestTotal){
                 //best command yet, ship it!
                 log.debug("Building wonder");
-                setCurrentCommand(potentialCommand);
+                player.setCurrentCommand(potentialCommand);
                 bestTotal = newTotal;
             }
         }
