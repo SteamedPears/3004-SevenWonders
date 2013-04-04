@@ -1,22 +1,21 @@
-package com.steamedpears.comp3004.models.players;
+package com.steamedpears.comp3004.models.players.strategies;
 
 import com.steamedpears.comp3004.models.Card;
+import com.steamedpears.comp3004.models.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
+import com.steamedpears.comp3004.models.players.AIPlayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RandomAIPlayer extends AIPlayer{
-    public RandomAIPlayer(Wonder wonder, SevenWondersGame game){
-        super(wonder, game);
-    }
+public class RandomStrategy implements Strategy {
 
     @Override
-    protected void handleTurn() {
-        List<Card> hand = getHand();
+    public void handleTurn(Player player) {
+        List<Card> hand = player.getHand();
         PlayerCommand command = new PlayerCommand();
 
         //get a random order to try the cards in
@@ -30,21 +29,21 @@ public class RandomAIPlayer extends AIPlayer{
         //just try to play any card
         for(int choice: orderOfChoices){
             Card curCard = hand.get(choice);
-            if(curCard.canAfford(this, command)){
+            if(curCard.canAfford(player, command)){
                 command.cardID = curCard.getId();
                 command.action = PlayerCommand.PlayerCardAction.PLAY;
-                setCurrentCommand(command);
+                player.setCurrentCommand(command);
                 return;
             }
         }
 
         //can't play any card, try to build wonder
-        if(!hasFinishedWonder()){
-            Card nextStage = getWonder().getNextStage();
-            if(nextStage.canAfford(this, command)){
+        if(!player.hasFinishedWonder()){
+            Card nextStage = player.getWonder().getNextStage();
+            if(nextStage.canAfford(player, command)){
                 command.cardID = hand.get(orderOfChoices.get(0)).getId();
                 command.action = PlayerCommand.PlayerCardAction.BUILD;
-                setCurrentCommand(command);
+                player.setCurrentCommand(command);
                 return;
             }
         }
@@ -52,7 +51,7 @@ public class RandomAIPlayer extends AIPlayer{
         //can't build, just discard
         command.cardID = hand.get(orderOfChoices.get(0)).getId();
         command.action = PlayerCommand.PlayerCardAction.DISCARD;
-        setCurrentCommand(command);
+        player.setCurrentCommand(command);
     }
 
 }

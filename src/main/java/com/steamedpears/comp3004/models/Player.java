@@ -1,8 +1,10 @@
 package com.steamedpears.comp3004.models;
 
 import com.steamedpears.comp3004.models.players.AIPlayer;
-import com.steamedpears.comp3004.models.players.GreedyAIPlayer;
+import com.steamedpears.comp3004.models.players.strategies.GreedyStrategy;
 import com.steamedpears.comp3004.models.players.HumanPlayer;
+import com.steamedpears.comp3004.models.players.strategies.NullStrategy;
+import com.steamedpears.comp3004.models.players.strategies.Strategy;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
@@ -60,11 +62,11 @@ public abstract class Player extends Changeable implements Runnable{
      * @return an AIPlayer
      */
     public static Player newAIPlayer(Wonder wonder, SevenWondersGame game){
-        return new GreedyAIPlayer(wonder, game);
+        return new AIPlayer(wonder, game, new GreedyStrategy());
     }
 
     public static Player newHumanPlayer(Wonder wonder, SevenWondersGame game){
-        return TESTING_AI ? new AIPlayer(wonder, game) : new HumanPlayer(wonder, game);
+        return TESTING_AI ? new AIPlayer(wonder, game, new NullStrategy()) : new HumanPlayer(wonder, game);
     }
 
     //instance variables////////////////////////////////////////////////////
@@ -812,28 +814,12 @@ public abstract class Player extends Changeable implements Runnable{
 
     /**
      * Creates a generic player with the same state to try hypothetical states out on.
-     * @return
+     * @param strategy the Strategy this clone should use
+     * @return the clone
      */
-    public Player clone(Class<? extends AIPlayer> aiClass){
+    public Player clone(Strategy strategy){
         log.debug("Cloning self");
-        Player clone = null;
-        try {
-            clone = aiClass.getConstructor(Wonder.class, SevenWondersGame.class)
-                    .newInstance(getWonder(), getGame());
-        } catch (InstantiationException e) {
-            log.error("Could not instantiate AI class",e);
-            System.exit(-1);
-        } catch (IllegalAccessException e) {
-            log.error("Could not instantiate AI class",e);
-            System.exit(-1);
-        } catch (InvocationTargetException e) {
-            log.error("Could not instantiate AI class",e);
-            System.exit(-1);
-        } catch (NoSuchMethodException e) {
-            log.error("Could not instantiate AI class",e);
-            System.exit(-1);
-        }
-
+        Player clone = new AIPlayer(getWonder(), getGame(), strategy);
         clone.getHand().addAll(getHand());
         clone.getPlayedCards().addAll(getPlayedCards());
         clone.setPlayerRight(getPlayerRight());
