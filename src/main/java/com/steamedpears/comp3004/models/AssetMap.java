@@ -168,8 +168,10 @@ public class AssetMap extends HashMap<String, Integer> {
     }
 
     private boolean recursiveSearchForValidChoices(List<AssetSet> choices, int index){
-        if(choices.isEmpty()){
-            return isEmpty();
+        if(isEmpty()){
+            return true;
+        }else if(choices.isEmpty()){
+            return false;
         }
         Set<String> choice = choices.get(index);
         //loop over every asset in this choice
