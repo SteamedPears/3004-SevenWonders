@@ -84,7 +84,7 @@ public class AssetView extends JPanel {
         resizeJLabelIcon(stageLabel,-1,60);
         add(stageLabel, MIG_CONFIG);
         for(Player player : players) {
-            if(players.size() > 1) add(new JLabel("" + player.getPlayerId()));
+            if(players.size() > 1) add(new JLabel("Player " + player.getPlayerId()));
             else add(new JLabel());
             AssetMap playerAssets = player.getAssets();
             for(String asset : Asset.ASSET_TYPES) {

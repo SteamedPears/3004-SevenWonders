@@ -17,5 +17,4 @@ public class HighLevelView extends JPanel {
         table = new AssetView(players);
         add(table,"gapleft 0, gaptop 1, span 8");
     }
-
 }
