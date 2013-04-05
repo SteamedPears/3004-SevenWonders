@@ -49,9 +49,6 @@ public class AssetView extends JPanel {
         add(newJLabel(STONE_ICON), MIG_CONFIG);
         add(newJLabel(CLAY_ICON), MIG_CONFIG);
         add(newJLabel(ORE_ICON), MIG_CONFIG);
-        add(newJLabel(LOOM_ICON), MIG_CONFIG);
-        add(newJLabel(PAPYRUS_ICON), MIG_CONFIG);
-        add(newJLabel(GLASS_ICON), MIG_CONFIG);
     }
 
     public AssetView(Player player) {
