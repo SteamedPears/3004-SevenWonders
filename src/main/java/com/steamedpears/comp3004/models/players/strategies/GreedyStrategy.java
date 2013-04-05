@@ -91,7 +91,7 @@ public class GreedyStrategy implements Strategy {
         player.changeGold(tradeCost);
         int heuristic = 0;
 
-        List resources = Arrays.asList(TRADEABLE_ASSET_TYPES);
+        List resources = Arrays.asList(ALL_ASSET_TYPES);
         List sciences = Arrays.asList(ASSET_SCIENCE_1, ASSET_SCIENCE_2, ASSET_SCIENCE_3);
 
         for(String key: cardAssets.keySet()){

@@ -43,9 +43,7 @@ public class TradesView extends JPanel {
 
         add(new JLabel("Left"));
         Player leftNeighbor = player.getPlayerLeft();
-        add(new AssetView(leftNeighbor.getAssetsTradeable()
-        ),
-                "span");
+        add(new AssetView(leftNeighbor.getAssetsTradeable()),"span");
 
         add(new JLabel(""));
         for(final String s : Asset.TRADEABLE_ASSET_TYPES) {
