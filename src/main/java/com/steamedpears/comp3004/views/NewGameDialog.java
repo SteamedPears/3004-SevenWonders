@@ -2,6 +2,7 @@ package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.*;
 import com.steamedpears.comp3004.routing.*;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -9,6 +10,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class NewGameDialog extends GameDialog {
+
+    private static Logger logger = Logger.getLogger(SevenWonders.class);
 
     // Configuration
     private boolean isHost = true;
@@ -142,10 +145,12 @@ public class NewGameDialog extends GameDialog {
         for(int i = SevenWonders.MIN_PLAYERS; i <= SevenWonders.MAX_PLAYERS; ++i) {
             playersComboBox.addItem(i);
         }
-        playersComboBox.addPropertyChangeListener(new PropertyChangeListener() {
+        playersComboBox.addItemListener(new ItemListener() {
             @Override
-            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+            public void itemStateChanged(ItemEvent itemEvent) {
+                logger.info("Old value: " + players);
                 players = (Integer)playersComboBox.getSelectedItem();
+                logger.info("New value: " + players);
             }
         });
         add(playersComboBox);
