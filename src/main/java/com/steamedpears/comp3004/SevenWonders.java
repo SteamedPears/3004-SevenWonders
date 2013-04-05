@@ -74,7 +74,7 @@ public class SevenWonders {
      * @param players The desired number of players, if this computer is hosting the game.
      */
     public void createGame(boolean isHosting, String ipAddress, int port, int players) {
-        logger.info("Creating game");
+        logger.info("Creating game with " + players + " players");
         this.isHost = isHosting;
         closeNewGameDialog();
         if(isHosting){
