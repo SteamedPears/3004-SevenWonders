@@ -177,7 +177,7 @@ public class SevenWonders {
             }
         });
         view.addTab(tradesView,"Trades");
-        highLevelView = new HighLevelView(this);
+        highLevelView = new HighLevelView(this, thisPlayer);
         view.addTab(highLevelView,"Table");
         for(Player player : getGame().getPlayers()) {
             String title = "Player " + player.getPlayerId();
