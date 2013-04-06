@@ -34,6 +34,9 @@ public class AssetView extends JPanel {
     public static final String SHIELD_ICON = PATH_ICON + "shield" + IMAGE_TYPE_SUFFIX;
     public static final String STAGE_ICON = PATH_ICON + "wonder" + IMAGE_TYPE_SUFFIX;
 
+    List<Player> players;
+    Player thisPlayer;
+
     static Logger log = Logger.getLogger(ViewFrame.class);
 
     public static final String MIG_CONFIG = "w 60!,gaptop 0";
@@ -54,11 +57,54 @@ public class AssetView extends JPanel {
         add(newJLabel(GLASS_ICON), MIG_CONFIG);
     }
 
-    public AssetView(Player player) {
-        this(Arrays.asList(player));
+    /**
+     * Display a given player's resources
+     * @param p The player to be listed
+     */
+    public AssetView(Player p) {
+        players = Arrays.asList(p);
+        thisPlayer = null;
+        update();
     }
 
-    public AssetView(List<Player> players) {
+    /**
+     * Display the resources of a list of players, but label p as "You".
+     * @param ps The players to be listed
+     * @param p The player to be labeled
+     */
+    public AssetView(List<Player> ps, Player p) {
+        players = ps;
+        thisPlayer = p;
+        update();
+    }
+
+    /**
+     * Display the resources of a list of players
+     * @param ps The players to be listed
+     */
+    public AssetView(List<Player> ps) {
+        players = ps;
+        thisPlayer = null;
+        update();
+    }
+
+    /**
+     * Display the resources of an AssetMap
+     * @param assets An Asset Map
+     */
+    public AssetView(AssetMap assets) {
+        setLayout(new MigLayout(
+                "aligny top,wrap 15", // Layout Constraints
+                "0[]0[]0", // Column Constraints
+                "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
+        ));
+
+        for(String asset : Asset.TRADEABLE_ASSET_TYPES) {
+            add(newTextJLabel("" + assets.get(asset)),MIG_CONFIG);
+        }
+    }
+
+    public void update() {
         setLayout(new MigLayout(
                 "aligny top,wrap 15, gap 0", // Layout Constraints
                 "0[]0[]0", // Column Constraints
@@ -84,7 +130,18 @@ public class AssetView extends JPanel {
         resizeJLabelIcon(stageLabel,-1,60);
         add(stageLabel, MIG_CONFIG);
         for(Player player : players) {
-            if(players.size() > 1) add(new JLabel(player.toString()));
+            if(players.size() > 1) {
+
+                if (thisPlayer != null && thisPlayer.getPlayerId() == player.getPlayerId()) {
+                    add(new JLabel("You"));
+                } else if (thisPlayer != null && player.equals(thisPlayer.getPlayerLeft())) {
+                    add(new JLabel("Left"));
+                } else if (thisPlayer != null && player.equals(thisPlayer.getPlayerRight())) {
+                    add(new JLabel("Right"));
+                } else {
+                    add(new JLabel(player.toString()));
+                }
+            }
             else add(new JLabel());
             AssetMap playerAssets = player.getAssets();
             for(String asset : Asset.ASSET_TYPES) {
@@ -98,17 +155,6 @@ public class AssetView extends JPanel {
                 new ImageIcon(((ImageIcon)label.getIcon()).getImage().getScaledInstance(-1,60,Image.SCALE_SMOOTH)));
     }
 
-    public AssetView(AssetMap assets) {
-        setLayout(new MigLayout(
-                "aligny top,wrap 15", // Layout Constraints
-                "0[]0[]0", // Column Constraints
-                "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
-        ));
-
-        for(String asset : Asset.TRADEABLE_ASSET_TYPES) {
-            add(newTextJLabel("" + assets.get(asset)),MIG_CONFIG);
-        }
-    }
 
     private static URL getImagePath(String image){
         URL result = AssetView.class.getResource(image);
