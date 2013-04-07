@@ -1,4 +1,4 @@
-package com.steamedpears.comp3004.models;
+package com.steamedpears.comp3004.models.assets;
 
 public final class Asset {
 

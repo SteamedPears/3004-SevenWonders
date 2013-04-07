@@ -5,7 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.steamedpears.comp3004.SevenWonders;
-import com.steamedpears.comp3004.models.players.HumanPlayer;
+import com.steamedpears.comp3004.models.assets.Asset;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.players.Player;
 import com.steamedpears.comp3004.routing.Router;
 import org.apache.log4j.Logger;
 

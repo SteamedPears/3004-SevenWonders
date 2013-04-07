@@ -4,6 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.assets.AssetSet;
+import com.steamedpears.comp3004.models.players.Player;
 import org.apache.log4j.Logger;
 
 import java.net.MalformedURLException;
@@ -13,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.steamedpears.comp3004.models.Asset.*;
+import static com.steamedpears.comp3004.models.assets.Asset.*;
 
 public class Card {
     //constants/////////////////////////////////////////////////////

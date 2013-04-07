@@ -1,6 +1,9 @@
 package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonParser;
+import com.steamedpears.comp3004.models.assets.Asset;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.assets.AssetSet;
 import org.junit.Test;
 
 import java.util.ArrayList;

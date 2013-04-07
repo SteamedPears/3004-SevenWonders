@@ -1,11 +1,8 @@
 package com.steamedpears.comp3004.models.players.strategies;
 
 import com.steamedpears.comp3004.models.Card;
-import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.players.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
-import com.steamedpears.comp3004.models.SevenWondersGame;
-import com.steamedpears.comp3004.models.Wonder;
-import com.steamedpears.comp3004.models.players.AIPlayer;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -4,6 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
+import com.steamedpears.comp3004.models.assets.Asset;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.assets.AssetSet;
+import com.steamedpears.comp3004.models.players.Player;
 import org.apache.log4j.Logger;
 
 import java.net.MalformedURLException;

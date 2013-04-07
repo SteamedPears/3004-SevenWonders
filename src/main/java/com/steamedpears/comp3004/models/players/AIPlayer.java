@@ -1,7 +1,5 @@
 package com.steamedpears.comp3004.models.players;
 
-import com.steamedpears.comp3004.models.Player;
-import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.Wonder;
 import com.steamedpears.comp3004.models.players.strategies.Strategy;

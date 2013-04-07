@@ -1,6 +1,6 @@
 package com.steamedpears.comp3004.models.players.strategies;
 
-import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.players.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 
 public class NullStrategy implements Strategy {
