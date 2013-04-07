@@ -1,6 +1,8 @@
 package com.steamedpears.comp3004.views;
 
-import com.steamedpears.comp3004.models.*;
+import com.steamedpears.comp3004.models.assets.Asset;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.players.Player;
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 

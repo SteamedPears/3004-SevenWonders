@@ -1,4 +1,4 @@
-package com.steamedpears.comp3004.models;
+package com.steamedpears.comp3004.models.assets;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -1,5 +1,8 @@
 package com.steamedpears.comp3004.models;
 
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.players.Player;
+
 public class PlayerCommand{
     public enum PlayerCardAction{
         DISCARD, BUILD, PLAY, UNDISCARD, PLAY_FREE

@@ -2,6 +2,9 @@ package com.steamedpears.comp3004.views;
 
 import com.google.gson.*;
 import com.steamedpears.comp3004.models.*;
+import com.steamedpears.comp3004.models.assets.Asset;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.players.Player;
 import org.apache.log4j.*;
 import org.junit.Ignore;
 

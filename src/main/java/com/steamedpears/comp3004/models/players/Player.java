@@ -1,13 +1,13 @@
-package com.steamedpears.comp3004.models;
+package com.steamedpears.comp3004.models.players;
 
-import com.steamedpears.comp3004.models.players.AIPlayer;
-import com.steamedpears.comp3004.models.players.strategies.GreedyStrategy;
-import com.steamedpears.comp3004.models.players.HumanPlayer;
+import com.steamedpears.comp3004.models.*;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.assets.AssetSet;
+import com.steamedpears.comp3004.models.players.strategies.HeuristicStrategy;
 import com.steamedpears.comp3004.models.players.strategies.NullStrategy;
 import com.steamedpears.comp3004.models.players.strategies.Strategy;
 import org.apache.log4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.steamedpears.comp3004.models.PlayerCommand.PlayerCardAction.*;
-import static com.steamedpears.comp3004.models.Asset.*;
+import static com.steamedpears.comp3004.models.assets.Asset.*;
 
 public abstract class Player extends Changeable implements Runnable{
     //static variables//////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public abstract class Player extends Changeable implements Runnable{
      * @return an AIPlayer
      */
     public static Player newAIPlayer(Wonder wonder, SevenWondersGame game){
-        return new AIPlayer(wonder, game, new GreedyStrategy());
+        return new AIPlayer(wonder, game, new HeuristicStrategy());
     }
 
     public static Player newHumanPlayer(Wonder wonder, SevenWondersGame game){
@@ -335,6 +335,14 @@ public abstract class Player extends Changeable implements Runnable{
      */
     public final void setHand(List<Card> hand){
         this.hand = hand;
+    }
+
+    /**
+     * Sets the player's wonder to the give one
+     * @param wonder to set
+     */
+    public void setWonder(Wonder wonder){
+        this.wonder = wonder;
     }
 
     /**

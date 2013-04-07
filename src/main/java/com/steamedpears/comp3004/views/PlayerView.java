@@ -2,6 +2,9 @@ package com.steamedpears.comp3004.views;
 import com.steamedpears.comp3004.models.*;
 
 import static com.steamedpears.comp3004.models.PlayerCommand.*;
+
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.players.Player;
 import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.*;
 

@@ -1,7 +1,7 @@
 package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.models.Card;
-import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.players.Player;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;

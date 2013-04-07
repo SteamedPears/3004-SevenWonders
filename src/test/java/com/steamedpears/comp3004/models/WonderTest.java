@@ -2,12 +2,14 @@ package com.steamedpears.comp3004.models;
 
 import com.google.gson.JsonParser;
 import com.steamedpears.comp3004.SevenWonders;
+import com.steamedpears.comp3004.models.assets.Asset;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.players.Player;
 import com.steamedpears.comp3004.routing.Router;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
