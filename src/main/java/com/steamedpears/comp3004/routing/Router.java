@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Changeable;
-import com.steamedpears.comp3004.models.Player;
+import com.steamedpears.comp3004.models.players.Player;
 import com.steamedpears.comp3004.models.PlayerCommand;
 import com.steamedpears.comp3004.models.SevenWondersGame;
 import org.apache.log4j.Logger;

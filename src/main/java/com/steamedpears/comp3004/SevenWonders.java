@@ -1,10 +1,10 @@
 package com.steamedpears.comp3004;
 
 import com.steamedpears.comp3004.models.*;
+import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.players.Player;
 import com.steamedpears.comp3004.routing.*;
 import com.steamedpears.comp3004.views.*;
-import org.apache.log4j.*;
-
 import org.apache.log4j.*;
 
 import javax.swing.*;
