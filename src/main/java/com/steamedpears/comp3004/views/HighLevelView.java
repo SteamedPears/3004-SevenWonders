@@ -17,4 +17,11 @@ public class HighLevelView extends JPanel {
         table = new AssetView(players);
         add(table,"gapleft 0, gaptop 1, span 8");
     }
+    public HighLevelView(SevenWonders controller, Player p) {
+        this.controller = controller;
+        players = controller.getGame().getPlayers();
+        table = new AssetView(players,p);
+        add(table,"gapleft 0, gaptop 1, span 8");
+
+    }
 }
