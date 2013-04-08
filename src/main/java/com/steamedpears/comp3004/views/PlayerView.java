@@ -1,4 +1,5 @@
 package com.steamedpears.comp3004.views;
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.*;
 
 import static com.steamedpears.comp3004.models.PlayerCommand.*;
@@ -22,6 +23,7 @@ public class PlayerView extends JPanel {
     public static final String AGE2_ICON = AssetView.PATH_ICON + "age2" + AssetView.IMAGE_TYPE_SUFFIX;
     public static final String AGE3_ICON = AssetView.PATH_ICON + "age3" + AssetView.IMAGE_TYPE_SUFFIX;
 
+    private SevenWonders controller;
     private Player player;
     private CardView selectedCardView;
     private Map<String, String> persistentMessages;
@@ -40,10 +42,11 @@ public class PlayerView extends JPanel {
     private JButton playButton;
     private JButton buildButton;
 
-    public PlayerView(Player player) {
+    public PlayerView(SevenWonders controller) {
         logger.info("Created with player[" + player + "]");
         setLayout(new MigLayout("gap 0! 0!"));
-        this.player = player;
+        this.controller = controller;
+        this.player = controller.getLocalPlayer();
         persistentMessages = new HashMap<String, String>();
         waiting = true;
         validPlayFree = false;
@@ -161,10 +164,10 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                player.setCurrentCommand(new PlayerCommand(
+                controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.DISCARD,
                         selectedCardView.getCard().getId()));
-                player.wake();
+                controller.doneMove();
             }
         });
         buttonPanel.add(discardButton,"span");
@@ -175,11 +178,10 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand(
+                controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.PLAY_FREE,
-                        selectedCardView.getCard().getId());
-                player.setCurrentCommand(move);
-                player.wake();
+                        selectedCardView.getCard().getId()));
+                controller.doneMove();
             }
         });
         buttonPanel.add(playFreeButton,"span");
@@ -190,13 +192,10 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand(
+                controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.PLAY,
-                        selectedCardView.getCard().getId());
-                if(leftTrades != null) move.leftPurchases = leftTrades;
-                if(rightTrades != null) move.rightPurchases = rightTrades;
-                player.setCurrentCommand(move);
-                player.wake();
+                        selectedCardView.getCard().getId()));
+                controller.doneMove();
             }
         });
         buttonPanel.add(playButton,"span");
@@ -207,13 +206,10 @@ public class PlayerView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doneMove();
-                PlayerCommand move = new PlayerCommand(
+                controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.BUILD,
-                        selectedCardView.getCard().getId());
-                if(leftTrades != null) move.leftPurchases = leftTrades;
-                if(rightTrades != null) move.rightPurchases = rightTrades;
-                player.setCurrentCommand(move);
-                player.wake();
+                        selectedCardView.getCard().getId()));
+                controller.doneMove();
             }
         });
         if(player.hasFinishedWonder()) {

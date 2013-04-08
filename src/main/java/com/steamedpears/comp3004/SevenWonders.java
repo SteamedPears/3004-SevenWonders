@@ -37,6 +37,10 @@ public class SevenWonders {
     private boolean isHost;
     private boolean gameStarted;
     private java.util.Timer scheduledUpdateTimer;
+    private PlayerCommand playerCommand;
+    private PlayerCommand tradesCommand;
+    private PlayerCommand undiscardCommand;
+    private PlayerCommand playExtraCommand;
 
     private ViewFrame view;
     private NewGameDialog newGameDialog;
@@ -168,20 +172,24 @@ public class SevenWonders {
 
     private void updateView() {
         Player thisPlayer = getLocalPlayer();
-        playerView = new PlayerView(thisPlayer);
+        playerView = new PlayerView(this);
         view.addTab(playerView, "Hand");
         tradesView = new TradesView(thisPlayer);
         tradesView.setListener(new TradesView.TradeChangeListener() {
             @Override
             public void handleChange(AssetMap leftTrades, AssetMap rightTrades) {
-                playerView.setTrades(leftTrades,rightTrades);
+                playerView.setTrades(leftTrades, rightTrades);
+                PlayerCommand tradesCommand = new PlayerCommand();
+                tradesCommand.leftPurchases = leftTrades;
+                tradesCommand.rightPurchases = rightTrades;
+                setTradesCommand(tradesCommand);
             }
         });
         view.addTab(tradesView,"Trades");
-        highLevelView = new HighLevelView(this, thisPlayer);
-        view.addTab(highLevelView,"Table");
-        discardView = new DiscardView(getGame());
+        discardView = new DiscardView(this);
         view.addTab(discardView,"Discard Pile");
+        highLevelView = new HighLevelView(this);
+        view.addTab(highLevelView,"Table");
         for(Player player : getGame().getPlayers()) {
             String title = "Player " + player.getPlayerId();
             if(player.equals(thisPlayer)) {
@@ -254,5 +262,49 @@ public class SevenWonders {
      */
     public void exit() {
         System.exit(0);
+    }
+
+    public void setPlayerCommand(PlayerCommand command) {
+        playerCommand = command;
+    }
+
+    public void setTradesCommand(PlayerCommand command) {
+        tradesCommand = command;
+    }
+
+    public void setUndiscardCommand(PlayerCommand command) {
+        undiscardCommand = command;
+    }
+
+    public void setPlayExtraCommand(PlayerCommand command) {
+        playExtraCommand = command;
+    }
+
+    public void doneMove() {
+        Player thisPlayer = getLocalPlayer();
+        PlayerCommand command = PlayerCommand.getNullCommand(thisPlayer);
+        PlayerCommand firstCommand = command;
+        if(playerCommand != null) {
+            command.action = playerCommand.action;
+            command.cardID = playerCommand.cardID;
+            playerCommand = null;
+        }
+        if(tradesCommand != null) {
+            command.rightPurchases = tradesCommand.rightPurchases;
+            command.leftPurchases = tradesCommand.leftPurchases;
+            tradesCommand = null;
+        }
+        if(undiscardCommand != null) {
+            command.followup = undiscardCommand;
+            command = undiscardCommand;
+            undiscardCommand = null;
+        }
+        if(playExtraCommand != null) {
+            command.followup = playExtraCommand;
+            command = playExtraCommand;
+            playExtraCommand = null;
+        }
+        thisPlayer.setCurrentCommand(firstCommand);
+        thisPlayer.wake();
     }
 }
