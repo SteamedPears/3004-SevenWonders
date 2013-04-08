@@ -40,18 +40,21 @@ public class PlayerViewTest extends JFrame {
         }
 
         // build optional assets
-        List<AssetSet> sets = new ArrayList<AssetSet>();
+        List<AssetSet> optionalAssets = new ArrayList<AssetSet>();
         AssetSet set = new AssetSet();
         set.add(Asset.ASSET_CLAY);
         set.add(Asset.ASSET_ORE);
-        sets.add(set);
-        sets.add(set);
+        optionalAssets.add(set);
+        set = new AssetSet();
+        set.add(Asset.ASSET_CLAY);
+        set.add(Asset.ASSET_ORE);
+        optionalAssets.add(set);
         set = new AssetSet();
         set.add(Asset.ASSET_CLAY);
         set.add(Asset.ASSET_ORE);
         set.add(Asset.ASSET_STONE);
         set.add(Asset.ASSET_WOOD);
-        sets.add(set);
+        optionalAssets.add(set);
 
         // build game
         SevenWondersGame game = mock(SevenWondersGame.class);
@@ -63,7 +66,7 @@ public class PlayerViewTest extends JFrame {
         when(player.getAssets()).thenReturn(assets);
         when(player.isValid(any(PlayerCommand.class))).thenReturn(true);
         when(player.getGame()).thenReturn(game);
-        when(player.getOptionalAssetsComplete()).thenReturn(sets);
+        when(player.getOptionalAssetsComplete()).thenReturn(optionalAssets);
 
         // create view
         PlayerView view = new PlayerView(player);

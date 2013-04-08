@@ -26,7 +26,7 @@ public class ComboAssetView extends JPanel {
 
     public ComboAssetView(List<AssetSet> comboAssets) {
         setLayout(new MigLayout(
-                "aligny top,wrap 14, gap 0", // Layout Constraints
+                "aligny top, alignx left, wrap 14, gap 0! 0!", // Layout Constraints
                 "0[]0[]0", // Column Constraints
                 "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
@@ -50,9 +50,9 @@ public class ComboAssetView extends JPanel {
             int count = assetCounts.get(set);
             JPanel assetPanel = new JPanel();
             assetPanel.setLayout(new MigLayout(
-                    "aligny top,wrap 14, gap 0", // Layout Constraints
+                    "aligny top, alignx left, wrap 14, gap 0! 0!", // Layout Constraints
                     "0[]0[]0", // Column Constraints
-                    "0[]0[]0[]0[]0[]0[]0[]0"  // Row Constraints
+                    "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
             ));
             boolean firstAsset = true;
             for(String s : set) {
@@ -62,25 +62,25 @@ public class ComboAssetView extends JPanel {
                 firstAsset = false;
                 switch(s.charAt(0)) {
                     case ASSET_WOOD:
-                        assetPanel.add(AssetView.newJLabel(WOOD_ICON));
+                        assetPanel.add(AssetView.newJLabel(WOOD_ICON),AssetView.MIG_CONFIG);
                         break;
                     case ASSET_STONE:
-                        assetPanel.add(AssetView.newJLabel(STONE_ICON));
+                        assetPanel.add(AssetView.newJLabel(STONE_ICON),AssetView.MIG_CONFIG);
                         break;
                     case ASSET_CLAY:
-                        assetPanel.add(AssetView.newJLabel(CLAY_ICON));
+                        assetPanel.add(AssetView.newJLabel(CLAY_ICON),AssetView.MIG_CONFIG);
                         break;
                     case ASSET_ORE:
-                        assetPanel.add(AssetView.newJLabel(ORE_ICON));
+                        assetPanel.add(AssetView.newJLabel(ORE_ICON),AssetView.MIG_CONFIG);
                         break;
                     case ASSET_LOOM:
-                        assetPanel.add(AssetView.newJLabel(LOOM_ICON));
+                        assetPanel.add(AssetView.newJLabel(LOOM_ICON),AssetView.MIG_CONFIG);
                         break;
                     case ASSET_PAPYRUS:
-                        assetPanel.add(AssetView.newJLabel(PAPYRUS_ICON));
+                        assetPanel.add(AssetView.newJLabel(PAPYRUS_ICON),AssetView.MIG_CONFIG);
                         break;
                     case ASSET_GLASS:
-                        assetPanel.add(AssetView.newJLabel(GLASS_ICON));
+                        assetPanel.add(AssetView.newJLabel(GLASS_ICON),AssetView.MIG_CONFIG);
                         break;
                     default:
                         log.error("Unknown asset type!!!");

@@ -40,7 +40,7 @@ public class PlayerView extends JPanel {
 
     public PlayerView(Player player) {
         logger.info("Created with player[" + player + "]");
-        setLayout(new MigLayout());
+        setLayout(new MigLayout("gap 0! 0!"));
         this.player = player;
         persistentMessages = new HashMap<String, String>();
         waiting = true;

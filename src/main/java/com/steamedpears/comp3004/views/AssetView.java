@@ -38,11 +38,11 @@ public class AssetView extends JPanel {
 
     static Logger log = Logger.getLogger(AssetView.class);
 
-    public static final String MIG_CONFIG = "w 60!,gaptop 0";
+    public static final String MIG_CONFIG = "w 60!,gaptop 0, gap 0! 0! 0! 0!";
 
     public AssetView() {
         setLayout(new MigLayout(
-                "aligny top,wrap 15, gap 0", // Layout Constraints
+                "aligny top,wrap 15, gap 0! 0!", // Layout Constraints
                 "0[]0[]0", // Column Constraints
                 "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
