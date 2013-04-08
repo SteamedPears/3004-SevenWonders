@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.views;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class ViewFrame extends JFrame {
     public static final int WIDTH = 960;
@@ -15,8 +16,11 @@ public class ViewFrame extends JFrame {
     private void init() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setBounds(0, 0, WIDTH, HEIGHT);
+        UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(0,0,0,0));
+        UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
         setResizable(false);
         pane = new JTabbedPane();
+        pane.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         setContentPane(pane);
     }
 
@@ -26,6 +30,7 @@ public class ViewFrame extends JFrame {
      * @param title the title of the frame
      */
     public void addTab(JPanel view, String title) {
+        view.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         synchronized (pane) {
             if(hasTab(title)) {
                 pane.setComponentAt(pane.indexOfTab(title),view);

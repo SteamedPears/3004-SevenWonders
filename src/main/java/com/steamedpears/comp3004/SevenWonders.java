@@ -44,6 +44,7 @@ public class SevenWonders {
     private PlayerView playerView;
     private TradesView tradesView;
     private HighLevelView highLevelView;
+    private DiscardView discardView;
 
     public SevenWonders() {
         view = new ViewFrame();
@@ -179,6 +180,8 @@ public class SevenWonders {
         view.addTab(tradesView,"Trades");
         highLevelView = new HighLevelView(this, thisPlayer);
         view.addTab(highLevelView,"Table");
+        discardView = new DiscardView(getGame());
+        view.addTab(discardView,"Discard Pile");
         for(Player player : getGame().getPlayers()) {
             String title = "Player " + player.getPlayerId();
             if(player.equals(thisPlayer)) {

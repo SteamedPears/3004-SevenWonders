@@ -27,6 +27,7 @@ public class PlayerView extends JPanel {
     private Map<String, String> persistentMessages;
     private int timer = 0;
     private boolean waiting;
+    private boolean validPlayFree;
     private boolean validPlay;
     private boolean validBuild;
     private AssetMap leftTrades;
@@ -35,15 +36,17 @@ public class PlayerView extends JPanel {
     private JLabel messageLabel;
     private JLabel persistentMessageLabel;
     private JButton discardButton;
+    private JButton playFreeButton;
     private JButton playButton;
     private JButton buildButton;
 
     public PlayerView(Player player) {
         logger.info("Created with player[" + player + "]");
-        setLayout(new MigLayout());
+        setLayout(new MigLayout("gap 0! 0!"));
         this.player = player;
         persistentMessages = new HashMap<String, String>();
         waiting = true;
+        validPlayFree = false;
         validPlay = false;
         validBuild = false;
         update();
@@ -64,7 +67,9 @@ public class PlayerView extends JPanel {
      * Validates play and build player actions, including left and right trades
      */
     public void validateMoves() {
-        PlayerCommand move = new PlayerCommand(PlayerCardAction.PLAY,selectedCardView.getCard().getId());
+        PlayerCommand move = new PlayerCommand(PlayerCardAction.PLAY_FREE,selectedCardView.getCard().getId());
+        validPlayFree = player.isValid(move);
+        move.action = PlayerCardAction.PLAY;
         if(leftTrades != null) move.leftPurchases = leftTrades;
         if(rightTrades != null) move.rightPurchases = rightTrades;
         validPlay = player.isValid(move);
@@ -164,6 +169,21 @@ public class PlayerView extends JPanel {
         });
         buttonPanel.add(discardButton,"span");
 
+        // play free button
+        playFreeButton = new JButton("Play Free");
+        playFreeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                doneMove();
+                PlayerCommand move = new PlayerCommand(
+                        PlayerCardAction.PLAY_FREE,
+                        selectedCardView.getCard().getId());
+                player.setCurrentCommand(move);
+                player.wake();
+            }
+        });
+        buttonPanel.add(playFreeButton,"span");
+
         // play button
         playButton = new JButton("Play");
         playButton.addActionListener(new ActionListener() {
@@ -239,6 +259,9 @@ public class PlayerView extends JPanel {
         }
         add(ageLabel);
 
+        // combo assets
+        add(new ComboAssetView(player.getOptionalAssetsComplete()),"span, newline, gapleft 0, gaptop 1");
+
         waitForTurn();
     }
 
@@ -278,6 +301,7 @@ public class PlayerView extends JPanel {
             public void run() {
                 boolean timeLimitExpired = timer <= 0;
                 setDiscardButtonEnabled(!waiting && !timeLimitExpired);
+                setPlayFreeButtonEnabled(validPlayFree && !waiting && !timeLimitExpired);
                 setPlayButtonEnabled(validPlay && !waiting && !timeLimitExpired);
                 setBuildButtonEnabled(validBuild && !waiting && !timeLimitExpired);
             }
@@ -289,6 +313,15 @@ public class PlayerView extends JPanel {
             @Override
             public void run() {
                 buildButton.setEnabled(enabled);
+            }
+        });
+    }
+
+    public void setPlayFreeButtonEnabled(final boolean enabled) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                playFreeButton.setEnabled(enabled);
             }
         });
     }
@@ -315,7 +348,6 @@ public class PlayerView extends JPanel {
      * Updates the timer associated with this view.
      */
     public void updateTimer() {
-        logger.info("Updating timer");
         if(waiting) {
             setMessage("Waiting...");
         } else if(timer <= 0) {
