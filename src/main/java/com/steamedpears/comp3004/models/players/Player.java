@@ -152,6 +152,7 @@ public abstract class Player extends Changeable implements Runnable{
         if(isFinal){
             playedCards.add(card);
             game.undiscard(card);
+            wonder.expendLimitedAsset(ASSET_DISCARD);
         }else{
             stagedCommandResult+=card.getAssets(this).get(ASSET_GOLD);
         }
