@@ -547,4 +547,12 @@ public class SevenWondersGame extends Changeable implements Runnable{
      * @return The router associated with this game.
      */
     public Router getRouter() { return router; }
+
+    /**
+     * Check if this is the last turn in the age
+     * @return true iff this is the last turn in the age
+     */
+    public boolean isLastTurnInAge() {
+        return  players.get(0).getHand().size()==2;
+    }
 }
