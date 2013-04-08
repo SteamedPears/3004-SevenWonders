@@ -29,13 +29,13 @@ public class ResourceHeuristic extends Heuristic{
 
         for(String key: cardAssets.keySet()){
             if(resources.contains(key)){
-                heuristic+= 3*(2*cardAssets.get(key)-assets.get(key));
+                heuristic+= 3*(cardAssets.get(key)-assets.get(key));
             }
         }
 
         for(String key: cardAssetsOptional){
             if(resources.contains(key)){
-                heuristic+= 3*(2*cardAssets.get(key)-assets.get(key));
+                heuristic+= 3*(cardAssets.get(key)-assets.get(key));
             }
         }
         return heuristic;
