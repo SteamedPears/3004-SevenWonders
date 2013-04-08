@@ -117,6 +117,15 @@ public class PlayerView extends JPanel {
         updatePersistentMessages();
     }
 
+    /**
+     * Remove a persistent message.
+     * @param key the key of the message to be removed.
+     */
+    public void removeMessage(String key) {
+        persistentMessages.remove(key);
+        updatePersistentMessages();
+    }
+
     private void updatePersistentMessages() {
         StringBuffer message = new StringBuffer();
         message.append("<html>");
@@ -132,10 +141,13 @@ public class PlayerView extends JPanel {
      * Update the view.
      */
     public void update() {
+        updateWithHand(player.getHand());
+    }
+
+    public void updateWithHand(final List<Card> hand) {
         removeAll();
 
         // cards in hand
-        final List<Card> hand = player.getHand();
         for(Card c : hand) {
             CardView cv = new CardView(c);
             cv.setSelectionListener(cardSelectionListener);
@@ -167,7 +179,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.DISCARD,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         buttonPanel.add(discardButton,"span");
@@ -181,7 +192,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.PLAY_FREE,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         buttonPanel.add(playFreeButton,"span");
@@ -195,7 +205,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.PLAY,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         buttonPanel.add(playButton,"span");
@@ -209,7 +218,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.BUILD,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         if(player.hasFinishedWonder()) {
