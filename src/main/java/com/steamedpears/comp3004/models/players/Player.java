@@ -859,4 +859,12 @@ public abstract class Player extends Changeable implements Runnable{
         }
         return guilds;
     }
+
+    /**
+     * Determine if player can play last card
+     * @return true iff player can play last card
+     */
+    public boolean canPlayLastCard() {
+        return getAssets().containsKey(ASSET_DOUBLE_PLAY);
+    }
 }

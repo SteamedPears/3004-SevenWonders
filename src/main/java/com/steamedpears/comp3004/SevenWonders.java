@@ -42,6 +42,7 @@ public class SevenWonders {
     private Router router;
     private boolean isHost;
     private boolean gameStarted;
+    private boolean playedLastCard = false;
     private java.util.Timer scheduledUpdateTimer;
     private PlayerCommand playerCommand;
     private PlayerCommand tradesCommand;
@@ -280,7 +281,25 @@ public class SevenWonders {
     }
 
     public void setPlayerCommand(PlayerCommand command) {
-        playerCommand = command;
+        if(getLocalPlayer().canPlayLastCard() && !playedLastCard && getGame().isLastTurnInAge()) {
+            setPlayExtraCommand(command);
+            playedLastCard = true;
+            // make player view look like the card was played
+            List<Card> newHand = new ArrayList<Card>();
+            for(Card c : getLocalPlayer().getHand()) {
+                if(c.getId().equals(command.cardID))
+                    continue;
+                newHand.add(c);
+            }
+            playerView.updateWithHand(newHand);
+            playerView.addMessage("lastCard","You can play your last card!");
+            playerView.newMove();
+        } else {
+            playedLastCard = false;
+            playerCommand = command;
+            playerView.removeMessage("lastCard");
+            doneMove();
+        }
     }
 
     public void setTradesCommand(PlayerCommand command) {

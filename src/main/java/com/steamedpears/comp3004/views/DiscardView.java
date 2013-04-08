@@ -61,10 +61,17 @@ public class DiscardView extends JPanel {
                     public void handleSelection(Card card) {
                         selectedCardView.setCard(card);
                         Player player = controller.getLocalPlayer();
-                        undiscard.setEnabled(player.isValid(new PlayerCommand(
+                        PlayerCommand command = new PlayerCommand(
                                 PlayerCommand.PlayerCardAction.UNDISCARD,
                                 selectedCardView.getCard().getId()
-                        )));
+                        );
+                        undiscard.setEnabled(player.isValid(command));
+                        if(undiscard.isEnabled() && undiscard.isSelected()) {
+                            controller.setUndiscardCommand(command);
+                        } else {
+                            controller.setUndiscardCommand(null);
+                            undiscard.setSelected(false);
+                        }
                     }
                 });
                 if(firstCard) {
