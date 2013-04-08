@@ -40,7 +40,7 @@ public class PlayerView extends JPanel {
 
     public PlayerView(Player player) {
         logger.info("Created with player[" + player + "]");
-        setLayout(new MigLayout());
+        setLayout(new MigLayout("gap 0! 0!"));
         this.player = player;
         persistentMessages = new HashMap<String, String>();
         waiting = true;
@@ -239,6 +239,9 @@ public class PlayerView extends JPanel {
         }
         add(ageLabel);
 
+        // combo assets
+        add(new ComboAssetView(player.getOptionalAssetsComplete()),"span, newline, gapleft 0, gaptop 1");
+
         waitForTurn();
     }
 
@@ -315,7 +318,6 @@ public class PlayerView extends JPanel {
      * Updates the timer associated with this view.
      */
     public void updateTimer() {
-        logger.info("Updating timer");
         if(waiting) {
             setMessage("Waiting...");
         } else if(timer <= 0) {

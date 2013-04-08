@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.models.assets.Asset;
 import com.steamedpears.comp3004.models.assets.AssetMap;
+import com.steamedpears.comp3004.models.assets.AssetSet;
 import com.steamedpears.comp3004.models.players.Player;
 import org.apache.log4j.*;
 import org.junit.Ignore;
@@ -38,9 +39,26 @@ public class PlayerViewTest extends JFrame {
             assets.put(assetType,++i);
         }
 
+        // build optional assets
+        List<AssetSet> optionalAssets = new ArrayList<AssetSet>();
+        AssetSet set = new AssetSet();
+        set.add(Asset.ASSET_CLAY);
+        set.add(Asset.ASSET_ORE);
+        optionalAssets.add(set);
+        set = new AssetSet();
+        set.add(Asset.ASSET_CLAY);
+        set.add(Asset.ASSET_ORE);
+        optionalAssets.add(set);
+        set = new AssetSet();
+        set.add(Asset.ASSET_CLAY);
+        set.add(Asset.ASSET_ORE);
+        set.add(Asset.ASSET_STONE);
+        set.add(Asset.ASSET_WOOD);
+        optionalAssets.add(set);
+
         // build game
         SevenWondersGame game = mock(SevenWondersGame.class);
-        when(game.getAge()).thenReturn(1);
+        when(game.getAge()).thenReturn(2);
 
         // build player
         Player player = mock(Player.class);
@@ -48,6 +66,7 @@ public class PlayerViewTest extends JFrame {
         when(player.getAssets()).thenReturn(assets);
         when(player.isValid(any(PlayerCommand.class))).thenReturn(true);
         when(player.getGame()).thenReturn(game);
+        when(player.getOptionalAssetsComplete()).thenReturn(optionalAssets);
 
         // create view
         PlayerView view = new PlayerView(player);
