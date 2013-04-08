@@ -2,7 +2,7 @@ package com.steamedpears.comp3004.views;
 
 import com.steamedpears.comp3004.models.assets.*;
 import static com.steamedpears.comp3004.views.AssetView.*;
-import com.steamedpears.comp3004.models.assets.Asset;
+import static com.steamedpears.comp3004.models.assets.Asset.*;
 
 import net.miginfocom.swing.*;
 import org.apache.log4j.*;
@@ -11,14 +11,7 @@ import java.util.*;
 
 public class ComboAssetView extends JPanel {
 
-    public static final char ASSET_WOOD = 'w';
-    public static final char ASSET_STONE = 's';
-    public static final char ASSET_CLAY = 'c';
-    public static final char ASSET_ORE = 'o';
-
-    public static final char ASSET_LOOM = 'l';
-    public static final char ASSET_PAPYRUS = 'p';
-    public static final char ASSET_GLASS = 'g';
+    public final Map<String,String> mapAssetToIcon;
 
     static Logger log = Logger.getLogger(ComboAssetView.class);
 
@@ -30,6 +23,18 @@ public class ComboAssetView extends JPanel {
                 "0[]0[]0", // Column Constraints
                 "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
+
+        mapAssetToIcon = new HashMap<String, String>();
+        mapAssetToIcon.put(ASSET_WOOD,WOOD_ICON);
+        mapAssetToIcon.put(ASSET_STONE,STONE_ICON);
+        mapAssetToIcon.put(ASSET_CLAY,CLAY_ICON);
+        mapAssetToIcon.put(ASSET_ORE,ORE_ICON);
+        mapAssetToIcon.put(ASSET_LOOM,LOOM_ICON);
+        mapAssetToIcon.put(ASSET_PAPYRUS,PAPYRUS_ICON);
+        mapAssetToIcon.put(ASSET_GLASS,GLASS_ICON);
+        mapAssetToIcon.put(ASSET_SCIENCE_1,SCIENCE1_ICON);
+        mapAssetToIcon.put(ASSET_SCIENCE_2,SCIENCE2_ICON);
+        mapAssetToIcon.put(ASSET_SCIENCE_3,SCIENCE3_ICON);
 
         assetCounts = new HashMap<AssetSet, Integer>();
 
@@ -60,33 +65,7 @@ public class ComboAssetView extends JPanel {
                     assetPanel.add(new JLabel("/"));
                 }
                 firstAsset = false;
-                switch(s.charAt(0)) {
-                    case ASSET_WOOD:
-                        assetPanel.add(AssetView.newJLabel(WOOD_ICON),AssetView.MIG_CONFIG);
-                        break;
-                    case ASSET_STONE:
-                        assetPanel.add(AssetView.newJLabel(STONE_ICON),AssetView.MIG_CONFIG);
-                        break;
-                    case ASSET_CLAY:
-                        assetPanel.add(AssetView.newJLabel(CLAY_ICON),AssetView.MIG_CONFIG);
-                        break;
-                    case ASSET_ORE:
-                        assetPanel.add(AssetView.newJLabel(ORE_ICON),AssetView.MIG_CONFIG);
-                        break;
-                    case ASSET_LOOM:
-                        assetPanel.add(AssetView.newJLabel(LOOM_ICON),AssetView.MIG_CONFIG);
-                        break;
-                    case ASSET_PAPYRUS:
-                        assetPanel.add(AssetView.newJLabel(PAPYRUS_ICON),AssetView.MIG_CONFIG);
-                        break;
-                    case ASSET_GLASS:
-                        assetPanel.add(AssetView.newJLabel(GLASS_ICON),AssetView.MIG_CONFIG);
-                        break;
-                    default:
-                        log.error("Unknown asset type!!!");
-                        System.exit(-1);
-                        break;
-                }
+                assetPanel.add(AssetView.newJLabel(mapAssetToIcon.get(s)),AssetView.MIG_CONFIG);
             }
             add(assetPanel);
             add(new JLabel(": " + count));

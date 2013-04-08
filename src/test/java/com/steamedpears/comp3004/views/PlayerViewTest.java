@@ -1,6 +1,7 @@
 package com.steamedpears.comp3004.views;
 
 import com.google.gson.*;
+import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.models.assets.Asset;
 import com.steamedpears.comp3004.models.assets.AssetMap;
@@ -68,8 +69,12 @@ public class PlayerViewTest extends JFrame {
         when(player.getGame()).thenReturn(game);
         when(player.getOptionalAssetsComplete()).thenReturn(optionalAssets);
 
+        // build controller
+        SevenWonders controller = mock(SevenWonders.class);
+        when(controller.getLocalPlayer()).thenReturn(player);
+
         // create view
-        PlayerView view = new PlayerView(player);
+        PlayerView view = new PlayerView(controller);
         add(view);
 
         view.addMessage("One","One");
