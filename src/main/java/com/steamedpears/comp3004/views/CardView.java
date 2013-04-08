@@ -59,6 +59,10 @@ public class CardView extends JLabel {
         this.selectionListener = selectionListener;
     }
 
+    public void fireSelectionListener() {
+        selectionListener.handleSelection(card);
+    }
+
     /**
      * Update the view.
      */
@@ -74,7 +78,7 @@ public class CardView extends JLabel {
     private class CardMouseListener extends MouseAdapter {
         public void mouseClicked(MouseEvent e) {
             if(selectionListener != null) {
-                selectionListener.handleSelection(card);
+                fireSelectionListener();
             }
         }
     }
