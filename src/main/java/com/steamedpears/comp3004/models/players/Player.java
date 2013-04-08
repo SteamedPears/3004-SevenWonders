@@ -22,6 +22,7 @@ public abstract class Player extends Changeable implements Runnable{
 
     public static boolean TESTING_AI = false;
 
+    private static Strategy defaultStrategy = new HeuristicStrategy();
     private static int currentId = 0;
     private static Logger log = Logger.getLogger(Player.class);
     private Thread thread;
@@ -62,11 +63,15 @@ public abstract class Player extends Changeable implements Runnable{
      * @return an AIPlayer
      */
     public static Player newAIPlayer(Wonder wonder, SevenWondersGame game){
-        return new AIPlayer(wonder, game, new HeuristicStrategy());
+        return new AIPlayer(wonder, game, defaultStrategy);
     }
 
     public static Player newHumanPlayer(Wonder wonder, SevenWondersGame game){
         return TESTING_AI ? new AIPlayer(wonder, game, new NullStrategy()) : new HumanPlayer(wonder, game);
+    }
+
+    public static void setDefaultStrategy(Strategy strategy){
+        defaultStrategy = strategy;
     }
 
     //instance variables////////////////////////////////////////////////////
@@ -422,6 +427,7 @@ public abstract class Player extends Changeable implements Runnable{
                     return false;
                 }
             }
+            command = command.followup;
         }
 
         return true;
