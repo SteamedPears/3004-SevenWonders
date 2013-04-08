@@ -32,19 +32,4 @@ public class AssetSet extends HashSet<String> {
             add(entry.getAsString());
         }
     }
-
-    /**
-     * Compare this AssetSet to another AssetSet.
-     * @param otherSet The AssetSet against which to compare this AssetSet.
-     * @return true iff this AssetSet and the otherSet contain the same assets.
-     */
-    public boolean equivalentTo(AssetSet otherSet) {
-        for(String asset : otherSet) {
-            if(!this.contains(asset)) return false;
-        }
-        for(String asset : this) {
-            if(!otherSet.contains(asset)) return false;
-        }
-        return true;
-    }
 }
