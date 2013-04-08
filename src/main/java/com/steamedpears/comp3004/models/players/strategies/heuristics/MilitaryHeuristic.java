@@ -33,7 +33,7 @@ public class MilitaryHeuristic extends Heuristic{
         for(String key: cardAssets.keySet()){
             if(key.equals(ASSET_MILITARY_POWER)){
                 int delta = cardAssets.get(ASSET_MILITARY_POWER);
-                int ownPower = assets.get(ASSET_MILITARY_POWER)-delta;
+                int ownPower = assets.get(ASSET_MILITARY_POWER);
                 int leftPower = leftAssets.get(ASSET_MILITARY_POWER);
                 int rightPower = rightAssets.get(ASSET_MILITARY_POWER);
                 if(ownPower<=leftPower && ownPower+delta>=leftPower){

@@ -238,7 +238,7 @@ public class Wonder {
         }
 
         results.add(currentSide.startResource);
-        results.subtract(Asset.ASSET_BUILD_FREE, builtFreeThisAge ? 0 : 1);
+        results.subtract(Asset.ASSET_BUILD_FREE, builtFreeThisAge ? 1 : 0);
         results.subtract(Asset.ASSET_DISCARD, undiscards);
 
         return results;
