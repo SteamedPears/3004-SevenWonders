@@ -13,6 +13,7 @@ public class DiscardView extends JPanel {
 
     private SevenWondersGame game;
     private CardView selectedCardView;
+    private JCheckBox undiscard;
 
     public DiscardView(SevenWondersGame game) {
         this.game = game;
@@ -29,10 +30,6 @@ public class DiscardView extends JPanel {
 
         Set<Card> discardedCards = game.getDiscard();
         if(discardedCards.size() > 0) {
-            selectedCardView = new CardView((Card)discardedCards.toArray()[0],
-                    CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
-            add(selectedCardView,"span " + SELECTED_MULTIPLIER + " " + SELECTED_MULTIPLIER);
-
             for(Card c : discardedCards) {
                 CardView cv = new CardView(c);
                 cv.setSelectionListener(new CardSelectionListener() {
@@ -43,7 +40,13 @@ public class DiscardView extends JPanel {
                 });
                 add(cv);
             }
-        }
 
+            selectedCardView = new CardView((Card)discardedCards.toArray()[0],
+                    CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
+            add(selectedCardView,"newline, span " + SELECTED_MULTIPLIER + " " + SELECTED_MULTIPLIER);
+
+            undiscard = new JCheckBox("Undiscard");
+            add(undiscard);
+        }
     }
 }

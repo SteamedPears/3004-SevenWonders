@@ -315,7 +315,6 @@ public class PlayerView extends JPanel {
      * Updates the timer associated with this view.
      */
     public void updateTimer() {
-        logger.info("Updating timer");
         if(waiting) {
             setMessage("Waiting...");
         } else if(timer <= 0) {
