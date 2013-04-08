@@ -34,6 +34,9 @@ class HostRouter extends Router {
     private Future listenerThread;
     private int maxPlayers;
 
+    private String localWonder = null;
+    private String localSide = null;
+
     private static Logger log = Logger.getLogger(HostRouter.class);
 
     /**
@@ -122,16 +125,40 @@ class HostRouter extends Router {
 
         Collections.shuffle(wonderList);
 
+        if(localWonder != null) {
+            int indexToSwap = 0;
+            for(int i = 0; i < wonderList.size(); ++i) {
+                Wonder wonder = wonderList.get(i);
+                if(wonder.getName().equals(localWonder)) {
+                    indexToSwap = i;
+                    break;
+                }
+            }
+            Wonder oldFirst = wonderList.get(0);
+            wonderList.set(0,wonderList.get(indexToSwap));
+            wonderList.set(indexToSwap,oldFirst);
+        }
+
         SevenWondersGame game = getLocalGame();
         for(int i=0; i<maxPlayers; ++i){
             Player player;
             Wonder wonder = wonderList.get(i);
-            wonder.randomizeSide();
+
+            if(i > 0 || localSide == null) {
+                wonder.randomizeSide();
+            } else if(localSide.toUpperCase().equals("A")) {
+                wonder.setSide(Wonder.PROP_WONDER_SIDE_A);
+            } else {
+                wonder.setSide(Wonder.PROP_WONDER_SIDE_B);
+            }
+
             if(i<=clients.size()){
                 player = Player.newHumanPlayer(wonder, game);
             }else{
                 player = Player.newAIPlayer(wonder, game);
             }
+
+
             if(i==0 || i>clients.size()){
                 game.addLocalPlayer(player);
             }else{
@@ -387,5 +414,15 @@ class HostRouter extends Router {
         } catch(IOException e) {
             log.warn("IOException while closing server socket");
         }
+    }
+
+    @Override
+    public void setLocalWonder(String wonder) {
+        this.localWonder = wonder;
+    }
+
+    @Override
+    public void setLocalSide(String side) {
+        this.localSide = side;
     }
 }

@@ -181,4 +181,16 @@ public abstract class Router extends Changeable implements ChangeListener {
     public void stateChanged(ChangeEvent event){
         announceChange(event.getSource());
     }
+
+    /**
+     * Set local wonder, only implemented in host.
+     * @param wonder the wonder to set the user to
+     */
+    public void setLocalWonder(String wonder) {}
+
+    /**
+     * Set local side, only implemented in host.
+     * @param side the side to set the user to
+     */
+    public void setLocalSide(String side) {}
 }

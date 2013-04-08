@@ -29,6 +29,12 @@ public class SevenWonders {
     private static Logger logger = Logger.getLogger(SevenWonders.class);
 
     public static void main(String[] args){
+        if(args.length > 0) {
+            pickedWonder = args[0];
+        }
+        if(args.length > 1) {
+            pickedSide = args[1];
+        }
         BasicConfigurator.configure();
         new SevenWonders();
     }
@@ -49,6 +55,9 @@ public class SevenWonders {
     private TradesView tradesView;
     private HighLevelView highLevelView;
     private DiscardView discardView;
+
+    private static String pickedWonder = null;
+    private static String pickedSide = null;
 
     public SevenWonders() {
         view = new ViewFrame();
@@ -84,6 +93,12 @@ public class SevenWonders {
         closeNewGameDialog();
         if(isHosting){
             router = Router.getHostRouter(port, players);
+            if(pickedWonder != null) {
+                router.setLocalWonder(pickedWonder);
+            }
+            if(pickedSide != null) {
+                router.setLocalSide(pickedSide);
+            }
             dialog = new HostGameDialog(view,this);
         }else{
             router = Router.getClientRouter(ipAddress, port);
