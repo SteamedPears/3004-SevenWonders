@@ -281,6 +281,7 @@ public class SevenWonders {
 
     public void setPlayerCommand(PlayerCommand command) {
         playerCommand = command;
+        doneMove();
     }
 
     public void setTradesCommand(PlayerCommand command) {

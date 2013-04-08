@@ -167,7 +167,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.DISCARD,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         buttonPanel.add(discardButton,"span");
@@ -181,7 +180,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.PLAY_FREE,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         buttonPanel.add(playFreeButton,"span");
@@ -195,7 +193,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.PLAY,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         buttonPanel.add(playButton,"span");
@@ -209,7 +206,6 @@ public class PlayerView extends JPanel {
                 controller.setPlayerCommand(new PlayerCommand(
                         PlayerCardAction.BUILD,
                         selectedCardView.getCard().getId()));
-                controller.doneMove();
             }
         });
         if(player.hasFinishedWonder()) {
