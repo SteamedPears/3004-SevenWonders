@@ -32,8 +32,6 @@ public class ResultsDialog extends GameDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                // Since we can't get the program to restart cleanly...
-                // just kill it and force the user to restart!
                 controller.openNewGameDialog();
             }
         });
