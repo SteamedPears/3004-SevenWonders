@@ -169,6 +169,7 @@ public abstract class Router extends Changeable implements ChangeListener {
     public void cleanup() {
         this.valid = false;
         Player.cleanup();
+        localGame = null;
     }
 
     /**
