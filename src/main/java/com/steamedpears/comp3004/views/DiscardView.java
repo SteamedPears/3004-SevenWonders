@@ -3,7 +3,6 @@ package com.steamedpears.comp3004.views;
 import com.steamedpears.comp3004.SevenWonders;
 import com.steamedpears.comp3004.models.Card;
 import com.steamedpears.comp3004.models.PlayerCommand;
-import com.steamedpears.comp3004.models.SevenWondersGame;
 import com.steamedpears.comp3004.models.players.Player;
 import net.miginfocom.swing.MigLayout;
 
@@ -20,7 +19,7 @@ public class DiscardView extends JPanel {
 
     public DiscardView(SevenWonders controller) {
         this.controller = controller;
-        setLayout(new MigLayout("wrap 9"));
+        setLayout(new MigLayout("wrap 12"));
         update();
     }
 
@@ -36,6 +35,7 @@ public class DiscardView extends JPanel {
 
             selectedCardView = new CardView((Card)discardedCards.toArray()[0],
                     CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
+            add(selectedCardView,"newline, span " + SELECTED_MULTIPLIER + " " + SELECTED_MULTIPLIER);
 
 
             final JCheckBox undiscard = new JCheckBox("Undiscard");
@@ -52,6 +52,7 @@ public class DiscardView extends JPanel {
                     }
                 }
             });
+            add(undiscard,"span 2");
 
             boolean firstCard = true;
             for(Card c : discardedCards) {
@@ -80,8 +81,6 @@ public class DiscardView extends JPanel {
                 }
                 add(cv);
             }
-            add(selectedCardView,"newline, span " + SELECTED_MULTIPLIER + " " + SELECTED_MULTIPLIER);
-            add(undiscard);
         }
     }
 }
