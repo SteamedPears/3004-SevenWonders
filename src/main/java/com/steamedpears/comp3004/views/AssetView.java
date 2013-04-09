@@ -33,11 +33,14 @@ public class AssetView extends JPanel {
     public static final String SHIELD_ICON = PATH_ICON + "shield" + IMAGE_TYPE_SUFFIX;
     public static final String STAGE_ICON = PATH_ICON + "wonder" + IMAGE_TYPE_SUFFIX;
 
-    List<Player> players;
-    Player thisPlayer;
+    protected List<Player> players;
+    protected Player thisPlayer;
+    private int width = 60;
 
     static Logger log = Logger.getLogger(AssetView.class);
 
+    public static final String MIG_CONFIG_1 = "w ";
+    public static final String MIG_CONFIG_2 = "!,gaptop 0, gap 0! 0! 0! 0!";
     public static final String MIG_CONFIG = "w 60!,gaptop 0, gap 0! 0! 0! 0!";
 
     public AssetView() {
@@ -47,13 +50,13 @@ public class AssetView extends JPanel {
                 "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
 
-        add(newJLabel(WOOD_ICON), MIG_CONFIG);
-        add(newJLabel(STONE_ICON), MIG_CONFIG);
-        add(newJLabel(CLAY_ICON), MIG_CONFIG);
-        add(newJLabel(ORE_ICON), MIG_CONFIG);
-        add(newJLabel(LOOM_ICON), MIG_CONFIG);
-        add(newJLabel(PAPYRUS_ICON), MIG_CONFIG);
-        add(newJLabel(GLASS_ICON), MIG_CONFIG);
+        add(newJLabel(WOOD_ICON, 60), MIG_CONFIG);
+        add(newJLabel(STONE_ICON, 60), MIG_CONFIG);
+        add(newJLabel(CLAY_ICON, 60), MIG_CONFIG);
+        add(newJLabel(ORE_ICON, 60), MIG_CONFIG);
+        add(newJLabel(LOOM_ICON, 60), MIG_CONFIG);
+        add(newJLabel(PAPYRUS_ICON, 60), MIG_CONFIG);
+        add(newJLabel(GLASS_ICON, 60), MIG_CONFIG);
     }
 
     /**
@@ -63,6 +66,7 @@ public class AssetView extends JPanel {
     public AssetView(Player p) {
         players = Arrays.asList(p);
         thisPlayer = null;
+        width = 40;
         update();
     }
 
@@ -110,24 +114,24 @@ public class AssetView extends JPanel {
                 "0[]1[]1[]1[]1[]1[]1[]1"  // Row Constraints
         ));
 
-        if(players.size() > 1) add(new JLabel("Player"), MIG_CONFIG);
+        if(players.size() > 1) add(new JLabel("Player"), MIG_CONFIG_1 + width + MIG_CONFIG_2);
         else add(new JLabel());
-        add(newJLabel(WOOD_ICON), MIG_CONFIG);
-        add(newJLabel(STONE_ICON), MIG_CONFIG);
-        add(newJLabel(CLAY_ICON), MIG_CONFIG);
-        add(newJLabel(ORE_ICON), MIG_CONFIG);
-        add(newJLabel(LOOM_ICON), MIG_CONFIG);
-        add(newJLabel(PAPYRUS_ICON), MIG_CONFIG);
-        add(newJLabel(GLASS_ICON), MIG_CONFIG);
-        add(newJLabel(SCIENCE1_ICON), MIG_CONFIG);
-        add(newJLabel(SCIENCE2_ICON), MIG_CONFIG);
-        add(newJLabel(SCIENCE3_ICON), MIG_CONFIG);
-        add(newJLabel(GOLD_ICON), MIG_CONFIG);
-        add(newJLabel(VICTORY_ICON), MIG_CONFIG);
-        add(newJLabel(SHIELD_ICON), MIG_CONFIG);
-        JLabel stageLabel = newJLabel(STAGE_ICON);
-        resizeJLabelIcon(stageLabel,-1,60);
-        add(stageLabel, MIG_CONFIG);
+        add(newJLabel(WOOD_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(STONE_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(CLAY_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(ORE_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(LOOM_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(PAPYRUS_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(GLASS_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(SCIENCE1_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(SCIENCE2_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(SCIENCE3_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(GOLD_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(VICTORY_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        add(newJLabel(SHIELD_ICON, width), MIG_CONFIG_1 + width + MIG_CONFIG_2);
+        JLabel stageLabel = newJLabel(STAGE_ICON, width);
+        resizeJLabelIcon(stageLabel,width,-1);
+        add(stageLabel, MIG_CONFIG_1 + width + MIG_CONFIG_2);
         for(Player player : players) {
             if(players.size() > 1) {
 
@@ -144,14 +148,14 @@ public class AssetView extends JPanel {
             else add(new JLabel());
             AssetMap playerAssets = player.getAssets();
             for(String asset : Asset.ASSET_TYPES) {
-                add(newTextJLabel("" + playerAssets.get(asset)),MIG_CONFIG);
+                add(newTextJLabel("" + playerAssets.get(asset)),MIG_CONFIG_1 + width + MIG_CONFIG_2);
             }
         }
     }
 
     private static void resizeJLabelIcon(JLabel label,int width,int height) {
         label.setIcon(
-                new ImageIcon(((ImageIcon)label.getIcon()).getImage().getScaledInstance(-1,60,Image.SCALE_SMOOTH)));
+                new ImageIcon(((ImageIcon)label.getIcon()).getImage().getScaledInstance(width,height,Image.SCALE_SMOOTH)));
     }
 
 
@@ -169,13 +173,15 @@ public class AssetView extends JPanel {
         return result;
     }
 
-    private static ImageIcon newImageIcon(String image) {
-        return new ImageIcon(getImagePath(image));
+    private static ImageIcon newImageIcon(String image, int width) {
+        ImageIcon imageIcon = new ImageIcon(getImagePath(image));
+        imageIcon.getImage().getScaledInstance(width, -1, Image.SCALE_SMOOTH);
+        return imageIcon;
     }
 
-    public static JLabel newJLabel(String image) {
-        JLabel label = new JLabel(newImageIcon(image),JLabel.CENTER);
-        label.setPreferredSize(new Dimension(60,10));
+    public static JLabel newJLabel(String image, int width) {
+        JLabel label = new JLabel(newImageIcon(image, width),JLabel.CENTER);
+        label.setPreferredSize(new Dimension(width,10));
         return label;
     }
 

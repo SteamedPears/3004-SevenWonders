@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.util.*;
 
 public class PlayerView extends JPanel {
-    private static final int SELECTED_MULTIPLIER = 4;
+    private static final int SELECTED_MULTIPLIER = 3;
 
     static Logger logger = Logger.getLogger(PlayerView.class);
 
@@ -44,7 +44,7 @@ public class PlayerView extends JPanel {
 
     public PlayerView(SevenWonders controller) {
         logger.info("Created with player[" + player + "]");
-        setLayout(new MigLayout("gap 0! 0!"));
+        setLayout(new MigLayout("wrap 12, gap 0! 0!"));
         this.controller = controller;
         this.player = controller.getLocalPlayer();
         persistentMessages = new HashMap<String, String>();
@@ -70,7 +70,10 @@ public class PlayerView extends JPanel {
      * Validates play and build player actions, including left and right trades
      */
     public void validateMoves() {
-        PlayerCommand move = new PlayerCommand(PlayerCardAction.PLAY_FREE,selectedCardView.getCard().getId());
+        PlayerCommand move = new PlayerCommand(
+                PlayerCardAction.PLAY_FREE,
+                selectedCardView.getCard().getId()
+        );
         validPlayFree = player.isValid(move);
         move.action = PlayerCardAction.PLAY;
         if(leftTrades != null) move.leftPurchases = leftTrades;
@@ -147,23 +150,24 @@ public class PlayerView extends JPanel {
     public void updateWithHand(final List<Card> hand) {
         removeAll();
 
-        // cards in hand
-        for(Card c : hand) {
-            CardView cv = new CardView(c);
-            cv.setSelectionListener(cardSelectionListener);
-            add(cv, "aligny top");
-        }
-
         // selected card
         if(hand.size() > 0) {
             selectedCardView = new CardView(hand.get(0), CardView.DEFAULT_WIDTH * SELECTED_MULTIPLIER);
-            add(selectedCardView, "newline, span " + SELECTED_MULTIPLIER);
+            add(selectedCardView,
+                    "aligny top, newline, span " + SELECTED_MULTIPLIER + " " + SELECTED_MULTIPLIER);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     cardSelectionListener.handleSelection(hand.get(0));
                 }
             });
+        }
+
+        // cards in hand
+        for(Card c : hand) {
+            CardView cv = new CardView(c);
+            cv.setSelectionListener(cardSelectionListener);
+            add(cv, "aligny top, alignx left");
         }
 
         // group action buttons together
@@ -225,7 +229,7 @@ public class PlayerView extends JPanel {
         }
         buttonPanel.add(buildButton,"span");
 
-        add(buttonPanel,"span 2");
+        add(buttonPanel,"newline, span 3");
 
         // messages
         JPanel messagePanel = new JPanel();
@@ -240,22 +244,22 @@ public class PlayerView extends JPanel {
         add(messagePanel,"span");
 
         // assets
-        add(new AssetView(this.player),"gapleft 0, gaptop 1, span 8");
+        add(new AssetView(this.player),"gapleft 0, gaptop 0, span 7");
 
         // age
         JLabel ageLabel = new JLabel();
         switch(player.getGame().getAge()) {
             case 1:
                 logger.info("First age");
-                ageLabel = AssetView.newJLabel(AGE1_ICON);
+                ageLabel = AssetView.newJLabel(AGE1_ICON, 40);
                 break;
             case 2:
                 logger.info("Second age");
-                ageLabel = AssetView.newJLabel(AGE2_ICON);
+                ageLabel = AssetView.newJLabel(AGE2_ICON, 40);
                 break;
             case 3:
                 logger.info("Third age");
-                ageLabel = AssetView.newJLabel(AGE3_ICON);
+                ageLabel = AssetView.newJLabel(AGE3_ICON, 40);
                 break;
             default:
                 logger.error("Age was not 1,2, or 3...how?!");
@@ -316,6 +320,8 @@ public class PlayerView extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                if(buildButton == null)
+                    return;
                 buildButton.setEnabled(enabled);
             }
         });
@@ -325,6 +331,8 @@ public class PlayerView extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                if(playFreeButton == null)
+                    return;
                 playFreeButton.setEnabled(enabled);
             }
         });
@@ -334,6 +342,8 @@ public class PlayerView extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                if(playButton == null)
+                    return;
                 playButton.setEnabled(enabled);
             }
         });
@@ -343,6 +353,8 @@ public class PlayerView extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                if(discardButton == null)
+                    return;
                 discardButton.setEnabled(enabled);
             }
         });

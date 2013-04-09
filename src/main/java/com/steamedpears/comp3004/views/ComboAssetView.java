@@ -65,7 +65,7 @@ public class ComboAssetView extends JPanel {
                     assetPanel.add(new JLabel("/"));
                 }
                 firstAsset = false;
-                assetPanel.add(AssetView.newJLabel(mapAssetToIcon.get(s)),AssetView.MIG_CONFIG);
+                assetPanel.add(AssetView.newJLabel(mapAssetToIcon.get(s), 60),AssetView.MIG_CONFIG);
             }
             add(assetPanel);
             add(new JLabel(": " + count));
