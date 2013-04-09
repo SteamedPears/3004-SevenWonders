@@ -70,7 +70,7 @@ function reformatCards(data){
 		if(card.chains){
 			var chains = card.chains;
 			for(var j=0; j<chains.length; ++j){
-				freeFor[chains[i]] = card.name;
+				freeFor[card.name] = chains[j];
 			}
 		}
 		delete card.chains;
@@ -111,5 +111,24 @@ function echo(data){
 	console.log(JSON.stringify(data));
 }
 
-$.getJSON("../data/cards.json", reformatCards);
-$.getJSON("../data/wonderlist.json", reformatWonders);
+function fixFreeFor(data){
+    var cards = data.cards;
+    var oldCards = oldData.cards;
+    for(var i=0; i<cards.length; ++i){
+        var card = cards[i];
+        for(var j=0; j<oldCards.length; ++j){
+            var oldCard = oldCards[j];
+            if(oldCard.name==card.name){
+                if(oldCard.freeFor){
+                    card.freeFor = oldCard.freeFor;
+                }
+                break;
+            }
+        }    
+    }
+    echo(data);
+}
+
+//$.getJSON("../src/main/resources/data/cards2.json", reformatCards);
+//$.getJSON("../data/wonderlist.json", reformatWonders);
+$.getJSON("../src/main/resources/data/cards.json", fixFreeFor);
