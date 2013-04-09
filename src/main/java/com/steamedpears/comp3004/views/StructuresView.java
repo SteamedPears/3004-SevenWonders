@@ -8,14 +8,14 @@ import javax.swing.*;
 import java.util.List;
 
 public class StructuresView extends JPanel {
-    private static final int SELECTED_MULTIPLIER = 3;
+    private static final int SELECTED_MULTIPLIER = 4;
 
     private Player player;
     private CardView selectedCardView;
 
     public StructuresView(Player player) {
         this.player = player;
-        setLayout(new MigLayout("wrap 9"));
+        setLayout(new MigLayout("wrap 12"));
         update();
     }
 
@@ -45,6 +45,6 @@ public class StructuresView extends JPanel {
 
         WonderView wonderView = new WonderView(player.getWonder());
         wonderView.setWonderWidth(580);
-        add(wonderView,"cell 0 4, span");
+        add(wonderView,"newline, span");
     }
 }

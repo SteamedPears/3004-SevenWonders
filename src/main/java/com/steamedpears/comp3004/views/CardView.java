@@ -6,9 +6,11 @@ import org.apache.log4j.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 public class CardView extends JLabel {
-    public static final int DEFAULT_WIDTH = 100;
+    public static final int DEFAULT_WIDTH = 70;
     private Card card;
     private CardSelectionListener selectionListener;
     static Logger logger = Logger.getLogger(CardView.class);
@@ -71,8 +73,10 @@ public class CardView extends JLabel {
     }
 
     private static Icon getIconOfSize(Card card, int width) {
-        return new ImageIcon((new ImageIcon(card.getImagePath()))
-                .getImage().getScaledInstance(width, -1, Image.SCALE_SMOOTH));
+        ImageIcon icon = new ImageIcon(card.getImagePath());
+        BufferedImage bufferedImage = rotate(icon,-Math.PI/2);
+        Image image = bufferedImage.getScaledInstance(width, -1, Image.SCALE_SMOOTH);
+        return new ImageIcon(image);
     }
 
     private class CardMouseListener extends MouseAdapter {
@@ -81,5 +85,35 @@ public class CardView extends JLabel {
                 fireSelectionListener();
             }
         }
+    }
+
+    private static BufferedImage rotate(ImageIcon imageIcon, double angle) {
+        BufferedImage image = bufferImage(imageIcon);
+        double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
+        int w = image.getWidth(), h = image.getHeight();
+        int neww = (int)Math.floor(w*cos+h*sin), newh = (int)Math.floor(h*cos+w*sin);
+        GraphicsConfiguration gc = getDefaultConfiguration();
+        BufferedImage result = gc.createCompatibleImage(neww, newh, Transparency.TRANSLUCENT);
+        Graphics2D g = result.createGraphics();
+        g.translate((neww-w)/2, (newh-h)/2);
+        g.rotate(angle, w/2, h/2);
+        g.drawRenderedImage(image, null);
+        g.dispose();
+        return result;
+    }
+
+    private static GraphicsConfiguration getDefaultConfiguration() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        return gd.getDefaultConfiguration();
+    }
+
+    private static BufferedImage bufferImage(ImageIcon imageIcon) {
+        BufferedImage bufferedImage = new BufferedImage(
+                imageIcon.getIconWidth(),
+                imageIcon.getIconHeight(),
+                BufferedImage.TYPE_INT_RGB);
+        bufferedImage.getGraphics().drawImage(imageIcon.getImage(), 0, 0, null);
+        return bufferedImage;
     }
 }
