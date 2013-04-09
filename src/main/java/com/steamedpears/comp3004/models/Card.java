@@ -278,7 +278,7 @@ public class Card {
         AssetMap costLessBase = new AssetMap();
         AssetMap playerAssets = player.getAssets();
 
-        costLessBase.add(cost);
+        costLessBase.add(getCost(player));
         costLessBase.subtract(playerAssets);
         costLessBase.subtract(command.leftPurchases);
         costLessBase.subtract(command.rightPurchases);

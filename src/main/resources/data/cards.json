@@ -659,7 +659,8 @@
          },
          "baseAssets":{
             "victory":3
-         }
+         },
+         "freeFor":"Aqueduct"
       },
       {
          "name":"Baths",
@@ -671,7 +672,8 @@
          },
          "baseAssets":{
             "victory":3
-         }
+         },
+         "freeFor":"Aqueduct"
       },
       {
          "name":"Altar",
@@ -683,7 +685,8 @@
          },
          "baseAssets":{
             "victory":2
-         }
+         },
+         "freeFor":"Temple"
       },
       {
          "name":"Altar",
@@ -695,7 +698,8 @@
          },
          "baseAssets":{
             "victory":2
-         }
+         },
+         "freeFor":"Temple"
       },
       {
          "name":"Theater",
@@ -707,7 +711,8 @@
          },
          "baseAssets":{
             "victory":2
-         }
+         },
+         "freeFor":"Statue"
       },
       {
          "name":"Theater",
@@ -719,7 +724,8 @@
          },
          "baseAssets":{
             "victory":2
-         }
+         },
+         "freeFor":"Statue"
       },
       {
          "name":"Aqueduct",
@@ -731,7 +737,8 @@
          },
          "baseAssets":{
             "victory":5
-         }
+         },
+         "freeFor":"Baths"
       },
       {
          "name":"Aqueduct",
@@ -743,7 +750,8 @@
          },
          "baseAssets":{
             "victory":5
-         }
+         },
+         "freeFor":"Baths"
       },
       {
          "name":"Temple",
@@ -757,7 +765,8 @@
          },
          "baseAssets":{
             "victory":3
-         }
+         },
+         "freeFor":"Altar"
       },
       {
          "name":"Temple",
@@ -771,7 +780,8 @@
          },
          "baseAssets":{
             "victory":3
-         }
+         },
+         "freeFor":"Altar"
       },
       {
          "name":"Statue",
@@ -784,7 +794,8 @@
          },
          "baseAssets":{
             "victory":4
-         }
+         },
+         "freeFor":"Theater"
       },
       {
          "name":"Statue",
@@ -797,7 +808,8 @@
          },
          "baseAssets":{
             "victory":4
-         }
+         },
+         "freeFor":"Theater"
       },
       {
          "name":"Pantheon",
@@ -813,7 +825,8 @@
          },
          "baseAssets":{
             "victory":7
-         }
+         },
+         "freeFor":"Temple"
       },
       {
          "name":"Pantheon",
@@ -829,7 +842,8 @@
          },
          "baseAssets":{
             "victory":7
-         }
+         },
+         "freeFor":"Temple"
       },
       {
          "name":"Gardens",
@@ -842,7 +856,8 @@
          },
          "baseAssets":{
             "victory":5
-         }
+         },
+         "freeFor":"Statue"
       },
       {
          "name":"Gardens",
@@ -855,7 +870,8 @@
          },
          "baseAssets":{
             "victory":5
-         }
+         },
+         "freeFor":"Statue"
       },
       {
          "name":"Town Hall",
@@ -946,7 +962,8 @@
          },
          "baseAssets":{
             "victory":4
-         }
+         },
+         "freeFor":"Scriptorium"
       },
       {
          "name":"Courthouse",
@@ -959,7 +976,8 @@
          },
          "baseAssets":{
             "victory":4
-         }
+         },
+         "freeFor":"Scriptorium"
       },
       {
          "name":"Senate",
@@ -973,7 +991,8 @@
          },
          "baseAssets":{
             "victory":6
-         }
+         },
+         "freeFor":"Library"
       },
       {
          "name":"Senate",
@@ -987,7 +1006,8 @@
          },
          "baseAssets":{
             "victory":6
-         }
+         },
+         "freeFor":"Library"
       },
       {
          "name":"Stockade",
@@ -1071,7 +1091,8 @@
          },
          "baseAssets":{
             "army":2
-         }
+         },
+         "freeFor":"Fortifications"
       },
       {
          "name":"Walls",
@@ -1083,7 +1104,8 @@
          },
          "baseAssets":{
             "army":2
-         }
+         },
+         "freeFor":"Fortifications"
       },
       {
          "name":"Training Ground",
@@ -1096,7 +1118,8 @@
          },
          "baseAssets":{
             "army":1
-         }
+         },
+         "freeFor":"Circus"
       },
       {
          "name":"Training Ground",
@@ -1109,7 +1132,8 @@
          },
          "baseAssets":{
             "army":1
-         }
+         },
+         "freeFor":"Circus"
       },
       {
          "name":"Training Ground",
@@ -1122,7 +1146,8 @@
          },
          "baseAssets":{
             "army":1
-         }
+         },
+         "freeFor":"Circus"
       },
       {
          "name":"Fortifications",
@@ -1135,7 +1160,8 @@
          },
          "baseAssets":{
             "army":3
-         }
+         },
+         "freeFor":"Walls"
       },
       {
          "name":"Fortifications",
@@ -1148,7 +1174,8 @@
          },
          "baseAssets":{
             "army":3
-         }
+         },
+         "freeFor":"Walls"
       },
       {
          "name":"Circus",
@@ -1161,7 +1188,8 @@
          },
          "baseAssets":{
             "army":3
-         }
+         },
+         "freeFor":"Training Ground"
       },
       {
          "name":"Circus",
@@ -1174,7 +1202,8 @@
          },
          "baseAssets":{
             "army":3
-         }
+         },
+         "freeFor":"Training Ground"
       },
       {
          "name":"Circus",
@@ -1187,7 +1216,8 @@
          },
          "baseAssets":{
             "army":3
-         }
+         },
+         "freeFor":"Training Ground"
       },
       {
          "name":"Arsenal",
@@ -1243,7 +1273,8 @@
          },
          "baseAssets":{
             "army":2
-         }
+         },
+         "freeFor":"Apothecary"
       },
       {
          "name":"Stables",
@@ -1257,7 +1288,8 @@
          },
          "baseAssets":{
             "army":2
-         }
+         },
+         "freeFor":"Apothecary"
       },
       {
          "name":"Archery Range",
@@ -1270,7 +1302,8 @@
          },
          "baseAssets":{
             "army":2
-         }
+         },
+         "freeFor":"Workshop"
       },
       {
          "name":"Archery Range",
@@ -1283,7 +1316,8 @@
          },
          "baseAssets":{
             "army":2
-         }
+         },
+         "freeFor":"Workshop"
       },
       {
          "name":"Siege Workshop",
@@ -1296,7 +1330,8 @@
          },
          "baseAssets":{
             "army":3
-         }
+         },
+         "freeFor":"Laboratory"
       },
       {
          "name":"Siege Workshop",
@@ -1309,7 +1344,8 @@
          },
          "baseAssets":{
             "army":3
-         }
+         },
+         "freeFor":"Laboratory"
       },
       {
          "name":"Tavern",
@@ -1366,7 +1402,8 @@
          ],
          "discountsTargets":[
             "right"
-         ]
+         ],
+         "freeFor":"Forum"
       },
       {
          "name":"East Trading Post",
@@ -1387,7 +1424,8 @@
          ],
          "discountsTargets":[
             "right"
-         ]
+         ],
+         "freeFor":"Forum"
       },
       {
          "name":"West Trading Post",
@@ -1408,7 +1446,8 @@
          ],
          "discountsTargets":[
             "left"
-         ]
+         ],
+         "freeFor":"Forum"
       },
       {
          "name":"West Trading Post",
@@ -1429,7 +1468,8 @@
          ],
          "discountsTargets":[
             "left"
-         ]
+         ],
+         "freeFor":"Forum"
       },
       {
          "name":"Marketplace",
@@ -1450,7 +1490,8 @@
          "discountsTargets":[
             "right",
             "left"
-         ]
+         ],
+         "freeFor":"Caravansery"
       },
       {
          "name":"Marketplace",
@@ -1471,7 +1512,8 @@
          "discountsTargets":[
             "right",
             "left"
-         ]
+         ],
+         "freeFor":"Caravansery"
       },
       {
          "name":"Forum",
@@ -1486,7 +1528,8 @@
             "l":1,
             "p":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"West Trading Post"
       },
       {
          "name":"Forum",
@@ -1501,7 +1544,8 @@
             "l":1,
             "p":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"West Trading Post"
       },
       {
          "name":"Forum",
@@ -1516,7 +1560,8 @@
             "l":1,
             "p":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"West Trading Post"
       },
       {
          "name":"Caravansery",
@@ -1532,7 +1577,8 @@
             "o":1,
             "w":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"Marketplace"
       },
       {
          "name":"Caravansery",
@@ -1548,7 +1594,8 @@
             "o":1,
             "w":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"Marketplace"
       },
       {
          "name":"Caravansery",
@@ -1564,7 +1611,8 @@
             "o":1,
             "w":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"Marketplace"
       },
       {
          "name":"Vineyard",
@@ -1665,7 +1713,8 @@
          ],
          "multiplierTargets":[
             "self"
-         ]
+         ],
+         "freeFor":"Forum"
       },
       {
          "name":"Haven",
@@ -1686,7 +1735,8 @@
          ],
          "multiplierTargets":[
             "self"
-         ]
+         ],
+         "freeFor":"Forum"
       },
       {
          "name":"Lighthouse",
@@ -1703,7 +1753,8 @@
          },
          "multiplierAssets":[
             "yellow"
-         ]
+         ],
+         "freeFor":"Caravansery"
       },
       {
          "name":"Lighthouse",
@@ -1720,7 +1771,8 @@
          },
          "multiplierAssets":[
             "yellow"
-         ]
+         ],
+         "freeFor":"Caravansery"
       },
       {
          "name":"Chamber Of Commerce",
@@ -1771,7 +1823,8 @@
          },
          "multiplierAssets":[
             "wonderstages"
-         ]
+         ],
+         "freeFor":"Dispensary"
       },
       {
          "name":"Arena",
@@ -1788,7 +1841,8 @@
          },
          "multiplierAssets":[
             "wonderstages"
-         ]
+         ],
+         "freeFor":"Dispensary"
       },
       {
          "name":"Arena",
@@ -1805,7 +1859,8 @@
          },
          "multiplierAssets":[
             "wonderstages"
-         ]
+         ],
+         "freeFor":"Dispensary"
       },
       {
          "name":"Apothecary",
@@ -1820,7 +1875,8 @@
             "comp":1,
             "gear":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"Dispensary"
       },
       {
          "name":"Apothecary",
@@ -1835,7 +1891,8 @@
             "comp":1,
             "gear":1
          },
-         "isChoice":true
+         "isChoice":true,
+         "freeFor":"Dispensary"
       },
       {
          "name":"Workshop",
@@ -1847,7 +1904,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"Laboratory"
       },
       {
          "name":"Workshop",
@@ -1859,7 +1917,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"Laboratory"
       },
       {
          "name":"Scriptorium",
@@ -1871,7 +1930,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Library"
       },
       {
          "name":"Scriptorium",
@@ -1883,7 +1943,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Library"
       },
       {
          "name":"Dispensary",
@@ -1896,7 +1957,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"Apothecary"
       },
       {
          "name":"Dispensary",
@@ -1909,7 +1971,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"Apothecary"
       },
       {
          "name":"Laboratory",
@@ -1922,7 +1985,8 @@
          },
          "baseAssets":{
             "gear":1
-         }
+         },
+         "freeFor":"Workshop"
       },
       {
          "name":"Laboratory",
@@ -1935,7 +1999,8 @@
          },
          "baseAssets":{
             "gear":1
-         }
+         },
+         "freeFor":"Workshop"
       },
       {
          "name":"Library",
@@ -1948,7 +2013,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Scriptorium"
       },
       {
          "name":"Library",
@@ -1961,7 +2027,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Scriptorium"
       },
       {
          "name":"School",
@@ -1974,7 +2041,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Study"
       },
       {
          "name":"School",
@@ -1987,7 +2055,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Study"
       },
       {
          "name":"Lodge",
@@ -2001,7 +2070,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"Dispensary"
       },
       {
          "name":"Lodge",
@@ -2015,7 +2085,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"Dispensary"
       },
       {
          "name":"Observatory",
@@ -2029,7 +2100,8 @@
          },
          "baseAssets":{
             "gear":1
-         }
+         },
+         "freeFor":"Laboratory"
       },
       {
          "name":"Observatory",
@@ -2043,7 +2115,8 @@
          },
          "baseAssets":{
             "gear":1
-         }
+         },
+         "freeFor":"Laboratory"
       },
       {
          "name":"University",
@@ -2057,7 +2130,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Library"
       },
       {
          "name":"University",
@@ -2071,7 +2145,8 @@
          },
          "baseAssets":{
             "tab":1
-         }
+         },
+         "freeFor":"Library"
       },
       {
          "name":"Academy",
@@ -2084,7 +2159,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"School"
       },
       {
          "name":"Academy",
@@ -2097,7 +2173,8 @@
          },
          "baseAssets":{
             "comp":1
-         }
+         },
+         "freeFor":"School"
       },
       {
          "name":"Study",
@@ -2111,7 +2188,8 @@
          },
          "baseAssets":{
             "gear":1
-         }
+         },
+         "freeFor":"School"
       },
       {
          "name":"Study",
@@ -2125,7 +2203,8 @@
          },
          "baseAssets":{
             "gear":1
-         }
+         },
+         "freeFor":"School"
       }
    ]
 }
