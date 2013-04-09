@@ -3,6 +3,7 @@ package com.steamedpears.comp3004.models.players;
 import com.steamedpears.comp3004.models.*;
 import com.steamedpears.comp3004.models.assets.AssetMap;
 import com.steamedpears.comp3004.models.assets.AssetSet;
+import com.steamedpears.comp3004.models.players.strategies.CollusionStrategy;
 import com.steamedpears.comp3004.models.players.strategies.HeuristicStrategy;
 import com.steamedpears.comp3004.models.players.strategies.NullStrategy;
 import com.steamedpears.comp3004.models.players.strategies.Strategy;
@@ -22,7 +23,7 @@ public abstract class Player extends Changeable implements Runnable{
 
     public static boolean TESTING_AI = false;
 
-    private static Strategy defaultStrategy = new HeuristicStrategy();
+    private static Strategy defaultStrategy = new CollusionStrategy();
     private static int currentId = 0;
     private static Logger log = Logger.getLogger(Player.class);
     private Thread thread;
