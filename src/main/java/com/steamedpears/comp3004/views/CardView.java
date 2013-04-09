@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
 public class CardView extends JLabel {
+    public static final double ASPECT_RATIO = 1.6;
     public static final int DEFAULT_WIDTH = 70;
     private Card card;
     private CardSelectionListener selectionListener;
@@ -75,7 +76,10 @@ public class CardView extends JLabel {
     private static Icon getIconOfSize(Card card, int width) {
         ImageIcon icon = new ImageIcon(card.getImagePath());
         BufferedImage bufferedImage = rotate(icon,-Math.PI/2);
-        Image image = bufferedImage.getScaledInstance(width, -1, Image.SCALE_SMOOTH);
+        Image image = bufferedImage.getScaledInstance(
+                width,
+                (int)Math.floor(width*ASPECT_RATIO),
+                Image.SCALE_SMOOTH);
         return new ImageIcon(image);
     }
 
