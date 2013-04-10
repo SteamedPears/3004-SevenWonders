@@ -64,4 +64,9 @@ public class CollusionStrategy extends HeuristicStrategy {
         }
     }
 
+
+    @Override
+    public String toString() {
+        return "Collusion";
+    }
 }

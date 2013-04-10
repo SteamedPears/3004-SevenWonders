@@ -137,4 +137,9 @@ public class HeuristicStrategy implements Strategy {
     }
 
 
+
+    @Override
+    public String toString() {
+        return "Heuristic";
+    }
 }

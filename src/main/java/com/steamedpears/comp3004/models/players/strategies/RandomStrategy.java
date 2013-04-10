@@ -51,4 +51,8 @@ public class RandomStrategy implements Strategy {
         player.setCurrentCommand(command);
     }
 
+    @Override
+    public String toString() {
+        return "Random";
+    }
 }
