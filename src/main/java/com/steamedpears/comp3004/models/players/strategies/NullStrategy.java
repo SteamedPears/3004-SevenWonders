@@ -9,4 +9,9 @@ public class NullStrategy implements Strategy {
     public void handleTurn(Player player){
         player.setCurrentCommand(PlayerCommand.getNullCommand(player));
     }
+
+    @Override
+    public String toString() {
+        return "Dumb";
+    }
 }
