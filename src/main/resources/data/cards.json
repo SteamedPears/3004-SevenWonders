@@ -426,7 +426,6 @@
          "age":3,
          "guild":"purple",
          "cost":{
-            "coin":1,
             "o":2,
             "c":1,
             "s":1,
